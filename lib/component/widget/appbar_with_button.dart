@@ -10,6 +10,7 @@ import 'package:web_2/component/widget/vitalsign.dart';
 import '../settings/config.dart';
 import 'previous_history_tab.dart';
 import 'tab_container.dart';
+import 'vital_sign_group.dart';
 
 // ignore: must_be_immutable
 class AppBarWithButton extends StatelessWidget {
@@ -322,43 +323,7 @@ class AppBarWithButton extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                            CapWithTextFields(
-                              caption: 'Heaght(CM)',
-                              controller: TextEditingController(),
-                            ),
-                          ],
-                        )
+                        VitalSignGroup()
                       ],
                     ),
                   )),
@@ -369,101 +334,8 @@ class AppBarWithButton extends StatelessWidget {
                   ? MediaQuery.of(context).size.width > 1710
                       ? Expanded(
                           flex: 3,
-                          child: Container(
-                            margin: EdgeInsets.all(0),
-                            padding: EdgeInsets.all(0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              border:
-                                  Border.all(color: Colors.black54, width: 1),
-                              boxShadow: const [
-                                BoxShadow(
-                                    color:backgroundColor,
-                                    blurRadius: 80.0,
-                                    spreadRadius: 8,
-                                    offset: Offset(2.0, 2.0)),
-                              ],
-                            ),
-                            height: 180,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(0),
-                                  child: Container(
-                                    margin:
-                                        const EdgeInsets.only(left: 6, top: 28),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.black, width: 1)),
-                                    width: 100,
-                                    height: 120,
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text("Visit List Search By HCN"),
-                                      SizedBox(
-                                        height: 35,
-                                        width: 150,
-                                        child: TextField(
-                                          maxLength: 11,
-                                          // canRequestFocus : false,
-                                          maxLines: 1,
-                                          //   textCapitalization : TextCapitalization.none,
-                                          // keyboardType: TextInputType.number,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                          textAlignVertical:
-                                              TextAlignVertical.top,
-                                          textAlign: TextAlign.start,
-                                          decoration: InputDecoration(
-                                              fillColor: Colors.white,
-                                              filled: true,
-                                              //  labelText: 'Enter text',
-                                              counterText: '',
-                                              border: OutlineInputBorder()),
-                                          //  controller:controller ,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ElevatedButton(
-                                          onPressed: () {},
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Colors
-                                                  .purple // Background color
-                                              ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Text("Consultant\nPanel"),
-                                          )),
-                                      ElevatedButton(
-                                          onPressed: () {},
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Text("Save & Print"),
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ))
+                          child: 
+                          PrescriptionRightSidePanel())
                       : const SizedBox()
                   : const SizedBox(),
             ],
@@ -476,6 +348,111 @@ class AppBarWithButton extends StatelessWidget {
             ),
         
       ],
+    );
+  }
+}
+
+class PrescriptionRightSidePanel extends StatelessWidget {
+  const PrescriptionRightSidePanel({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(0),
+      padding: EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2),
+        border:
+            Border.all(color: Colors.black54, width: 1),
+        boxShadow: const [
+          BoxShadow(
+              color:backgroundColor,
+              blurRadius: 80.0,
+              spreadRadius: 8,
+              offset: Offset(2.0, 2.0)),
+        ],
+      ),
+      height: 180,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Container(
+              margin:
+                  const EdgeInsets.only(left: 6, top: 28),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Colors.black, width: 1)),
+              width: 100,
+              height: 120,
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.center,
+              children: [
+                Text("Visit List Search By HCN"),
+                SizedBox(
+                  height: 35,
+                  width: 150,
+                  child: TextField(
+                    maxLength: 11,
+                    // canRequestFocus : false,
+                    maxLines: 1,
+                    //   textCapitalization : TextCapitalization.none,
+                    // keyboardType: TextInputType.number,
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                    textAlignVertical:
+                        TextAlignVertical.top,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        //  labelText: 'Enter text',
+                        counterText: '',
+                        border: OutlineInputBorder()),
+                    //  controller:controller ,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors
+                            .purple // Background color
+                        ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Consultant\nPanel"),
+                    )),
+                ElevatedButton(
+                    onPressed: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Save & Print"),
+                    )),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

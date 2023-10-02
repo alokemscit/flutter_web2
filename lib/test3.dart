@@ -1,148 +1,119 @@
-// import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
+import 'package:flutter/material.dart';
 
-// class MyApp extends StatefulWidget {
-//   @override
-//   State<MyApp> createState() => _MyAppState();
-// }
+class MyExpansionTileList extends StatefulWidget {
+  final List<dynamic> elementList;
 
-// class _MyAppState extends State<MyApp> {
-//   List<Menu> data = [];
+  MyExpansionTileList({Key? key, required this.elementList}) : super(key: key);
 
-//   @override
-//   void initState() {
-//     dataList.forEach((element) {
-//       data.add(Menu.fromJson(element));
-//     });
-//     super.initState();
-//   }
+  @override
+  State<StatefulWidget> createState() => _DrawerState();
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         drawer: _drawer(data),
-//         appBar: AppBar(
-//           title: const Text('Expandable ListView'),
-//         ),
-//         body: ListView.builder(
-//           itemCount: data.length,
-//           itemBuilder: (BuildContext context, int index) =>
-//               _buildList(data[index]),
-//         ),
-//       ),
-//     );
-//   }
+class _DrawerState extends State<MyExpansionTileList> {
+  // You can ask Get to find a Controller that is being used by another page and redirect you to it.
+  //final Controller c = Get.find();
 
-//   Widget _drawer(List<Menu> data) {
-//     return Drawer(
-//         child: SafeArea(
-//       child: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             UserAccountsDrawerHeader(
-//                 margin: EdgeInsets.only(bottom: 0.0),
-//                 accountName: Text('demo'),
-//                 accountEmail: Text('demo@webkul.com')),
-//             ListView.builder(
-//               shrinkWrap: true,
-//               physics: NeverScrollableScrollPhysics(),
-//               itemCount: data.length,
-//               itemBuilder: (context, index) {
-//                 return _buildList(data[index]);
-//               },
-//             )
-//           ],
-//         ),
-//       ),
-//     ));
-//   }
+  List<Widget> _getChildren(final List<dynamic> elementList) {
+    List<Widget> children = [];
+    elementList.toList().asMap().forEach((index, element) {
+      int selected = 0;
+      final subMenuChildren = <Widget>[];
+      // try {
+      //   for (var i = 0; i < element['children'].length; i++) {
+      //     subMenuChildren.add(new ListTile(
+      //       leading: Visibility(
+      //         child: Icon(
+      //           Icons.account_box_rounded,
+      //           size: 15,
+      //         ),
+      //         visible: false,
+      //       ),
+      //       onTap: () => {
+      //         setState(() {
+      //         //  log("The item clicked is " + element['children'][i]['state']);
 
-//   Widget _buildList(Menu list) {
-//     if (list.subMenu.isEmpty)
-//       return Builder(builder: (context) {
-//         return ListTile(
-//             // onTap:() => Navigator.push(context, MaterialPageRoute(builder: (context) => SubCategory(list.name))),
-//             leading: SizedBox(),
-//             title: Text(list.name));
-//       });
-//     return ExpansionTile(
-//       leading: Icon(list.icon),
-//       title: Text(
-//         list.name,
-//         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//       ),
-//       children: list.subMenu.map(_buildList).toList(),
-//     );
-//   }
-// }
+      //           //from the json we got which contains the menu and submenu we will need the "state"
+      //           // json item to get the unique identifier so we know what to open
 
-// List dataList = [
-//   {
-//     "name": "Sales",
-//     "icon": Icons.payment,
-//     "subMenu": [
-//       {"name": "Orders"},
-//       {"name": "Invoices"}
-//     ]
-//   },
-//   {
-//     "name": "Marketing",
-//     "icon": Icons.volume_up,
-//     "subMenu": [
-//       {
-//         "name": "Promotions",
-//         "subMenu": [
-//           {"name": "Catalog Price Rule"},
-//           {"name": "Cart Price Rules"}
-//         ]
-//       },
-//       {
-//         "name": "Communications",
-//         "subMenu": [
-//           {"name": "Newsletter Subscribers"}
-//         ]
-//       },
-//       {
-//         "name": "SEO & Search",
-//         "subMenu": [
-//           {"name": "Search Terms"},
-//           {"name": "Search Synonyms"}
-//         ]
-//       },
-//       {
-//         "name": "User Content",
-//         "subMenu": [
-//           {"name": "All Reviews"},
-//           {"name": "Pending Reviews"}
-//         ]
-//       }
-//     ]
-//   }
-// ];
-// class Menu {
-//   String name;
-//   IconData icon = Icons.ac_unit; // Initialize 'icon' with a default value.
-//   List<Menu> subMenu = [];
+      //           switch (element['children'][i]['state']) {
+      //             case '/fund-type':
+      //               //setting current index and opening a new screen using page controller with animations
+      //               _selectedPageIndex = 1;
+      //               WidgetsBinding.instance.addPostFrameCallback((_) {
+      //                 if (_pageController.hasClients) {
+      //                   _pageController.animateToPage(1, duration: Duration(milliseconds: 1), curve: Curves.easeInOut);
+      //                 }
+      //               });
+      //               c.title.value = "Fund Type";
+      //               Navigator.pop(context);
 
-//   Menu({required this.name, required this.subMenu, IconData? icon}) {
-//   this.icon = icon ?? Icons.ac_unit; // Initialize 'icon' with a default value if it's not provided.
-// }
 
-//   Menu.fromJson(Map<String, dynamic> json) {
-//     name = json['name'];
-//     if (json['icon'] != null) {
-//       icon = json['icon'];
-//     }
-//     if (json['subMenu'] != null) {
-//       subMenu.clear();
-//       json['subMenu'].forEach((v) {
-//         subMenu.add(Menu.fromJson(v));
-//       });
-//     }
-//   }
-// }
+      //               break;
+      //             case '/fund-sources':
+      //               _selectedPageIndex = 2;
+      //               // _pageController.jumpToPage(2);
+      //               WidgetsBinding.instance.addPostFrameCallback((_) {
+      //                 if (_pageController.hasClients) {
+      //                   _pageController.animateToPage(2,
+      //                       duration: Duration(milliseconds: 1),
+      //                       curve: Curves.easeInOut);
+      //                 }
+      //               });
+      //               c.title.value = "Fund Source";
 
+      //               Navigator.pop(context);
+
+      //               break;
+      //           }
+      //         })
+      //       },
+      //       title: Text(
+      //         element['children'][i]['title'],
+      //         style: TextStyle(fontWeight: FontWeight.w700),
+      //       ),
+      //     ));
+      //   }
+        children.add(
+          new ExpansionTile(
+            key: Key(index.toString()),
+            initiallyExpanded: index == selected,
+            leading: Icon(
+              Icons.audiotrack,
+              color: Colors.green,
+              size: 30.0,
+            ),
+            title: Text(
+              element['title'],
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+            ),
+            children: subMenuChildren,
+            onExpansionChanged: ((newState) {
+              if (newState) {
+                Duration(seconds: 20000);
+                selected = index;
+               // log(' selected ' + index.toString());
+              } else {
+                selected = -1;
+                //log(' selected ' + selected.toString());
+              }
+            }),
+          ),
+        );
+      }
+    );
+    return children;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Column(
+      children: _getChildren(widget.elementList),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+}

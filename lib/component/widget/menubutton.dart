@@ -36,7 +36,7 @@ class MenuButton extends StatelessWidget {
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: isSelected?kSecondaryColor:color,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(4),
                   border: Border.all(color: Colors.black38, width: 0.1),
                   //  boxShadow: const [
                   //   BoxShadow(

@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:web_2/for_test.dart';
 import 'package:web_2/test2.dart';
 
 
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
+    return   MaterialApp(
       debugShowCheckedModeBanner: false,
       home:  Test2(),
     );
