@@ -13,7 +13,7 @@ import 'component/settings/config.dart';
 class Test2 extends StatelessWidget {
   //final bool isSelected = true;
 //  TextEditingController mycontroller =  TextEditingController();
-     TextEditingController controller = TextEditingController();
+  TextEditingController controller = TextEditingController();
   // ignore: non_constant_identifier_names
   NextIndex(List<ItemModel> list, int index) {
     if (list.length > 1) {
@@ -38,6 +38,7 @@ class Test2 extends StatelessWidget {
           BlocProvider(
             create: (context) => CurrentIDBloc(),
           ),
+          BlocProvider(create: (constext) => MenubuttonCloseBlocBloc()),
         ],
         child: Responsive(
           mobile: Container(
@@ -50,11 +51,57 @@ class Test2 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 220),
-                //      //  // child:
-                child: SideMenu(),
+              BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
+                builder: (context, state) {
+                  bool b = state.IsClose;
+                  double ss = b == true ? 0 : 220;
+                  print(ss);
+                  return AnimatedSize(
+                    curve: Curves.easeIn,
+                    //  vsync: this,
+                    duration: const Duration(milliseconds: 300),
+                    child: ConstrainedBox(
+                      constraints:  BoxConstraints(maxWidth: ss),
+                      //      //  // child:
+                      child: Stack(
+                        children: [
+                          const SideMenu(),
+                          Positioned(top: 0,right: 0,child: IconButton(
+                      onPressed: () {
+                      context
+                          .read<MenubuttonCloseBlocBloc>()
+                          .add(IsMenuClose(IsClose: !state.IsClose));
+                     },
+                    icon: const Icon(Icons.arrow_back_sharp),
+                    ),
+                  )
+
+
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
+
+              // BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
+              //   builder: (context, state) {
+              //     return IconButton(
+              //       onPressed: () {
+              //         context
+              //             .read<MenubuttonCloseBlocBloc>()
+              //             .add(IsMenuClose(IsClose: !state.IsClose));
+              //       },
+              //       icon: const Icon(Icons.abc_outlined),
+              //     );
+              //   },
+              // ),
+
+              // ConstrainedBox(
+              //   constraints: const BoxConstraints(maxWidth: 220),
+              //   //      //  // child:
+              //   child: SideMenu(),
+              // ),
               Expanded(
                 // flex: 10,
                 //flex:  _size.width > 1340 ? 11 : 9,
@@ -65,55 +112,79 @@ class Test2 extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       height: 30,
-                      child: BlocBuilder<MenuItemBloc, ItemMenuState>(
-                        builder: (context, state) {
-                          if (state is ItemMenuAdded &&
-                              state.menuitem.isNotEmpty) {
-                            final itemList = state.menuitem;
-                            return BlocBuilder<CurrentIDBloc, CurrentIdState>(
-                              builder: (context1, state1) {
-                                return ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: const ScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: itemList.length,
-                                    itemBuilder: (context, index) {
-                                      final ItemModel menuitem =
-                                          itemList[index];
-                                      return MenuButton(
-                                        isSelected: false,
-                                        // state1.id != menuitem.id ? true : false,
-                                        isCrossButton: true,
-                                        text: menuitem.name,
-                                        buttonClick: () {
-                                          print('b');
-                                          context1.read<CurrentIDBloc>().add(
-                                              SetCurrentId(id: menuitem.id));
-                                          print(state1.id);
-                                          print(menuitem.id);
-                                        },
-                                        crossButtonClick: () {
-                                          context.read<MenuItemBloc>().add(
-                                              ItemMenuDelete(
-                                                  menuitem: menuitem));
-                                          context1.read<CurrentIDBloc>().add(
-                                              SetCurrentId(
-                                                  id: NextIndex(
-                                                      itemList, index)));
-                                        },
-                                        color: state1.id.trim() !=
-                                                menuitem.id.trim()
-                                            ? kSecondaryColor
-                                            : Color.fromARGB(
-                                                255, 255, 255, 255),
-                                      );
-                                    });
-                              },
-                            );
-                          } else {
-                            return SizedBox();
-                          }
-                        },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+
+             BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
+                builder: (context, state) {
+                  return state.IsClose? IconButton(
+                    onPressed: () {
+                      context
+                          .read<MenubuttonCloseBlocBloc>()
+                          .add(IsMenuClose(IsClose: !state.IsClose));
+                    },
+                    icon: const Icon(Icons.menu_sharp),
+                  ):SizedBox();
+                },
+              ),
+
+
+
+
+                          BlocBuilder<MenuItemBloc, ItemMenuState>(
+                            builder: (context, state) {
+                              if (state is ItemMenuAdded &&
+                                  state.menuitem.isNotEmpty) {
+                                final itemList = state.menuitem;
+                                return BlocBuilder<CurrentIDBloc, CurrentIdState>(
+                                  builder: (context1, state1) {
+                                    return ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: const ScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: itemList.length,
+                                        itemBuilder: (context, index) {
+                                          final ItemModel menuitem =
+                                              itemList[index];
+                                          return MenuButton(
+                                            isSelected: false,
+                                            // state1.id != menuitem.id ? true : false,
+                                            isCrossButton: true,
+                                            text: menuitem.name,
+                                            buttonClick: () {
+                                              print('b');
+                                              context1.read<CurrentIDBloc>().add(
+                                                  SetCurrentId(id: menuitem.id));
+                                              print(state1.id);
+                                              print(menuitem.id);
+                                            },
+                                            crossButtonClick: () {
+                                              context.read<MenuItemBloc>().add(
+                                                  ItemMenuDelete(
+                                                      menuitem: menuitem));
+                                              context1.read<CurrentIDBloc>().add(
+                                                  SetCurrentId(
+                                                      id: NextIndex(
+                                                          itemList, index)));
+                                            },
+                                            color: state1.id.trim() !=
+                                                    menuitem.id.trim()
+                                                ? kSecondaryColor
+                                                : Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                          );
+                                        });
+                                  },
+                                );
+                              } else {
+                                return SizedBox();
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -154,8 +225,8 @@ class Test2 extends StatelessWidget {
                                                       onPressed: () {},
                                                       child:
                                                           Text("Click Me..")),
-                                                   TextField(
-                                                   controller: controller,
+                                                  TextField(
+                                                    controller: controller,
                                                   )
                                                 ],
                                               ),
@@ -315,30 +386,33 @@ class CurrentIDBloc extends Bloc<CurrenIdEvent, CurrentIdState> {
   }
 }
 
-// class MenubuttonCloseBlocBloc
-//     extends Bloc<MenubuttonCloseBlocEvent, MenubuttonCloseBlocState> {
-//   MenubuttonCloseBlocBloc() : super(const MenubuttonCloseBlocInitial(false)) {
-//     on<MenubuttonCloseBlocEvent>((event, emit) {
-//       if (event is IsMenuClose) {
-//         emit(MenubuttonCloseBlocInitial(event.IsClose));
-//         //  print(event.isHover.toString());
-//       }
-//     });
-//   }
-// }
+class MenubuttonCloseBlocBloc
+    extends Bloc<MenubuttonCloseBlocEvent, MenubuttonCloseBlocState> {
+  MenubuttonCloseBlocBloc() : super( MenubuttonCloseBlocInitial(IsClose:false)) {
+    on<MenubuttonCloseBlocEvent>((event, emit) {
+      if (event is IsMenuClose) {
+        emit(MenubuttonCloseBlocInitial(IsClose: event.IsClose));
+        //  print(event.isHover.toString());
+      }
+    });
+  }
+}
 
-// sealed class MenubuttonCloseBlocState {
-//   final bool IsClose;
-//   const MenubuttonCloseBlocState(this.IsClose);
-// }
+sealed class MenubuttonCloseBlocState {
+  final bool IsClose;
 
-// final class MenubuttonCloseBlocInitial extends MenubuttonCloseBlocState {
-//   const MenubuttonCloseBlocInitial(super.IsClose);
-// }
+  MenubuttonCloseBlocState({required this.IsClose});
+   
+}
 
-// sealed class MenubuttonCloseBlocEvent {}
+final class MenubuttonCloseBlocInitial extends MenubuttonCloseBlocState {
+  MenubuttonCloseBlocInitial( {required super.IsClose});
+   
+}
 
-// class IsMenuClose extends MenubuttonCloseBlocEvent {
-//   final bool IsClose;
-//   IsMenuClose({required this.IsClose});
-// }
+sealed class MenubuttonCloseBlocEvent {}
+
+class IsMenuClose extends MenubuttonCloseBlocEvent {
+  final bool IsClose;
+  IsMenuClose({required this.IsClose});
+}
