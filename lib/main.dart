@@ -2,6 +2,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:web_2/component/settings/config.dart';
 
 import 'package:web_2/test4.dart';
 
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   const MaterialApp(
+    return    MaterialApp(
+      scrollBehavior: CustomScrollBehavior(),
       debugShowCheckedModeBanner: false,
       home: Testing(),
     );
