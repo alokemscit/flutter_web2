@@ -1,19 +1,32 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CustomDatePicker extends StatelessWidget {
-  const CustomDatePicker({
-    super.key,
-    // ignore: non_constant_identifier_names
-    required TextEditingController date_controller, this.label='Select Date',
-  }) : _date_controller = date_controller;
-
+class CustomDatePicker extends StatefulWidget {
   // ignore: non_constant_identifier_names
-  final TextEditingController _date_controller;
+  final TextEditingController date_controller;
   final String? label;
+
+  const CustomDatePicker(
+      {super.key, required this.date_controller, this.label = 'Select Date'});
+
+  @override
+  State<CustomDatePicker> createState() => _CustomDatePickerState();
+}
+
+
+class _CustomDatePickerState extends State<CustomDatePicker> {
+
+
+@override
+void initState() {
+  super.initState();
+ widget.date_controller.text =   DateFormat('dd/MM/yyyy').format(DateTime.now());
+}
+
+
   @override
   Widget build(BuildContext context) {
+    //String formattedDate =DateFormat('dd/MM/yyyy').format(DateTime.now());
     return SizedBox(
       width: 140,
       height: 35,
@@ -24,9 +37,9 @@ class CustomDatePicker extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
         child: TextFormField(
-          controller: _date_controller,
+          controller: widget.date_controller,
           decoration: InputDecoration(
-            labelText: label,
+            labelText: widget.label,
             labelStyle: const TextStyle(fontSize: 14),
             border: const OutlineInputBorder(),
             contentPadding:
@@ -34,7 +47,6 @@ class CustomDatePicker extends StatelessWidget {
             suffixIcon: InkWell(
               child: const Icon(Icons.calendar_month_outlined),
               onTap: () async {
-               
                 DateTime? pickedDate = await showDatePicker(
                   context: context, // Pass the correct BuildContext.
                   initialDate: DateTime.now(),
@@ -45,10 +57,17 @@ class CustomDatePicker extends StatelessWidget {
                 if (pickedDate != null) {
                   String formattedDate =
                       DateFormat('dd/MM/yyyy').format(pickedDate);
-                  _date_controller.text = formattedDate;
+                      setState(() {
+                         widget.date_controller.text = formattedDate;
+                      });
+                 
                 } else {
                   // print("Date is not selected");
-                  _date_controller.text = '';
+                  setState(() {
+                     widget.date_controller.text =
+                      DateFormat('dd/MM/yyyy').format(DateTime.now());
+                  });
+                 
                 }
               },
             ),

@@ -6,8 +6,9 @@ class AppTime {
   final String status;
   final String image;
   final String comments;
+  final String date;
   final int sl;
-  AppTime(
+  AppTime( 
       {required this.id,
       required this.name,
       required this.designation,
@@ -15,18 +16,18 @@ class AppTime {
       required this.status,
       required this.image,
       required this.comments,
-      required this.sl});
+      required this.sl,required this.date,});
 
-  @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ stime.hashCode;
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppTime &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          stime == other.stime;
+  // @override
+  // int get hashCode => id.hashCode ^ name.hashCode ^ stime.hashCode;
+  // @override
+  // bool operator ==(Object other) =>
+  //     identical(this, other) ||
+  //     other is AppTime &&
+  //         runtimeType == other.runtimeType &&
+  //         id == other.id &&
+  //         name == other.name &&
+  //         stime == other.stime;
 }
 
 class DistinctDoctor {
@@ -37,5 +38,7 @@ class DistinctDoctor {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppTime && runtimeType == other.runtimeType && id == other.id;
+      other is DistinctDoctor &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
 }

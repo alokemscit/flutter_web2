@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,10 @@ import 'package:web_2/data/apiBloc.dart';
 import 'package:web_2/model/app_time.dart';
 
 import 'component/widget/custom_datepicker.dart';
+import 'component/widget/doctor_panel.dart';
 import 'data/data_api.dart';
+import 'data/data_docror_image.dart';
+ 
 
 class Testing extends StatelessWidget {
   const Testing({super.key});
@@ -39,8 +43,6 @@ class Testing extends StatelessWidget {
           child: BlocBuilder<DepartmentBloc, DepartmentState>(
             builder: (context, state) {
               if (state is DepartmentLoading) {
-                //print('Dep loading......');
-                // context.read<DepartmentBloc>().add(GetDepartmentList());
                 return _buildLoading();
               } else if (state is DepartmentLoaded) {
                 return AppointmentPage(
@@ -51,10 +53,6 @@ class Testing extends StatelessWidget {
               } else {
                 return Container();
               }
-
-              // return SingleChildScrollView(
-              //   child: Container(),
-              // );
             },
           ),
         ),
@@ -73,6 +71,8 @@ class AppointmentPage extends StatelessWidget {
   String? unitID;
   List<DepartmentModel>? myDeptList;
   List<UnitModel>? myUnitList;
+  List<AppTime>? list = [];
+  List<DistinctDoctor>? dlist = [];
   //const AppintmentPage({super.key});
 
   AppointmentPage({super.key, required this.myModel});
@@ -97,6 +97,9 @@ class AppointmentPage extends StatelessWidget {
           myUnitList = state.unitList;
 
           //  print('dept click');
+        }
+        if (state is setUnitIDState) {
+          unitID = state.unitID;
         }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -169,7 +172,9 @@ class AppointmentPage extends StatelessWidget {
                     onTap: (value) {
                       unitID = value.toString();
                       print(unitID);
-                      context.read<DropdownBloc>().add(refreshEvent());
+                      context
+                          .read<DropdownBloc>()
+                          .add(setUnitIDEvent(unitID: unitID!));
                     },
                     width: 240,
                     labeltext: "Select Unit",
@@ -186,27 +191,102 @@ class AppointmentPage extends StatelessWidget {
                   ),
 
                   ShowButton(
-                    did: departmentID ?? '',
-                    uid: unitID ?? '',
-                    date: _date_controller.text ?? '',
+                    onTab: () {
+                      print('object');
+
+                      bool b = _date_controller.text == null
+                          ? true
+                          : departmentID == null
+                              ? true
+                              : unitID == null
+                                  ? true
+                                  : false;
+
+                      if (b) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).size.height - 100,
+                                left: MediaQuery.of(context).size.width * .4,
+                                right: MediaQuery.of(context).size.width * .4),
+//   //padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*.3),
+                            content: const Text(
+                                "Please selct the required dropdown field"),
+                          ),
+                        );
+                        return;
+                      }
+
+                      context.read<DoctorShowBloc>().add(DoctorShowSubmitEvent(
+                          date: _date_controller.text.toString(),
+                          did: departmentID!.toString(),
+                          unit: unitID!.toString()));
+                    },
+
+                    // did: departmentID ?? '',
+                    // uid: unitID ?? '',
+                    // date: _date_controller.text.toString(),
                   ),
 
                   // context.read<DropdownBloc>().onChange(change)
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // DoctorPanel(data),
-                    // DoctorPanel(),DoctorPanel(),DoctorPanel(),DoctorPanel(),DoctorPanel(),DoctorPanel(),
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: BlocBuilder<DoctorShowBloc, DoctorShowState>(
+                builder: (context, state) {
+                  // List<AppTime>? list = [];
+                  if (state is DoctorShowLoding) {
+                    list = [];
+                    dlist = [];
+                    print('Loading');
+                    return SizedBox(
+                        height: MediaQuery.of(context).size.height - 80,
+                        child:
+                            const Center(child: CircularProgressIndicator()));
+                  } else if (state is DoctorShowLoded) {
+                    debugPrint('Loaded');
+                    list = state.list;
+                    dlist = state.dList;
+                    //  print(list.toString());
+                    print(list!.length);
+                  } else if (StepState is DoctorShowError) {
+                    print('Error');
+                    return const Expanded(
+                        child: Center(child: Text('Data Loading Eroor!')));
+                  } else {
+                    return SizedBox();
+                  }
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      runSpacing: 12,
+                      spacing: 12,
+                      children: List.generate(
+                        dlist!.length,
+                        (index) => DoctorPanel(
+                            data: list!
+                                .toList()
+                                .where((e) => e.id == dlist![index].id)
+                                .toList()),
+                      ),
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children:list.generate(start, end)
+
+                    //   // [
+                    //   //    DoctorPanel(data: list!.toList()),
+                    //   //   // DoctorPanel(),DoctorPanel(),DoctorPanel(),DoctorPanel(),DoctorPanel(),DoctorPanel(),
+                    //   // ],
+                    // ),
+                  );
+                },
               ),
             ),
           ],
@@ -217,55 +297,30 @@ class AppointmentPage extends StatelessWidget {
 }
 
 class ShowButton extends StatelessWidget {
-  final String? did;
-  final String? uid;
-  final String? date;
+  final VoidCallback onTab;
   const ShowButton({
     Key? key,
-    required this.did,
-    required this.uid,
-    required this.date,
+    required this.onTab,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DoctorShowBloc, DoctorShowState>(
-      builder: (context, state) {
-        return SizedBox(
-          width: 75,
-          height: 35,
-          child: ElevatedButton(
-            onPressed: () {
-              //var snackBar = SnackBar(content: Text('Hello, I am here'));
-              // Step 3
-              ScaffoldMessenger.of(context)
-                  .showSnackBar( 
-                  SnackBar(
-          backgroundColor:Colors.red,
-  behavior: SnackBarBehavior.floating,
-  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height-100
-  ,left: MediaQuery.of(context).size.width*.4,right: MediaQuery.of(context).size.width*.4
-  ),
-  //padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*.3),
-  content: const Text("Hello World!"),
-)
-                  );
-
-              // context
-              //     .read<DoctorShowBloc>()
-              //     .add(DoctorShowSubmitEvent(date: date, did: did, unit: uid));
-            },
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.grey.shade700),
-            ),
-            child: const Text("Show"),
-          ),
-        );
-      },
+    return SizedBox(
+      width: 75,
+      height: 35,
+      child: ElevatedButton(
+        onPressed: onTab,
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Colors.grey.shade700),
+        ),
+        child: const Text("Show"),
+      ),
     );
   }
 }
+
+enum ToastType { error, warning, success }
 
 abstract class DoctorShowEvent extends Equatable {}
 
@@ -282,6 +337,11 @@ class DoctorShowSubmitEvent extends DoctorShowEvent {
 
 abstract class DoctorShowState extends Equatable {}
 
+class DoctorShowInit extends DoctorShowState {
+  @override
+  List<Object?> get props => [];
+}
+
 class DoctorShowLoding extends DoctorShowState {
   @override
   List<Object?> get props => [];
@@ -289,8 +349,8 @@ class DoctorShowLoding extends DoctorShowState {
 
 class DoctorShowLoded extends DoctorShowState {
   final List<AppTime>? list;
-
-  DoctorShowLoded(this.list);
+  final List<DistinctDoctor>? dList;
+  DoctorShowLoded(this.list, this.dList);
   @override
   List<Object?> get props => [list];
 }
@@ -308,9 +368,9 @@ class DoctorShowError extends DoctorShowState {
 
 class DoctorShowBloc extends Bloc<DoctorShowEvent, DoctorShowState> {
   final data_api apiRepository;
-  DoctorShowBloc(this.apiRepository) : super(DoctorShowLoding()) {
+  DoctorShowBloc(this.apiRepository) : super(DoctorShowInit()) {
     on<DoctorShowSubmitEvent>((event, emit) async {
-      //emit(DoctorShowLoding());
+      emit(DoctorShowLoding());
       try {
         final mList = await apiRepository.createLead([
           {
@@ -321,24 +381,40 @@ class DoctorShowBloc extends Bloc<DoctorShowEvent, DoctorShowState> {
             'p_entry_by': '1000'
           }
         ]);
+        List<DoctorImage> docImage = await GetDoctorImage().ImageList();
 
-        Set<AppTime> mlist = mList.map((item) {
+        print('${docImage.length}len');
+        Set<AppTime> mlist1 = mList.map((item) {
           return AppTime(
-            id: item['DPT_GRP_ID'].toString(),
-            name: item['DEPT_GRP_NAME'],
-            designation: '',
-            stime: '',
-            status: '',
-            image: '',
-            comments: '',
-            sl: 0,
+            id: item['DOCTOR_ID'].toString(),
+            name: item['DOCTOR_NAME'],
+            designation: item['DEG'].toString(),
+            stime: item['ATIME'].toString(),
+            status: item['TP'].toString(),
+            image:
+                'https://www.asgaralihospital.com/storage/${docImage.where((e) => e.id == item['DOCTOR_ID'].toString()).first.image}',
+           // 'https://www.asgaralihospital.com/storage/doctors/vczm1a75nsZZfBfxqpXWvZzDI.webp',
+            comments:
+                item['COMMENTS'] == null ? '' : item['COMMENTS'].toString(),
+            sl: item['FSL'],
+            date: event.date,
           );
         }).toSet();
 
-        emit(DoctorShowLoded(mlist.toList()));
+
+        Set<DistinctDoctor> dList = mList.map((item) {
+          return DistinctDoctor(
+            id: item['DOCTOR_ID'].toString(),
+          );
+        }).toSet();
+
+        print(dList.length);
+
+        await Future.delayed(const Duration(milliseconds: 100));
+        emit(DoctorShowLoded(mlist1.toList(), dList.toList()));
 
         // emit(DoctorShowLoded(mlist.toList()));
-      } on NetError {
+      } on Error {
         emit(DoctorShowError('Network face error'));
       }
     });
@@ -371,6 +447,14 @@ class setDepartmentID extends DropDownEvent {
   List<Object?> get props => [];
 }
 
+// ignore: camel_case_types
+class setUnitIDEvent extends DropDownEvent {
+  final String unitID;
+  setUnitIDEvent({required this.unitID});
+  @override
+  List<Object?> get props => [unitID];
+}
+
 abstract class DropDownState extends Equatable {}
 
 class DropdownInit extends DropDownState {
@@ -395,6 +479,14 @@ class DropDownDepartmentState extends DropDownState {
   DropDownDepartmentState({required this.departmentID, required this.unitList});
   @override
   List<Object?> get props => [];
+}
+
+// ignore: camel_case_types
+class setUnitIDState extends DropDownState {
+  final String unitID;
+  setUnitIDState({required this.unitID});
+  @override
+  List<Object?> get props => [unitID];
 }
 
 class DropdownBloc extends Bloc<DropDownEvent, DropDownState> {
@@ -425,9 +517,12 @@ class DropdownBloc extends Bloc<DropDownEvent, DropDownState> {
     on<refreshEvent>((event, emit) {
       emit(DropdownInit());
     });
+
+    on<setUnitIDEvent>((event, emit) {
+      emit(setUnitIDState(unitID: event.unitID));
+    });
   }
 }
-
 
 // List<DepartmentModel> getDp(List<DepartmentModel> list,String gid) {
 //   return  (list..where((o) => o.gid == gid).toList());
