@@ -1,8 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
 import '../../model/app_time.dart';
 import '../settings/config.dart';
+import '../settings/functions.dart';
+
 
 class DoctorPanel extends StatelessWidget {
   final List<AppTime> data;
@@ -61,7 +65,9 @@ class DoctorSlotPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 12, top: 6),
-      height: MediaQuery.of(context).size.height - 190,
+      height: MediaQuery.of(context).size.width < 835
+          ? MediaQuery.of(context).size.height - 230
+          : MediaQuery.of(context).size.height - 190,
       width: 300,
       decoration: const BoxDecoration(boxShadow: [
         BoxShadow(
@@ -87,11 +93,9 @@ class DoctorSlotPanel extends StatelessWidget {
               Container(
                 height: 48,
                 margin: const EdgeInsets.all(0),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Colors.black.withOpacity(0.3)),
+                    border: Border.all(color: Colors.black.withOpacity(0.3)),
                     boxShadow: myboxShadow),
                 alignment: Alignment.centerLeft,
                 child: Align(
@@ -103,13 +107,19 @@ class DoctorSlotPanel extends StatelessWidget {
               ),
               //const SizedBox(width: 6,),
               Expanded(
-                  child: getInkWell(data[index].status)
-                      ? InkWell(
-                          onTap: () => _dialogBuilder(context,data[index]),
-                          child: RightCellDoctorPanel(data: data,index: index,),
-                        )
-                      : RightCellDoctorPanel(data: data,index: index,),
+                child: getInkWell(data[index].status)
+                    ? InkWell(
+                        onTap: () => DoctorDialog(context, data[index]),
+                        child: RightCellDoctorPanel(
+                          data: data,
+                          index: index,
+                        ),
+                      )
+                    : RightCellDoctorPanel(
+                        data: data,
+                        index: index,
                       ),
+              ),
             ],
           );
         },
@@ -129,11 +139,9 @@ class DoctorInfoPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints:
-          const BoxConstraints(maxWidth: 180, maxHeight: 120),
-      child: Stack(
-        children:[
-          Column(
+      constraints: const BoxConstraints(maxWidth: 180, maxHeight: 120),
+      child: Stack(children: [
+        Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -164,16 +172,17 @@ class DoctorInfoPanel extends StatelessWidget {
             )
           ],
         ),
-
-         Positioned(
-          top: 2,
-          right: 2,
-          child: TextButton(onPressed:(){}, child: const Text('Edit for slot block',style: TextStyle(fontSize: 10,color: Color.fromARGB(255, 0, 41, 224)),))
-          )
-
-        ]
-         
-      ),
+        Positioned(
+            top: 2,
+            right: 2,
+            child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Edit for slot block',
+                  style: TextStyle(
+                      fontSize: 10, color: Color.fromARGB(255, 0, 41, 224)),
+                )))
+      ]),
     );
   }
 }
@@ -194,14 +203,11 @@ class DoctorPhotPanel extends StatelessWidget {
       width: 100,
       // margin: const EdgeInsets.only(left: 4),
       decoration: BoxDecoration(
-         // color: Colors.grey.withOpacity(0.051),
+          // color: Colors.grey.withOpacity(0.051),
           //border: Border.all(color: Colors.grey.withOpacity(0.3),width: 0.3),
-          borderRadius:  BorderRadius.circular(8)
-          )
-          ,
+          borderRadius: BorderRadius.circular(8)),
       child: Image.network(
-         
-       // alignment : Alignment.topLeft,
+        // alignment : Alignment.topLeft,
         data.isNotEmpty
             ? data[0].image
             : 'https://www.asgaralihospital.com/frontend/images/logo/aah-logo.png',
@@ -211,87 +217,15 @@ class DoctorPhotPanel extends StatelessWidget {
   }
 }
 
-Future<void> _dialogBuilder(BuildContext context, AppTime? data) {
-  
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          elevation:0,
-          title:  Container(
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 54, 6, 230).withOpacity(0.8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(data!.name,style: const TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),),
-                  const SizedBox(height: 2,),
-                  Text('Slot Time : ${data.date}',style: const TextStyle(fontSize: 14,color: Colors.white70,fontWeight: FontWeight.w500),),
-                  const SizedBox(height: 2,),
-                  Text('Slot Time : ${data.stime}',style: const TextStyle(fontSize: 14,color: Colors.white70,fontWeight: FontWeight.w500),),
-                ],
-              ),
-            ),
-          ),
-           titlePadding:  EdgeInsets.zero,
-           contentPadding:const EdgeInsets.all(8),
-          content: Container(
-            decoration: BoxDecoration(
-               border: Border.all(color: Colors.grey.shade300)
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    
-                     
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Save'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+// ignore: non_constant_identifier_names
 
 
 
 class RightCellDoctorPanel extends StatelessWidget {
   const RightCellDoctorPanel({
     super.key,
-    required this.data, required this.index,
+    required this.data,
+    required this.index,
   });
 
   final List<AppTime> data;

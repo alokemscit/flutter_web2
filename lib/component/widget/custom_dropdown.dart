@@ -26,7 +26,8 @@ class CustomDropDown extends StatelessWidget {
         onChanged: onTap,
         decoration:  InputDecoration(
           labelText: labeltext,
-          labelStyle: const TextStyle(fontSize: 14),
+           labelStyle: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.w500,fontSize: 14),
+          //labelStyle: const TextStyle(fontSize: 14),
           border: const OutlineInputBorder(),
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
         ),

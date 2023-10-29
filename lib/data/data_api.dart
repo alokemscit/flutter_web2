@@ -8,10 +8,8 @@ class data_api{
     String url = 'https://web.asgaralihospital.com/api/mob/getdata';
     final response = await http.post(
       Uri.parse(url),
-       headers: {'Content-Type': 'application/json',
-       'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE, HEAD',
-         },
+       headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "Origin, X-Requested-With, Content-Type, Accept",
+        },
       body: jsonEncode(parameter),
       
     );
@@ -28,7 +26,9 @@ class data_api{
     String url = 'https://web.asgaralihospital.com/api/mob/generate_otp';
     final response = await http.post(
       Uri.parse(url),
-       headers: {'Content-Type': 'application/json'},
+       headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "Origin, X-Requested-With, Content-Type, Accept",
+        },
+       
       body: jsonEncode(parameter),
       
     );
