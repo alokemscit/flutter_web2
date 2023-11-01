@@ -2,18 +2,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CustomIconButton extends StatelessWidget {
+class MyIconButton extends StatelessWidget {
   final String text;
   final Function() buttonClick;
   final IconData icon;
   final Color color;
+  final double width;
 
-  const CustomIconButton({
+  const MyIconButton({
     Key? key,
     required this.text,
     required this.buttonClick,
     required this.icon,
-     this.color=const Color.fromARGB(255, 248, 248, 248),
+    this.color = const Color.fromARGB(255, 248, 248, 248),  this.width=0,
   }) : super(key: key);
 
   @override
@@ -36,6 +37,7 @@ class CustomIconButton extends StatelessWidget {
                 },
                 onTap: buttonClick,
                 child: Container(
+                  width: width==0?double.infinity:width,
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: color,

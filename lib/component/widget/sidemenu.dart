@@ -1,8 +1,9 @@
-import 'dart:html';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web_2/test2.dart';
+import 'package:web_2/model/user_model.dart';
+import 'package:web_2/pages/home_page/home_page.dart';
 import '../settings/config.dart';
 import 'sidemenu_item.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -23,49 +24,110 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      padding: const EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
-      color: kBgLightColor,
+      padding: const EdgeInsets.only(top: kIsWeb ? 8 : 0),
+      decoration: const BoxDecoration(
+          color: kBgLightColor,
+          border: Border(right: BorderSide(color: Colors.black12, width: 0.5))),
       child: SafeArea(
-        child: BlocBuilder<MenuItemBloc, ItemMenuState>(
-          builder: (context, state) {
-            return BlocBuilder<CurrentIDBloc, CurrentIdState>(
-              builder: (context1, state1) {
-                return SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset(
-                            "assets/images/Logo Outlook.png",
-                            width: 32,
-                          ),
-                          const Spacer(),
-                          // We don't want to show this close button on Desktop mood
-                          //if (!Responsive.isDesktop(context))
-                          //   const CloseButton(
-                          //  ),
-                        ],
-                      ),
 
-                      const SizedBox(
-                        height: 25,
-                      ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            children: [
+              
+
+FutureBuilder<User_Model>(
+  future: getUserInfo(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.done) {
+      if (snapshot.hasData) {
+        // Attempt to decode the base64 image
+        try {
+          final MemoryImage backgroundImage =
+              MemoryImage(base64.decode(snapshot.data!.iMAGE!));
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircleAvatar(
+                  backgroundColor: Colors.blue.withOpacity(0.1),
+                  radius: 150,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.1),
+                    child: CircleAvatar(
+                      radius: 220,
+                      backgroundImage: backgroundImage,
+                    ),
+                  ),
+                ),
+              ),
+               SizedBox(
+                height: 60,
+                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                   Text(snapshot.data!.eMPNAME!,style:TextStyle(fontSize: 12,fontWeight: FontWeight.w400),),
+                    Text(snapshot.data!.dSGNAME!,style:TextStyle(fontSize: 11,fontWeight: FontWeight.w300),)
+                  ],
+                             ),
+               )
+            ],
+          );
+        } catch (e) {
+          // Handle the error by displaying a placeholder or an error message
+          return CircleAvatar(
+            radius: 220,
+            backgroundColor: Colors.red.withOpacity(0.05),
+          );
+        }
+      } else {
+        return SizedBox(); // Handle the case when the image couldn't be loaded
+      }
+    } else {
+      return const CircularProgressIndicator(); // Display a loading indicator while fetching the image
+    }
+  },
+),
+
+Column(
+  children: [
+    Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 1,
+        color: Colors.black12,
+      ),
+    )
+  ],
+),
+
+
+              const SizedBox(
+                height: 15,
+              ),
+
+              BlocBuilder<MenuItemBloc, ItemMenuState>(
+                builder: (context, state) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       SideMenuItem(
                         press: () {
-                          
                           final itemList = state.menuitem;
                           if (!isExists(itemList, "1")) {
                             final Item = ItemModel(id: "1", name: "Inbox");
                             context
                                 .read<MenuItemBloc>()
                                 .add(ItemMenuAdd(menuitem: Item));
-                           
                           }
-                           context
-                                .read<CurrentIDBloc>()
-                                .add(SetCurrentId(id: "1"));
+                          context
+                              .read<CurrentIDBloc>()
+                              .add(SetCurrentId(id: "1"));
                         },
                         title: "Inbox",
                         iconSrc: "assets/Icons/Inbox.svg",
@@ -76,7 +138,6 @@ class SideMenu extends StatelessWidget {
                       ),
                       SideMenuItem(
                         press: () {
-                           
                           final itemList = state.menuitem;
                           if (!isExists(itemList, "2")) {
                             final Item = ItemModel(id: "2", name: "Sent");
@@ -84,9 +145,9 @@ class SideMenu extends StatelessWidget {
                                 .read<MenuItemBloc>()
                                 .add(ItemMenuAdd(menuitem: Item));
                           }
-                          context1
-                                .read<CurrentIDBloc>()
-                                .add(SetCurrentId(id: "2"));
+                          context
+                              .read<CurrentIDBloc>()
+                              .add(SetCurrentId(id: "2"));
                         },
                         title: "Sent",
                         iconSrc: "assets/Icons/Send.svg",
@@ -97,7 +158,6 @@ class SideMenu extends StatelessWidget {
                       ),
                       SideMenuItem(
                         press: () {
-                          
                           final itemList = state.menuitem;
                           if (!isExists(itemList, "3")) {
                             final Item = ItemModel(id: "3", name: "Drafts");
@@ -105,9 +165,9 @@ class SideMenu extends StatelessWidget {
                                 .read<MenuItemBloc>()
                                 .add(ItemMenuAdd(menuitem: Item));
                           }
-                           context1
-                                .read<CurrentIDBloc>()
-                                .add(SetCurrentId(id: "3"));
+                          context
+                              .read<CurrentIDBloc>()
+                              .add(SetCurrentId(id: "3"));
                         },
                         title: "Drafts",
                         iconSrc: "assets/Icons/File.svg",
@@ -120,15 +180,14 @@ class SideMenu extends StatelessWidget {
                         press: () {
                           final itemList = state.menuitem;
                           if (!isExists(itemList, "4")) {
-                            
                             final Item = ItemModel(id: "4", name: "Deleted");
                             context
                                 .read<MenuItemBloc>()
                                 .add(ItemMenuAdd(menuitem: Item));
                           }
-                           context1
-                                .read<CurrentIDBloc>()
-                                .add(SetCurrentId(id: "4"));
+                          context
+                              .read<CurrentIDBloc>()
+                              .add(SetCurrentId(id: "4"));
                         },
                         title: "Deleted",
                         iconSrc: "assets/Icons/Trash.svg",
@@ -137,17 +196,18 @@ class SideMenu extends StatelessWidget {
                         isHover: true,
                         itemCount: 0,
                       ),
-
-                      SizedBox(height: kDefaultPadding * 2),
-                      // Tags
-                      // Tags(),
                     ],
-                  ),
-                );
-              },
-            );
-          },
+                  );
+                },
+              ),
+
+              const SizedBox(height: kDefaultPadding * 2),
+              // Tags
+              // Tags(),
+            ],
+          ),
         ),
+      
       ),
     );
   }

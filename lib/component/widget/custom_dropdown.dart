@@ -7,13 +7,18 @@ class CustomDropDown extends StatelessWidget {
       required this.list,
       required this.onTap,
       this.height = 35,
-     required  this.width, this.labeltext='Select'});
+      required this.width,
+      this.borderColor = Colors.black38,
+      this.labeltext = 'Select',  this.borderRadious=4.0});
   final double? height;
   final double? width;
   final String? id;
   final List<DropdownMenuItem<String>>? list;
   final void Function(String? value) onTap;
-  final String?labeltext;
+  final String? labeltext;
+  final Color borderColor;
+  final double borderRadious;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -24,12 +29,22 @@ class CustomDropDown extends StatelessWidget {
         value: id,
         items: list,
         onChanged: onTap,
-        decoration:  InputDecoration(
+        decoration: InputDecoration(
           labelText: labeltext,
-           labelStyle: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.w500,fontSize: 14),
+           labelStyle: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 13),
+                  hintStyle: TextStyle(
+                      color: Colors.grey.shade400, fontWeight: FontWeight.w300),
           //labelStyle: const TextStyle(fontSize: 14),
           border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: borderColor, width: 0.5),
+            borderRadius: BorderRadius.circular(borderRadious),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
         ),
         isDense: true,
         isExpanded: true,

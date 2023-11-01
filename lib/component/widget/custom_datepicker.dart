@@ -9,6 +9,7 @@ class CustomDatePicker extends StatefulWidget {
   final double? height;
   final double? width;
   final bool? isBackDate;
+  final Color borderColor;
 
   const CustomDatePicker(
       {super.key,
@@ -16,7 +17,9 @@ class CustomDatePicker extends StatefulWidget {
       this.label = 'Select Date',
       this.bgColor = const Color.fromARGB(255, 218, 216, 216),
       this.height = 35,
-      this.width = 140, this.isBackDate=false});
+      this.width = 140,
+      this.borderColor=Colors.black38,
+      this.isBackDate = false});
 
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();
@@ -39,7 +42,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       child: Container(
         decoration: BoxDecoration(
           color: widget.bgColor,
-          border: Border.all(color: Colors.grey.shade400),
+          //border: Border.all(color: Colors.grey.shade400),
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
         child: TextFormField(
@@ -48,6 +51,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             labelText: widget.label,
             labelStyle: const TextStyle(fontSize: 14),
             border: const OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: widget.borderColor, width: 0.5),
+              ),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
             suffixIcon: InkWell(
@@ -56,7 +62,8 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                 DateTime? pickedDate = await showDatePicker(
                   context: context, // Pass the correct BuildContext.
                   initialDate: DateTime.now(),
-                  firstDate:  widget.isBackDate!?DateTime(1800): DateTime.now(),
+                  firstDate:
+                      widget.isBackDate! ? DateTime(1800) : DateTime.now(),
                   lastDate: DateTime(2101),
                 );
 

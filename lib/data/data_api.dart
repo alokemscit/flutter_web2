@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 class data_api{
 
-  Future<List<dynamic>> createLead(List<dynamic> parameter) async {
+  Future<List<dynamic>> createLead(List<dynamic> parameter,[String methods="getdata"]) async {
     List<dynamic> apiData1 = [];
     //print(object)
-    String url = 'https://web.asgaralihospital.com/api/mob/getdata';
+    String url = 'https://web.asgaralihospital.com/api/mob/$methods';
     final response = await http.post(
       Uri.parse(url),
        headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "Origin, X-Requested-With, Content-Type, Accept",
@@ -21,6 +21,10 @@ class data_api{
     }
     return apiData1;
   }
+
+
+
+
   Future<List<dynamic>> otp(List<dynamic> parameter) async {
     List<dynamic> apiData1 = [];
     String url = 'https://web.asgaralihospital.com/api/mob/generate_otp';

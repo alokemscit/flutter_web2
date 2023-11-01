@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +17,7 @@ class CustomAutoComplete extends StatelessWidget {
     this.dropDownHeight = 80,
     this.dropDownWidth = 65,
     this.onSelected,
+    this.borderColor=Colors.black38
   }) : _fruitOptions = fruitOptions;
 
   final List<String> _fruitOptions;
@@ -33,6 +33,7 @@ class CustomAutoComplete extends StatelessWidget {
   final double dropDownHeight;
   final double dropDownWidth;
   final Function(String)? onSelected;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +84,18 @@ class CustomAutoComplete extends StatelessWidget {
             textAlign: TextAlign.center,
             decoration: InputDecoration(
               labelText: caption,
-              labelStyle: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14),
-              hintStyle: TextStyle(
-                  color: Colors.grey.shade400, fontWeight: FontWeight.w400),
+               labelStyle: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 13),
+                  hintStyle: TextStyle(
+                      color: Colors.grey.shade400, fontWeight: FontWeight.w300),
               counterText: '',
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(4.0)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: borderColor, width: 0.5),
               ),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -106,13 +110,13 @@ class CustomAutoComplete extends StatelessWidget {
         },
         optionsViewBuilder: (
           BuildContext context,
-           onSelected,
+          onSelected,
           Iterable<String> options,
         ) {
           return Align(
             alignment: Alignment.topLeft,
             child: Material(
-              shape:Border.all(color: Colors.grey),
+              shape: Border.all(color: Colors.grey),
               elevation: 0,
               color: Colors.white,
               child: SizedBox(
