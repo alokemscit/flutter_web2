@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:web_2/model/user_model.dart';
+import 'package:web_2/pages/authentication/login_page.dart';
 import 'package:web_2/pages/home_page/home_page.dart';
 import '../settings/config.dart';
+import '../settings/notifers/auth_provider.dart';
 import 'sidemenu_item.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -29,82 +32,139 @@ class SideMenu extends StatelessWidget {
           color: kBgLightColor,
           border: Border(right: BorderSide(color: Colors.black12, width: 0.5))),
       child: SafeArea(
-
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Column(
             children: [
-              
+              FutureBuilder<User_Model>(
+                future: getUserInfo(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      // Attempt to decode the base64 image
+                      try {
+                        final MemoryImage backgroundImage =
+                            MemoryImage(base64.decode(snapshot.data!.iMAGE!));
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 60,
+                                  height: 60,
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Colors.blue.withOpacity(0.1),
+                                    radius: 150,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(0.1),
+                                      child: CircleAvatar(
+                                        radius: 220,
+                                        backgroundImage: backgroundImage,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                BlocProvider(
+                                  create: (context) => LoginBloc(
+                                      Provider.of<AuthProvider>(context,
+                                          listen: false)),
+                                  child: BlocBuilder<LoginBloc, LoginState>(
+                                    builder: (context, state) {
+                                      return TextButton(
+                                          onPressed: () {
+                                            context
+                                                .read<LoginBloc>()
+                                                .add(LogOutEvent());
 
-FutureBuilder<User_Model>(
-  future: getUserInfo(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.done) {
-      if (snapshot.hasData) {
-        // Attempt to decode the base64 image
-        try {
-          final MemoryImage backgroundImage =
-              MemoryImage(base64.decode(snapshot.data!.iMAGE!));
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircleAvatar(
-                  backgroundColor: Colors.blue.withOpacity(0.1),
-                  radius: 150,
-                  child: Padding(
-                    padding: const EdgeInsets.all(0.1),
-                    child: CircleAvatar(
-                      radius: 220,
-                      backgroundImage: backgroundImage,
-                    ),
-                  ),
-                ),
+                                            //
+                                            //       String jsonString = '{"id":"0007","student":[{"stade":"Online Transaction User","edate":"Online"}]}';
+
+                                            // Map<String, dynamic> jsonMap = json.decode(jsonString);
+
+                                            // String id = jsonMap['id'];
+                                            // List<Map<String, dynamic>> studentList = List<Map<String, dynamic>>.from(jsonMap['student']);
+
+                                            // print('id: $id');
+                                            // print('student:');
+                                            // for (var student in studentList) {
+                                            //   String stade = student['stade'];
+                                            //   String edate = student['edate'];
+                                            //   print('  stade: $stade');
+                                            //   print('  edate: $edate');
+                                            // }
+                                          },
+                                          child: Text('Log out'));
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            SizedBox(
+                              height: 60,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                        maxWidth: 140, maxHeight: 30),
+                                    child: Text(
+                                      snapshot.data!.eMPNAME!,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                        maxWidth: 140, maxHeight: 10),
+                                    child: Text(
+                                      snapshot.data!.dSGNAME!,
+                                      style: const TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w300),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        );
+                      } catch (e) {
+                        // Handle the error by displaying a placeholder or an error message
+                        return CircleAvatar(
+                          radius: 220,
+                          backgroundColor: Colors.red.withOpacity(0.05),
+                        );
+                      }
+                    } else {
+                      return const SizedBox(); // Handle the case when the image couldn't be loaded
+                    }
+                  } else {
+                    return const CircularProgressIndicator(); // Display a loading indicator while fetching the image
+                  }
+                },
               ),
-               SizedBox(
-                height: 60,
-                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                   Text(snapshot.data!.eMPNAME!,style:TextStyle(fontSize: 12,fontWeight: FontWeight.w400),),
-                    Text(snapshot.data!.dSGNAME!,style:TextStyle(fontSize: 11,fontWeight: FontWeight.w300),)
-                  ],
-                             ),
-               )
-            ],
-          );
-        } catch (e) {
-          // Handle the error by displaying a placeholder or an error message
-          return CircleAvatar(
-            radius: 220,
-            backgroundColor: Colors.red.withOpacity(0.05),
-          );
-        }
-      } else {
-        return SizedBox(); // Handle the case when the image couldn't be loaded
-      }
-    } else {
-      return const CircularProgressIndicator(); // Display a loading indicator while fetching the image
-    }
-  },
-),
 
-Column(
-  children: [
-    Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 1,
-        color: Colors.black12,
-      ),
-    )
-  ],
-),
-
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 1,
+                      color: Colors.black12,
+                    ),
+                  )
+                ],
+              ),
 
               const SizedBox(
                 height: 15,
@@ -120,6 +180,7 @@ Column(
                         press: () {
                           final itemList = state.menuitem;
                           if (!isExists(itemList, "1")) {
+                            // ignore: non_constant_identifier_names
                             final Item = ItemModel(id: "1", name: "Inbox");
                             context
                                 .read<MenuItemBloc>()
@@ -207,7 +268,6 @@ Column(
             ],
           ),
         ),
-      
       ),
     );
   }

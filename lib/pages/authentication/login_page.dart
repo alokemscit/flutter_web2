@@ -204,7 +204,6 @@ class Login extends StatelessWidget {
                                         onPressed: () {
                                           if (_uid.text.length < 3 ||
                                               _pws.text.isEmpty) {
-
                                             return;
                                           }
 
@@ -360,6 +359,8 @@ class LoginSubmitEvent extends LoginEvent {
   LoginSubmitEvent({required this.uid, required this.pws});
 }
 
+class LogOutEvent extends LoginEvent {}
+
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthProvider authProvider;
   LoginBloc(this.authProvider) : super(LoginInitSate()) {
@@ -416,6 +417,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await Future.delayed(const Duration(milliseconds: 2000));
 
       emit(LoginRefrashSate());
+    });
+    on<LogOutEvent>((event, emit) async {
+      authProvider.logout();
     });
   }
 }
