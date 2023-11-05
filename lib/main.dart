@@ -8,6 +8,7 @@ import 'package:web_2/pages/text5.dart';
 import 'component/settings/notifers/auth_provider.dart';
 import 'pages/authentication/login_page.dart';
 import 'pages/home_page/home_page.dart';
+import 'pages/home_page/parent_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +45,7 @@ final appTheame = AppTheme();
               brightness: appThemes.darkTheme?Brightness.dark:Brightness.light,
                //appThemes.darkTheme==true?Brightness.dark:Brightness.light
                ),
-            home: userProvider.user != null ? HomePage() : Login(),
+            home: userProvider.user != null ? const ParentPage() : Login(),
           );
         }));
   }

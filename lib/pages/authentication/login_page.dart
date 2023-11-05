@@ -350,6 +350,8 @@ class LoginSuccessSate extends LoginState {}
 
 class LoginNavigateSate extends LoginState {}
 
+class LoginOutSate extends LoginState {}
+
 abstract class LoginEvent {}
 
 class LoginSubmitEvent extends LoginEvent {
@@ -420,6 +422,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
     on<LogOutEvent>((event, emit) async {
       authProvider.logout();
+      emit(LoginOutSate());
     });
   }
 }
