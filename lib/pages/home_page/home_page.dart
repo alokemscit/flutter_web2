@@ -45,8 +45,7 @@ class HomePage extends StatelessWidget {
       body: Stack(
         children: [
           const ParentPageBackground(imageOpacity: 0.03),
-          HomePagebodyWidget(
-              module: module, textControllerList: textControllerList),
+          HomePagebodyWidget( module: module, textControllerList: textControllerList),
         ],
       ),
     );
@@ -55,7 +54,7 @@ class HomePage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class HomePagebodyWidget extends StatelessWidget {
-   HomePagebodyWidget({
+  HomePagebodyWidget({
     super.key,
     required this.module,
     required this.textControllerList,
@@ -64,29 +63,26 @@ class HomePagebodyWidget extends StatelessWidget {
   final main_app_menu module;
   final List<TextEditingController> textControllerList;
 
- final List<SingleChildWidget> providers = [
-      BlocProvider(
-        create: (context) => MenuItemBloc(),
-      ),
-      BlocProvider(
-        create: (context) => CurrentIDBloc(),
-      ),
-      BlocProvider(create: (constext) => MenubuttonCloseBlocBloc()),
-    ];
+  final List<SingleChildWidget> providers = [
+    BlocProvider(
+      create: (context) => MenuItemBloc(),
+    ),
+    BlocProvider(
+      create: (context) => CurrentIDBloc(),
+    ),
+    BlocProvider(create: (constext) => MenubuttonCloseBlocBloc()),
+  ];
 
   @override
   Widget build(BuildContext context) {
-      return MultiBlocProvider(
+    return MultiBlocProvider(
       providers: providers,
       child: Responsive(
         mobile: Container(
           color: const Color.fromARGB(255, 235, 233, 230),
         ),
-        tablet: Container(
-          color: Colors.blueGrey,
-        ),
-        desktop:
-            DesktopWidget(module: module, controllerList: textControllerList),
+        tablet:  DesktopWidget(module: module, controllerList: textControllerList),
+        desktop: DesktopWidget(module: module, controllerList: textControllerList),
       ),
     );
   }
@@ -110,7 +106,6 @@ class DesktopWidget extends StatelessWidget {
       children: [
         //Drawer Menu Item
         DrawerWithBackArrow(module: module),
-
         TabAndBodyWidget(controllerList: controllerList),
       ],
     );
@@ -153,12 +148,19 @@ class DrawerBackIconWithTabEvent extends StatelessWidget {
       color: kBgLightColor,
       width: double.infinity,
       height: 28,
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DrawerMenueIcon(),
-          TabMenuWithEvent(),
+          const DrawerMenueIcon(),
+           SizedBox(
+                width: MediaQuery.of(context).size.width - 252,
+                child: const SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: TabMenuWithEvent(),
+                ),
+              ),
+             
         ],
       ),
     );
@@ -189,7 +191,9 @@ class DrawerWithBackArrow extends StatelessWidget {
             //      //  // child:
             child: Stack(
               children: [
-                SideMenu( module: module,),
+                SideMenu(
+                  module: module,
+                ),
                 const ArrowBackPositioned(),
               ],
             ),
@@ -243,6 +247,9 @@ class TabMenuWithEvent extends StatelessWidget {
                       color: state1.id.trim() != menuitem.id.trim()
                           ? kSecondaryColor
                           : const Color.fromARGB(255, 255, 255, 255),
+                      textColor: state1.id.trim() != menuitem.id.trim()
+                          ? Colors.black.withOpacity(0.8)
+                          : const Color.fromARGB(255, 1, 114, 108),
                     );
                   });
             },
@@ -347,10 +354,10 @@ class DrawerMenueIcon extends StatelessWidget {
                       .add(IsMenuClose(isClose: !state.isClose));
                 },
                 child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
+                  padding: EdgeInsets.symmetric(vertical: 4,horizontal: 4),
                   child: Icon(
                     Icons.menu_sharp,
-                    size: 20,
+                    size: 22,
                   ),
                 ),
               )

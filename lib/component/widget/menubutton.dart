@@ -10,6 +10,7 @@ class MenuButton extends StatelessWidget {
   final Function() buttonClick;
   final Function() crossButtonClick;
   final Color color;
+  final Color textColor;
   final bool isSelected;
   const MenuButton({
     Key? key,
@@ -18,7 +19,7 @@ class MenuButton extends StatelessWidget {
     required this.buttonClick,
     required this.crossButtonClick,
     this.color = const Color.fromARGB(255, 248, 248, 248),
-     this.isSelected=false,
+     this.isSelected=false,  this.textColor=const Color.fromARGB(255, 58, 56, 56),
   }) : super(key: key);
 
   @override
@@ -51,11 +52,12 @@ class MenuButton extends StatelessWidget {
                       child: Text(
                         text,
                         style: TextStyle(
+                          
                             fontSize: 13,
-                            fontWeight: FontWeight.w300,
-                            color: state.isHover == true
+                            fontWeight: FontWeight.w400,
+                            color:   state.isHover == true
                                 ? const Color.fromARGB(255, 100, 130, 143)
-                                : const Color.fromARGB(255, 58, 56, 56),
+                                :textColor,
                             backgroundColor:  Colors.transparent),
                       ),
                     ),

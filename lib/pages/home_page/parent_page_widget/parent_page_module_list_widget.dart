@@ -95,12 +95,12 @@ class ParentMainModuleListWidget extends StatelessWidget {
                           child: Image(
                             image: AssetImage(
                                 "assets/images/${list[index].icon!}"),
-                            height: (size.width >= 1200 && size.width < 1600)
+                            height: size.width < 650?40:(size.width >= 1200 && size.width < 1600)
                                 ? 60
                                 : (size.width > 650 && size.width < 805)
                                     ? 50
                                     : 70,
-                            width: (size.width >= 1200 && size.width < 1600)
+                            width:size.width < 650?30: (size.width >= 1200 && size.width < 1600)
                                 ? 50
                                 : (size.width > 650 && size.width < 805)
                                     ? 40
@@ -124,7 +124,7 @@ class ParentMainModuleListWidget extends StatelessWidget {
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                            maxHeight: (size.width > 650 && size.width <= 705)
+                            maxHeight:  (size.width > 650 && size.width <= 705)
                                 ? 30
                                 : (size.width > 705 && size.width < 805)
                                     ? 45
