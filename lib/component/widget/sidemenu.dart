@@ -49,12 +49,12 @@ class SideMenu extends StatelessWidget {
               ),
               HomeLogOut(module: module),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: ModuleNameDisplay(module: module),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                child: GenerateMenuItems(),
+               Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                child: GenerateMenuItems(mid: module.id.toString()),
               ),
             ],
           ),
@@ -65,21 +65,23 @@ class SideMenu extends StatelessWidget {
 }
 
 class GenerateMenuItems extends StatelessWidget {
-  const GenerateMenuItems({super.key});
+  const GenerateMenuItems({super.key, required this.mid});
+  final String mid;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: get_menu_data_list(),
+        future: get_menu_data_list(mid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              List<MenuData> list = snapshot.data!;
+              List<Menu> list = snapshot.data!;
               return BlocBuilder<MenuItemBloc, ItemMenuState>(
                 builder: (context, state) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: List.generate(list.length, (index) {
                         return ExpansionTile(
                             title: Container(
@@ -104,13 +106,24 @@ class GenerateMenuItems extends StatelessWidget {
                               return ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 horizontalTitleGap: 0,
+                              //  contentPadding: EdgeInsets.zero,
+                               // horizontalTitleGap: 0,
+                               
                                 title: Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    e.smName!,
-                                    style: GoogleFonts.titilliumWeb(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
+                                  padding: const EdgeInsets.only(left: 8,top: 0,bottom: 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Icon(Icons.arrow_right),const SizedBox(width: 6,),
+                                      Text(
+                                        e.smName!,
+                                        style: GoogleFonts.titilliumWeb(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      
+                                    ],
                                   ),
                                 ),
                                 onTap: () {
@@ -365,11 +378,11 @@ class DrawerMenuItemList extends StatelessWidget {
     return BlocBuilder<MenuItemBloc, ItemMenuState>(
       builder: (context, state) {
         return FutureBuilder(
-            future: get_menu_data_list(),
+            future: get_menu_data_list(module.id!.toString()),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
-                  List<MenuData> list = snapshot.data!;
+                  List<Menu> list = snapshot.data!;
                   return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (context, index) {

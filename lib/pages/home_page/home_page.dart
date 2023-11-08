@@ -9,9 +9,12 @@ import 'package:provider/single_child_widget.dart';
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/menubutton.dart';
 import 'package:web_2/component/widget/sidemenu.dart';
+import 'package:web_2/data/apiBloc.dart';
+import 'package:web_2/pages/appointment/doctor_appointment.dart';
 
 import '../../component/settings/config.dart';
-import '../../component/widget/vitalsign.dart';
+
+import '../../model/app_time.dart';
 import '../../model/main_app_menu.dart';
 import 'parent_page_widget/parent_background_widget.dart';
 
@@ -26,7 +29,7 @@ NextIndex(List<ItemModel> list, int index) {
   return '';
 }
 
-List<TextEditingController> textControllerListGenerator(int length) {
+List<dynamic> textControllerListGenerator(int length) {
   return List.generate(length, (index) => TextEditingController());
 }
 
@@ -38,14 +41,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: non_constant_identifier_names
-    List<TextEditingController> textControllerList =
-        textControllerListGenerator(1);
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: Stack(
         children: [
           const ParentPageBackground(imageOpacity: 0.03),
-          HomePagebodyWidget( module: module, textControllerList: textControllerList),
+          HomePagebodyWidget(module: module),
         ],
       ),
     );
@@ -57,11 +58,9 @@ class HomePagebodyWidget extends StatelessWidget {
   HomePagebodyWidget({
     super.key,
     required this.module,
-    required this.textControllerList,
   });
 
   final main_app_menu module;
-  final List<TextEditingController> textControllerList;
 
   final List<SingleChildWidget> providers = [
     BlocProvider(
@@ -81,8 +80,8 @@ class HomePagebodyWidget extends StatelessWidget {
         mobile: Container(
           color: const Color.fromARGB(255, 235, 233, 230),
         ),
-        tablet:  DesktopWidget(module: module, controllerList: textControllerList),
-        desktop: DesktopWidget(module: module, controllerList: textControllerList),
+        tablet: DesktopWidget(module: module),
+        desktop: DesktopWidget(module: module),
       ),
     );
   }
@@ -92,11 +91,9 @@ class DesktopWidget extends StatelessWidget {
   const DesktopWidget({
     super.key,
     required this.module,
-    required this.controllerList,
   });
 
   final main_app_menu module;
-  final List<TextEditingController> controllerList;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +103,7 @@ class DesktopWidget extends StatelessWidget {
       children: [
         //Drawer Menu Item
         DrawerWithBackArrow(module: module),
-        TabAndBodyWidget(controllerList: controllerList),
+        const TabAndBodyWidget(),
       ],
     );
   }
@@ -115,23 +112,17 @@ class DesktopWidget extends StatelessWidget {
 class TabAndBodyWidget extends StatelessWidget {
   const TabAndBodyWidget({
     super.key,
-    required this.controllerList,
   });
-
-  final List<TextEditingController> controllerList;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
       // flex: 10,
       //flex:  _size.width > 1340 ? 11 : 9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const DrawerBackIconWithTabEvent(),
-          BodyWidgetMain(controllerList: controllerList)
-        ],
+        children: [DrawerBackIconWithTabEvent(), BodyWidgetMain()],
       ),
     );
   }
@@ -153,14 +144,13 @@ class DrawerBackIconWithTabEvent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const DrawerMenueIcon(),
-           SizedBox(
-                width: MediaQuery.of(context).size.width - 252,
-                child: const SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: TabMenuWithEvent(),
-                ),
-              ),
-             
+          SizedBox(
+            width: MediaQuery.of(context).size.width - 252,
+            child: const SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: TabMenuWithEvent(),
+            ),
+          ),
         ],
       ),
     );
@@ -265,13 +255,23 @@ class TabMenuWithEvent extends StatelessWidget {
 class BodyWidgetMain extends StatelessWidget {
   const BodyWidgetMain({
     super.key,
-    required this.controllerList,
+    //required this.controllerList,
   });
 
-  final List<TextEditingController> controllerList;
+  //final List<dynamic> controllerList;
 
   @override
   Widget build(BuildContext context) {
+  List<dynamic> doctorAppointment = [
+  String,
+  String,
+  String,
+  List<DepartmentModel>,
+  List<UnitModel>,
+  List<AppTime>,
+  List<DistinctDoctor>,
+  ];
+
     return SizedBox(
       height: MediaQuery.of(context).size.height - 28,
       //width: double.infinity,
@@ -294,21 +294,17 @@ class BodyWidgetMain extends StatelessWidget {
             //   return //TabPageMain(id: state.id);
 
             switch (id) {
-              case "1":
+              case "2":
                 {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextButton(
-                          onPressed: () {}, child: const Text("Click Me..")),
-                      CapWithTextFields(
-                        caption: 'Heaght(CM)',
-                        controller: controllerList[0],
-                        width: 250,
-                        maxlength: 150,
-                      ),
-                    ],
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - 28,
+                    child:  const Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: DoctorAppointment()),
+                      ],
+                    ),
                   );
                 }
 
@@ -354,7 +350,7 @@ class DrawerMenueIcon extends StatelessWidget {
                       .add(IsMenuClose(isClose: !state.isClose));
                 },
                 child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4,horizontal: 4),
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                   child: Icon(
                     Icons.menu_sharp,
                     size: 22,

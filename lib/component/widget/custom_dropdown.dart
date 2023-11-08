@@ -9,7 +9,8 @@ class CustomDropDown extends StatelessWidget {
       this.height = 35,
       required this.width,
       this.borderColor = Colors.black38,
-      this.labeltext = 'Select',  this.borderRadious=4.0});
+      this.labeltext = 'Select',
+      this.borderRadious = 4.0,  this.isFilled=true});
   final double? height;
   final double? width;
   final String? id;
@@ -18,6 +19,7 @@ class CustomDropDown extends StatelessWidget {
   final String? labeltext;
   final Color borderColor;
   final double borderRadious;
+  final bool isFilled;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +32,15 @@ class CustomDropDown extends StatelessWidget {
         items: list,
         onChanged: onTap,
         decoration: InputDecoration(
+          filled: isFilled,
+          fillColor: Colors.white,
           labelText: labeltext,
-           labelStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontWeight: FontWeight.w300,
-                      fontSize: 13),
-                  hintStyle: TextStyle(
-                      color: Colors.grey.shade400, fontWeight: FontWeight.w300),
+          labelStyle: TextStyle(
+              color: Colors.grey.shade400,
+              fontWeight: FontWeight.w300,
+              fontSize: 13),
+          hintStyle: TextStyle(
+              color: Colors.grey.shade400, fontWeight: FontWeight.w300),
           //labelStyle: const TextStyle(fontSize: 14),
           border: const OutlineInputBorder(),
           enabledBorder: OutlineInputBorder(

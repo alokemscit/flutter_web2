@@ -24,11 +24,12 @@ class DoctorPanel extends StatelessWidget {
         SizedBox(
           width: 300,
           child: Container(
-            margin: const EdgeInsets.only(left: 8, top: 8),
+            margin: const EdgeInsets.only(left: 3, top: 4),
             padding: const EdgeInsets.all(4),
 
             decoration: BoxDecoration(
-                boxShadow: myboxShadow, borderRadius: BorderRadius.circular(8)),
+              border: Border.all(color: Colors.grey,width: 0.3),
+                boxShadow: myboxShadow, borderRadius: BorderRadius.circular(6)),
 
             // color: Colors.amber,
             child: Row(
@@ -64,10 +65,10 @@ class DoctorSlotPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 12, top: 6),
+      padding: const EdgeInsets.only(left: 4, top: 3),
       height: MediaQuery.of(context).size.width < 835
           ? MediaQuery.of(context).size.height - 230
-          : MediaQuery.of(context).size.height - 190,
+          : MediaQuery.of(context).size.height - 220,
       width: 300,
       decoration: const BoxDecoration(boxShadow: [
         BoxShadow(
@@ -93,7 +94,7 @@ class DoctorSlotPanel extends StatelessWidget {
               Container(
                 height: 48,
                 margin: const EdgeInsets.all(0),
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black.withOpacity(0.3)),
                     boxShadow: myboxShadow),

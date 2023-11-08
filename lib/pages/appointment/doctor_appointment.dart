@@ -13,8 +13,8 @@ import '../../data/data_api.dart';
 import 'widget/show_button.dart';
 
 class DoctorAppointment extends StatelessWidget {
-  const DoctorAppointment({super.key});
-
+  const DoctorAppointment({super.key, });
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +104,7 @@ class AppointmentPage extends StatelessWidget {
         }
 
         var customdropdownGroup = CustomDropDown(
+          
           id: groupID,
           list: myModel.groupList.map((item) {
             return DropdownMenuItem<String>(
@@ -131,7 +132,7 @@ class AppointmentPage extends StatelessWidget {
           }).toList(),
           onTap: (value) {
             departmentID = value.toString();
-           // print(departmentID);
+            // print(departmentID);
             context.read<DropdownBloc>().add(setDepartmentID(
                 departmentID: value.toString(),
                 groupID: groupID,
@@ -150,7 +151,7 @@ class AppointmentPage extends StatelessWidget {
           }).toList(),
           onTap: (value) {
             unitID = value.toString();
-          //  print(unitID);
+            //  print(unitID);
             context.read<DropdownBloc>().add(setUnitIDEvent(unitID: unitID!));
           },
           width: 240,
@@ -200,7 +201,7 @@ class AppointmentPage extends StatelessWidget {
           // date: _date_controller.text.toString(),
         );
         var displayContainer = Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          padding: const EdgeInsets.symmetric(horizontal: 2.0),
           child: BlocBuilder<DoctorShowBloc, DoctorShowState>(
             builder: (context, state) {
               // List<AppTime>? list = [];
@@ -210,8 +211,8 @@ class AppointmentPage extends StatelessWidget {
                 // print('Loading');
                 return SizedBox(
                     height: MediaQuery.of(context).size.width > 835
-                        ? MediaQuery.of(context).size.height - 80
-                        : MediaQuery.of(context).size.height - 120,
+                        ? MediaQuery.of(context).size.height - 130
+                        : MediaQuery.of(context).size.height - 135,
                     child: const Center(child: CircularProgressIndicator()));
               } else if (state is DoctorShowLoded) {
                 //  debugPrint('Loaded');
@@ -249,9 +250,15 @@ class AppointmentPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                boxShadow: myboxShadow,
+              decoration:  const BoxDecoration(
+                color:kSecondaryColor,
+                boxShadow: [
+                  BoxShadow(
+                  //   color: Colors.white,
+                     blurRadius: 0.1,
+                     spreadRadius: 0.01
+                   )
+                ]
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
@@ -266,7 +273,7 @@ class AppointmentPage extends StatelessWidget {
                   sizedBox,
                   CustomDatePicker(
                     date_controller: _date_controller,
-                    bgColor: Colors.grey.shade200,
+                    bgColor: Colors.white,
                   ),
                   sizedBox,
                   showButton,
@@ -283,9 +290,15 @@ class AppointmentPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                boxShadow: myboxShadow,
+              decoration: const BoxDecoration(
+               color:kSecondaryColor,
+                boxShadow: [
+                  BoxShadow(
+                  //   color: Colors.white,
+                     blurRadius: 0.1,
+                     spreadRadius: 0.1
+                   )
+                ]
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: wide > 812
@@ -358,4 +371,3 @@ class AppointmentPage extends StatelessWidget {
     );
   }
 }
-

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
-import 'package:web_2/pages/text5.dart';
+
 import 'component/settings/notifers/auth_provider.dart';
 import 'pages/authentication/login_page.dart';
-import 'pages/home_page/home_page.dart';
+
 import 'pages/home_page/parent_page.dart';
 
 void main() async {
