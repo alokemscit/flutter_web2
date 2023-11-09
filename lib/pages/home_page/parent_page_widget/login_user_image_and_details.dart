@@ -45,7 +45,7 @@ class LoginUsersImageAndDetails extends StatelessWidget {
                         height: 60,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             ConstrainedBox(
                               constraints: const BoxConstraints(
@@ -115,6 +115,8 @@ class LoginUsersImageAndDetails extends StatelessWidget {
                           ],
                         ),
                       )
+                   
+                   
                     ],
                   );
                 } catch (e) {

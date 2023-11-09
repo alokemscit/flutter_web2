@@ -1,11 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
 
 import 'component/settings/notifers/auth_provider.dart';
+import 'pages/appointment/doctor_leave.dart';
 import 'pages/authentication/login_page.dart';
 
 import 'pages/home_page/parent_page.dart';
@@ -27,6 +29,11 @@ final appTheame = AppTheme();
   MyApp({super.key, required this.userProvider});
   @override
   Widget build(BuildContext context) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+    statusBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor:Colors.black,
+    statusBarBrightness: Brightness.dark));
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<AuthProvider>(
@@ -45,7 +52,10 @@ final appTheame = AppTheme();
               brightness: appThemes.darkTheme?Brightness.dark:Brightness.light,
                //appThemes.darkTheme==true?Brightness.dark:Brightness.light
                ),
-            home: userProvider.user != null ? const ParentPage() : Login(),
+            home: userProvider.user != null ? const 
+           ParentPage() 
+           // DoctorLeave()
+            : Login(),
           );
         }));
   }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:web_2/pages/home_page/parent_page_widget/parent_page_module_list_widget.dart';
 import '../../../model/main_app_menu.dart';
@@ -18,7 +17,9 @@ class ParentPageModuleHolderWidget extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height - 80,
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+            ),
             child: FutureBuilder(
               future: menu_app_list(),
               builder: (context, snapshot) {

@@ -28,7 +28,7 @@ class ParentPageTopWidget extends StatelessWidget {
               Text(
                 "ERP System",
                 style: GoogleFonts.carlito(
-                    fontSize: size.width < 380 ? 32 : 38,
+                    fontSize: size.width < 400 ? 30 : 34,
                     fontWeight: FontWeight.bold),
               ),
               const LoginUsersImageAndDetails(),

@@ -34,260 +34,263 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     //final authProvider = Provider.of<AuthProvider>(context, listen: true);
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            width: MediaQuery.of(context).size.width * 1.7,
-            left: 50,
-            bottom: 100,
-            child: Image.asset(
-              "assets/Backgrounds/Spline.png",
-              fit: BoxFit.cover,
+      
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned(
+              width: MediaQuery.of(context).size.width * 1.7,
+              left: 50,
+              bottom: 100,
+              child: Image.asset(
+                "assets/Backgrounds/Spline.png",
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 30),
-              child: const SizedBox(),
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 30),
+                child: const SizedBox(),
+              ),
             ),
-          ),
-          const RiveAnimation.asset(
-            "assets/RiveAssets/shapes.riv",
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-              child: const SizedBox(),
+            const RiveAnimation.asset(
+              "assets/RiveAssets/shapes.riv",
             ),
-          ),
-          AnimatedPositioned(
-            // top: isShowSignInDialog ? -50 : 0,
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            duration: const Duration(milliseconds: 260),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Spacer(),
-                    Center(
-                      child: BlocProvider(
-                        create: (context) => LoginBloc(
-                            Provider.of<AuthProvider>(context, listen: false)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              //color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              // border: Border.all(color: const Color.fromARGB(255, 255, 255, 255),width: 0.1),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color.fromARGB(255, 1, 0, 12)
-                                      .withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 0),
-                                )
-                              ]),
-                          width: 350,
-                          height: 350,
-                          child: BlocBuilder<LoginBloc, LoginState>(
-                            builder: (context, state) {
-                              if (state is LoginInitSate) {
-                                isLoading = false;
-                                isDisable = false;
-                              }
-                              if (state is LoginRefrashSate) {
-                                isLoading = false;
-                                isDisable = false;
-                                print('Refresh');
-                              }
-                              if (state is LoginSubmitSate) {
-                                isDisable = true;
-                                isLoading = true;
-                                // error.fire();
-                              }
-                              if (state is LoginSuccessSate) {
-                                // isLoading = false;
-                                //confetti.fire();
-                                //isDisable = false;
-                                check.fire();
-                                // error.fire();
-                                // isDisable = false;
-                              }
-                              if (state is LoginErrorSate) {
-                                // isLoading = false;
-                                //confetti.fire();
-                                //isDisable = false;
-                                // check.fire();
-                                error.fire();
-                                // isDisable = false;
-                              }
-                              if (state is LoginNavigateSate) {
-                                isLoading = false;
-                                isDisable = false;
-                                confetti.fire();
-                                //check.fire();
-
-                                //  Navigator.pop(context);
-                              }
-
-                              return Stack(children: [
-                                Positioned(
-                                  // width: MediaQuery.of(context).size.width * 1.7,
-                                  right: 8,
-                                  top: 1,
-                                  child: Image.asset(
-                                    "assets/images/logo.png",
-                                    width: 100,
-                                    height: 40,
-                                    color:
-                                        const Color.fromARGB(255, 2, 174, 253)
-                                            .withOpacity(0.7),
-                                    // fit: BoxFit.cover,
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+                child: const SizedBox(),
+              ),
+            ),
+            AnimatedPositioned(
+              // top: isShowSignInDialog ? -50 : 0,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              duration: const Duration(milliseconds: 260),
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      Center(
+                        child: BlocProvider(
+                          create: (context) => LoginBloc(
+                              Provider.of<AuthProvider>(context, listen: false)),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                //color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                // border: Border.all(color: const Color.fromARGB(255, 255, 255, 255),width: 0.1),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color.fromARGB(255, 1, 0, 12)
+                                        .withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 0),
+                                  )
+                                ]),
+                            width: 350,
+                            height: 350,
+                            child: BlocBuilder<LoginBloc, LoginState>(
+                              builder: (context, state) {
+                                if (state is LoginInitSate) {
+                                  isLoading = false;
+                                  isDisable = false;
+                                }
+                                if (state is LoginRefrashSate) {
+                                  isLoading = false;
+                                  isDisable = false;
+                                  print('Refresh');
+                                }
+                                if (state is LoginSubmitSate) {
+                                  isDisable = true;
+                                  isLoading = true;
+                                  // error.fire();
+                                }
+                                if (state is LoginSuccessSate) {
+                                  // isLoading = false;
+                                  //confetti.fire();
+                                  //isDisable = false;
+                                  check.fire();
+                                  // error.fire();
+                                  // isDisable = false;
+                                }
+                                if (state is LoginErrorSate) {
+                                  // isLoading = false;
+                                  //confetti.fire();
+                                  //isDisable = false;
+                                  // check.fire();
+                                  error.fire();
+                                  // isDisable = false;
+                                }
+                                if (state is LoginNavigateSate) {
+                                  isLoading = false;
+                                  isDisable = false;
+                                  confetti.fire();
+                                  //check.fire();
+      
+                                  //  Navigator.pop(context);
+                                }
+      
+                                return Stack(children: [
+                                  Positioned(
+                                    // width: MediaQuery.of(context).size.width * 1.7,
+                                    right: 8,
+                                    top: 1,
+                                    child: Image.asset(
+                                      "assets/images/logo.png",
+                                      width: 100,
+                                      height: 40,
+                                      color:
+                                          const Color.fromARGB(255, 2, 174, 253)
+                                              .withOpacity(0.7),
+                                      // fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                                Positioned(
-                                  left: 8,
-                                  right: 8,
-                                  top: 80,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      CustomTextBox(
-                                        //isPassword:true,
-
-                                        height: 42,
-                                        fontColor: Colors.white,
-                                        borderBolor:
-                                            Colors.grey.withOpacity(0.9),
-                                        caption: 'EMP ID',
-                                        borderRadious: 10.0,
-
-                                        width: 300,
-                                        maxlength: 4,
-                                        controller: _uid,
-                                        onChange: (String value) {},
-                                      ),
-
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      CustomTextBox(
-                                        isPassword: true,
-                                        height: 42,
-                                        fontColor: Colors.white,
-                                        borderBolor:
-                                            Colors.grey.withOpacity(0.9),
-                                        caption: 'Password',
-                                        borderRadious: 10.0,
-                                        width: 300,
-                                        maxlength: 20,
-                                        controller: _pws,
-                                        onChange: (String value) {},
-                                      ),
-
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      // MyIconButton(buttonClick: () {
-
-                                      // }, text: 'Login', icon: Icons.lock_open ,width: 75,
-                                      // color: Color.fromARGB(255, 2, 112, 131) .withOpacity(0.5),)
-
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          if (_uid.text.length < 3 ||
-                                              _pws.text.isEmpty) {
-                                            return;
-                                          }
-
-                                          context
-                                              .read<LoginBloc>()
-                                              .add(LoginSubmitEvent(
-                                                uid: _uid.text.toString(),
-                                                pws: _pws.text.toString(),
-                                              ));
-                                        },
-                                        icon: const Icon(
-                                          Icons.lock_open_rounded,
-                                          size: 20,
+                                  Positioned(
+                                    left: 8,
+                                    right: 8,
+                                    top: 80,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
                                         ),
-                                        label: const Padding(
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 8),
-                                          child: Text("Login"),
+                                        CustomTextBox(
+                                          //isPassword:true,
+      
+                                          height: 42,
+                                          fontColor: Colors.white,
+                                          borderBolor:
+                                              Colors.grey.withOpacity(0.9),
+                                          caption: 'EMP ID',
+                                          borderRadious: 10.0,
+      
+                                          width: 300,
+                                          maxlength: 4,
+                                          controller: _uid,
+                                          onChange: (String value) {},
                                         ),
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  const Color.fromARGB(
-                                                          255, 117, 117, 117)
-                                                      .withOpacity(0.01)),
+      
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                // ignore: dead_code
-                                isLoading
-                                    ? Customposition(
-                                        isDisable: isDisable,
-                                        size: 80,
-                                        child: RiveAnimation.asset(
-                                          "assets/RiveAssets/check.riv",
-                                          onInit: (artboard) {
-                                            StateMachineController controller =
-                                                getRiveController(artboard);
-                                            check = controller.findSMI("Check")
-                                                as SMITrigger;
-                                            error = controller.findSMI("Error")
-                                                as SMITrigger;
-                                            reset = controller.findSMI("Reset")
-                                                as SMITrigger;
+                                        CustomTextBox(
+                                          isPassword: true,
+                                          height: 42,
+                                          fontColor: Colors.white,
+                                          borderBolor:
+                                              Colors.grey.withOpacity(0.9),
+                                          caption: 'Password',
+                                          borderRadious: 10.0,
+                                          width: 300,
+                                          maxlength: 20,
+                                          controller: _pws,
+                                          onChange: (String value) {},
+                                        ),
+      
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        // MyIconButton(buttonClick: () {
+      
+                                        // }, text: 'Login', icon: Icons.lock_open ,width: 75,
+                                        // color: Color.fromARGB(255, 2, 112, 131) .withOpacity(0.5),)
+      
+                                        ElevatedButton.icon(
+                                          onPressed: () {
+                                            if (_uid.text.length < 3 ||
+                                                _pws.text.isEmpty) {
+                                              return;
+                                            }
+      
+                                            context
+                                                .read<LoginBloc>()
+                                                .add(LoginSubmitEvent(
+                                                  uid: _uid.text.toString(),
+                                                  pws: _pws.text.toString(),
+                                                ));
                                           },
-                                        ))
-                                    : const SizedBox(),
-
-                                Customposition(
-                                    child: Transform.scale(
-                                  scale: 7,
-                                  child: RiveAnimation.asset(
-                                    "assets/RiveAssets/confetti.riv",
-                                    onInit: (artboard) {
-                                      StateMachineController controller =
-                                          getRiveController(artboard);
-
-                                      confetti = controller.findSMI(
-                                          "Trigger explosion") as SMITrigger;
-                                    },
+                                          icon: const Icon(
+                                            Icons.lock_open_rounded,
+                                            size: 20,
+                                          ),
+                                          label: const Padding(
+                                            padding:
+                                                EdgeInsets.symmetric(vertical: 8),
+                                            child: Text("Login"),
+                                          ),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<Color>(
+                                                    const Color.fromARGB(
+                                                            255, 117, 117, 117)
+                                                        .withOpacity(0.01)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ))
-                              ]);
-                            },
+                                  // ignore: dead_code
+                                  isLoading
+                                      ? Customposition(
+                                          isDisable: isDisable,
+                                          size: 80,
+                                          child: RiveAnimation.asset(
+                                            "assets/RiveAssets/check.riv",
+                                            onInit: (artboard) {
+                                              StateMachineController controller =
+                                                  getRiveController(artboard);
+                                              check = controller.findSMI("Check")
+                                                  as SMITrigger;
+                                              error = controller.findSMI("Error")
+                                                  as SMITrigger;
+                                              reset = controller.findSMI("Reset")
+                                                  as SMITrigger;
+                                            },
+                                          ))
+                                      : const SizedBox(),
+      
+                                  Customposition(
+                                      child: Transform.scale(
+                                    scale: 7,
+                                    child: RiveAnimation.asset(
+                                      "assets/RiveAssets/confetti.riv",
+                                      onInit: (artboard) {
+                                        StateMachineController controller =
+                                            getRiveController(artboard);
+      
+                                        confetti = controller.findSMI(
+                                            "Trigger explosion") as SMITrigger;
+                                      },
+                                    ),
+                                  ))
+                                ]);
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Spacer(flex: 1),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        "Your Best Friend for find doctors",
-                        style: TextStyle(fontWeight: FontWeight.w400),
-                      ),
-                    )
-                  ],
+                      const Spacer(flex: 1),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          "Your Best Friend for find doctors",
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
