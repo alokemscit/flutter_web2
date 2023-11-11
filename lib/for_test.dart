@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
+import 'component/widget/custom_button.dart';
+
 class MyDataTable extends StatefulWidget {
   const MyDataTable({super.key});
 
@@ -276,28 +278,6 @@ class CustomContainer extends StatelessWidget {
         ),
         padding: EdgeInsets.all(8),
         child: Text(text,style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold),),
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  final String text;
- 
-  final VoidCallback onPressed;
-
-  const CustomButton({required this.text, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2,vertical: 2),
-      margin: EdgeInsets.all(0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey,foregroundColor: Colors.black,textStyle: TextStyle(fontSize: 13)),
-            
-        onPressed: onPressed,
-        child: Text(text),
       ),
     );
   }

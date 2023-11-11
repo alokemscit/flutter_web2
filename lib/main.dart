@@ -53,8 +53,8 @@ final appTheame = AppTheme();
                //appThemes.darkTheme==true?Brightness.dark:Brightness.light
                ),
             home: userProvider.user != null ? const 
-           ParentPage() 
-           // DoctorLeave()
+          // ParentPage() 
+            DoctorLeave()
             : Login(),
           );
         }));

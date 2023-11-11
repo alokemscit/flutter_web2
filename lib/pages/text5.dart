@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:web_2/for_test.dart';
+ 
 
 import '../component/settings/functions.dart';
+import '../component/widget/custom_button.dart';
 import '../data/static_data.dart';
 
 class Test5 extends StatelessWidget {

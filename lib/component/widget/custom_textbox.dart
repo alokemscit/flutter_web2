@@ -43,6 +43,8 @@ class CustomTextBox extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: SizedBox(
+        //  padding: const EdgeInsets.only(top: 4),
+         // color: Colors.amber,
           width: width,
           height: height,
 
@@ -54,6 +56,7 @@ class CustomTextBox extends StatelessWidget {
                 isObsText = state.isShow;
               }
               return TextField(
+                
                 onChanged: (value) => onChange(value),
                 keyboardType: textInputType,
                 obscureText: !isObsText ? isPassword : false,
@@ -80,11 +83,12 @@ class CustomTextBox extends StatelessWidget {
 
                 textAlign: textAlign!,
                 decoration: InputDecoration(
+                  
                   labelText: caption,
                   labelStyle: TextStyle(
                       color: Colors.grey.shade400,
                       fontWeight: FontWeight.w300,
-                      fontSize: 13),
+                      fontSize: 14),
                   hintStyle: TextStyle(
                       color: Colors.grey.shade400, fontWeight: FontWeight.w300),
                   counterText: '',
@@ -111,9 +115,9 @@ class CustomTextBox extends StatelessWidget {
                             size: 20,
                           ),
                         )
-                      : const SizedBox(),
+                      : null,
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
                 ),
                 controller: controller,
               );
