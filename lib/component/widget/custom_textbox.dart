@@ -17,6 +17,7 @@ class CustomTextBox extends StatelessWidget {
   final Color fontColor;
   final Color borderBolor;
   final bool isPassword;
+  final bool isFilled;
 
   const CustomTextBox(
       {Key? key,
@@ -32,7 +33,7 @@ class CustomTextBox extends StatelessWidget {
       this.borderRadious = 4.0,
       this.fontColor = Colors.black87,
       this.borderBolor = Colors.black38,
-      this.isPassword = false})
+      this.isPassword = false,  this.isFilled=false})
       : super(key: key);
 
   @override
@@ -43,8 +44,8 @@ class CustomTextBox extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: SizedBox(
-        //  padding: const EdgeInsets.only(top: 4),
-         // color: Colors.amber,
+          //  padding: const EdgeInsets.only(top: 4),
+          // color: Colors.amber,
           width: width,
           height: height,
 
@@ -56,7 +57,6 @@ class CustomTextBox extends StatelessWidget {
                 isObsText = state.isShow;
               }
               return TextField(
-                
                 onChanged: (value) => onChange(value),
                 keyboardType: textInputType,
                 obscureText: !isObsText ? isPassword : false,
@@ -83,7 +83,8 @@ class CustomTextBox extends StatelessWidget {
 
                 textAlign: textAlign!,
                 decoration: InputDecoration(
-                  
+                  fillColor: Colors.white,
+                  filled: isFilled,
                   labelText: caption,
                   labelStyle: TextStyle(
                       color: Colors.grey.shade400,

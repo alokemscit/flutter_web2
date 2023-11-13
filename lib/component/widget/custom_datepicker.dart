@@ -18,7 +18,7 @@ class CustomDatePicker extends StatefulWidget {
       this.bgColor = const Color.fromARGB(255, 218, 216, 216),
       this.height = 35,
       this.width = 140,
-      this.borderColor=Colors.black38,
+      this.borderColor = Colors.black38,
       this.isBackDate = false});
 
   @override
@@ -46,46 +46,50 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
         child: TextFormField(
+          onTap: () {
+            getDates();
+          },
           controller: widget.date_controller,
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle: const TextStyle(fontSize: 14),
             border: const OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: widget.borderColor, width: 0.5),
-              ),
+              borderSide: BorderSide(color: widget.borderColor, width: 0.5),
+            ),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
             suffixIcon: InkWell(
-              child: const Icon(Icons.calendar_month_outlined),
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context, // Pass the correct BuildContext.
-                  initialDate: DateTime.now(),
-                  firstDate:
-                      widget.isBackDate! ? DateTime(1800) : DateTime.now(),
-                  lastDate: DateTime(2101),
-                );
-
-                if (pickedDate != null) {
-                  String formattedDate =
-                      DateFormat('dd/MM/yyyy').format(pickedDate);
-                  setState(() {
-                    widget.date_controller.text = formattedDate;
-                  });
-                } else {
-                  // print("Date is not selected");
-                  setState(() {
-                    widget.date_controller.text =
-                        DateFormat('dd/MM/yyyy').format(DateTime.now());
-                  });
-                }
-              },
-            ),
+                child: const Icon(Icons.calendar_month_outlined),
+                onTap: () async {
+                  getDates();
+                }),
           ),
           readOnly: true,
         ),
       ),
     );
+  }
+
+  Future<void> getDates() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context, // Pass the correct BuildContext.
+      initialDate: DateTime.now(),
+      firstDate: widget.isBackDate! ? DateTime(1800) : DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
+      setState(() {
+        widget.date_controller.text = formattedDate;
+      });
+    } else {
+      // print("Date is not selected");
+      setState(() {
+        widget.date_controller.text =
+            DateFormat('dd/MM/yyyy').format(DateTime.now());
+      });
+    }
   }
 }
