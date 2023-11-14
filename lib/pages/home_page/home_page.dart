@@ -9,12 +9,13 @@ import 'package:provider/single_child_widget.dart';
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/menubutton.dart';
 import 'package:web_2/component/widget/sidemenu.dart';
-import 'package:web_2/data/apiBloc.dart';
+
 import 'package:web_2/pages/appointment/doctor_appointment.dart';
+import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave.dart';
 
 import '../../component/settings/config.dart';
 
-import '../../model/app_time.dart';
+
 import '../../model/main_app_menu.dart';
 import 'parent_page_widget/parent_background_widget.dart';
 
@@ -262,16 +263,7 @@ class BodyWidgetMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  List<dynamic> doctorAppointment = [
-  String,
-  String,
-  String,
-  List<DepartmentModel>,
-  List<UnitModel>,
-  List<AppTime>,
-  List<DistinctDoctor>,
-  ];
-
+  
     return SizedBox(
       height: MediaQuery.of(context).size.height - 28,
       //width: double.infinity,
@@ -292,13 +284,13 @@ class BodyWidgetMain extends StatelessWidget {
               builder: (context, state) {
             var id = state.id;
             //   return //TabPageMain(id: state.id);
-
+            
             switch (id) {
               case "2":
                 {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height - 28,
-                    child:  const Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -307,16 +299,23 @@ class BodyWidgetMain extends StatelessWidget {
                     ),
                   );
                 }
-
-              case "2":
+                case "3":
                 {
-                  return Text("2");
+
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - 28,
+                    child:  DoctorLeave(),
+                    
+                    // Column(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     Expanded(child: DoctorLeave()),
+                    //   ],
+                    // ),
+                  );
                 }
 
-              case "3":
-                {
-                  return Text("3");
-                }
 
               case "4":
                 {
