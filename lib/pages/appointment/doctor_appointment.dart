@@ -13,8 +13,10 @@ import '../../data/data_api.dart';
 import 'widget/show_button.dart';
 
 class DoctorAppointment extends StatelessWidget {
-  const DoctorAppointment({super.key, });
- 
+  const DoctorAppointment({
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +45,7 @@ class DoctorAppointment extends StatelessWidget {
               if (state is DepartmentLoading) {
                 return _buildLoading();
               } else if (state is DepartmentLoaded) {
+                print('loaded');
                 return AppointmentPage(
                   myModel: state.model,
                 );
@@ -104,7 +107,6 @@ class AppointmentPage extends StatelessWidget {
         }
 
         var customdropdownGroup = CustomDropDown(
-          
           id: groupID,
           list: myModel.groupList.map((item) {
             return DropdownMenuItem<String>(
@@ -250,16 +252,13 @@ class AppointmentPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              decoration:  const BoxDecoration(
-                color:kSecondaryColor,
-                boxShadow: [
-                  BoxShadow(
-                  //   color: Colors.white,
-                     blurRadius: 0.1,
-                     spreadRadius: 0.01
-                   )
-                ]
-              ),
+              decoration:
+                  const BoxDecoration(color: kSecondaryColor, boxShadow: [
+                BoxShadow(
+                    //   color: Colors.white,
+                    blurRadius: 0.1,
+                    spreadRadius: 0.01)
+              ]),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -290,16 +289,13 @@ class AppointmentPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              decoration: const BoxDecoration(
-               color:kSecondaryColor,
-                boxShadow: [
-                  BoxShadow(
-                  //   color: Colors.white,
-                     blurRadius: 0.1,
-                     spreadRadius: 0.1
-                   )
-                ]
-              ),
+              decoration:
+                  const BoxDecoration(color: kSecondaryColor, boxShadow: [
+                BoxShadow(
+                    //   color: Colors.white,
+                    blurRadius: 0.1,
+                    spreadRadius: 0.1)
+              ]),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: wide > 812
                   ? Row(

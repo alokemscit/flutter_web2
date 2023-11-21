@@ -2,21 +2,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
-
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/menubutton.dart';
 import 'package:web_2/component/widget/sidemenu.dart';
-
 import 'package:web_2/pages/appointment/doctor_appointment.dart';
-import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave.dart';
+import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave_page.dart';
 
 import '../../component/settings/config.dart';
-
-
 import '../../model/main_app_menu.dart';
+import '../appointment/time_slot_page/time_slot_page.dart';
 import 'parent_page_widget/parent_background_widget.dart';
 
 // ignore: must_be_immutable
@@ -75,14 +71,19 @@ class HomePagebodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var sidemenu = SideMenu(
+      module: module,
+      userDetailsForDrawer: UserDetailsForDrawer(module: module),
+      generateMenuItems: GenerateMenuItems(mid: module.id.toString()),
+    );
     return MultiBlocProvider(
       providers: providers,
       child: Responsive(
         mobile: Container(
           color: const Color.fromARGB(255, 235, 233, 230),
         ),
-        tablet: DesktopWidget(module: module),
-        desktop: DesktopWidget(module: module),
+        tablet: DesktopWidget(module: module, sidemenu: sidemenu),
+        desktop: DesktopWidget(module: module, sidemenu: sidemenu),
       ),
     );
   }
@@ -92,18 +93,49 @@ class DesktopWidget extends StatelessWidget {
   const DesktopWidget({
     super.key,
     required this.module,
+    required this.sidemenu,
   });
-
+  final SideMenu sidemenu;
   final main_app_menu module;
 
   @override
   Widget build(BuildContext context) {
+    print('Secon-----------  widget');
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //Drawer Menu Item
-        DrawerWithBackArrow(module: module),
+
+        // DrawerWithBackArrow(module: module),
+
+        BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
+          builder: (context, state) {
+            bool b = false;
+            if (state is MenubuttonCloseBlocInitial) {
+              b = state.isClose;
+            }
+
+            double ss = b == true ? 0 : 220;
+            //print(ss);
+            return AnimatedSize(
+              curve: Curves.easeIn,
+              //  vsync: this,
+              duration: const Duration(milliseconds: 300),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: ss),
+                //      //  // child:
+                child: Stack(
+                  children: [
+                    sidemenu,
+                    const ArrowBackPositioned(),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+
         const TabAndBodyWidget(),
       ],
     );
@@ -117,13 +149,51 @@ class TabAndBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
+    Size size = MediaQuery.of(context).size;
+    //print('Render Main Body ..........main00000000');
+    // Size size = MediaQuery.of(context).size;
+    return Expanded(
       // flex: 10,
       //flex:  _size.width > 1340 ? 11 : 9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [DrawerBackIconWithTabEvent(), BodyWidgetMain()],
+        children: [
+          const DrawerBackIconWithTabEvent(),
+          Expanded(
+            child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
+                builder: (context, state) {
+              var id = state.id;
+              print(id);
+              //   return //TabPageMain(id: state.id);
+              //  print('Render Main Body ..........111');
+              return (() {
+                switch (id) {
+                  case "1":
+                    {
+                      return const TimeSlotPage();
+                    }
+                  case "2":
+                    {
+                      return const DoctorAppointment();
+                    }
+                  case "3":
+                    {
+                      return const DoctorLeave();
+                    }
+
+                  case "4":
+                    {
+                      return Text("4");
+                    }
+
+                  default:
+                    return SizedBox();
+                }
+              })();
+            }),
+          )
+        ],
       ),
     );
   }
@@ -154,43 +224,6 @@ class DrawerBackIconWithTabEvent extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class DrawerWithBackArrow extends StatelessWidget {
-  const DrawerWithBackArrow({
-    super.key,
-    required this.module,
-  });
-
-  final main_app_menu module;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
-      builder: (context, state) {
-        bool b = state.isClose;
-        double ss = b == true ? 0 : 220;
-        //print(ss);
-        return AnimatedSize(
-          curve: Curves.easeIn,
-          //  vsync: this,
-          duration: const Duration(milliseconds: 300),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: ss),
-            //      //  // child:
-            child: Stack(
-              children: [
-                SideMenu(
-                  module: module,
-                ),
-                const ArrowBackPositioned(),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }
@@ -253,85 +286,6 @@ class TabMenuWithEvent extends StatelessWidget {
   }
 }
 
-class BodyWidgetMain extends StatelessWidget {
-  const BodyWidgetMain({
-    super.key,
-    //required this.controllerList,
-  });
-
-  //final List<dynamic> controllerList;
-
-  @override
-  Widget build(BuildContext context) {
-  
-    return SizedBox(
-      height: MediaQuery.of(context).size.height - 28,
-      //width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-          // padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-            border: Border.fromBorderSide(
-              BorderSide(color: Colors.grey, width: 0.1),
-            ),
-          ),
-          child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
-              builder: (context, state) {
-            var id = state.id;
-            //   return //TabPageMain(id: state.id);
-            
-            switch (id) {
-              case "2":
-                {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height - 28,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: DoctorAppointment()),
-                      ],
-                    ),
-                  );
-                }
-                case "3":
-                {
-
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height - 28,
-                    child:  DoctorLeave(),
-                    
-                    // Column(
-                    //   mainAxisAlignment: MainAxisAlignment.start,
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Expanded(child: DoctorLeave()),
-                    //   ],
-                    // ),
-                  );
-                }
-
-
-              case "4":
-                {
-                  return Text("4");
-                }
-
-              default:
-                return SizedBox();
-            }
-          }),
-        ),
-      ),
-    );
-  }
-}
-
 class DrawerMenueIcon extends StatelessWidget {
   const DrawerMenueIcon({
     super.key,
@@ -369,6 +323,7 @@ class ArrowBackPositioned extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final MenuCloseController yourController = Get.put(MenuCloseController());
     return Positioned(
         top: 0,
         right: 1,
@@ -434,6 +389,9 @@ class MenuItemBloc extends Bloc<ItemMenuEvent, ItemMenuState> {
 
   FutureOr<void> _addItem(ItemMenuAdd event, Emitter<ItemMenuState> emit) {
     state.menuitem.add(event.menuitem);
+    // List<ItemModel> lst = [];
+    //lst.add(event.menuitem);
+
     emit(ItemMenuAdded(menuitem: state.menuitem));
   }
 

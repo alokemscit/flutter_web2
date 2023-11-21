@@ -120,7 +120,8 @@ class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
   DepartmentBloc(this.apiRepository) : super(DepartmentLoading()) {
     on<GetDepartmentList>((event, emit) async {
       try {
-        //print('object');
+
+        print('dept list');
         // emit(DepartmentLoading());
         final mList = await apiRepository.createLead([
           {'tag': '59'},

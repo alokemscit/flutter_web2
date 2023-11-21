@@ -13,16 +13,16 @@ class ParentMainModuleListWidget extends StatelessWidget {
   ParentMainModuleListWidget({
     Key? key,
     required this.list,
-    required this.size,
+    
   }) : super(key: key);
 
-  final Size size;
+   
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Padding(
-      padding: size.width <= 650? EdgeInsets.only(bottom: 45):EdgeInsets.only(bottom: 0),
+      padding: size.width <= 650? const EdgeInsets.only(bottom: 45):const EdgeInsets.only(bottom: 0),
       child: GridView.builder(
         itemCount: list.length,
         padding: const EdgeInsets.all(8.0),

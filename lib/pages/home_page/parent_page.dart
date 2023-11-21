@@ -6,15 +6,14 @@ class ParentPage extends StatelessWidget {
   const ParentPage({super.key});
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-  //  print('Size ' + size.width.toString());
-    return Scaffold(
+     
+    return const Scaffold(
         body: SafeArea(
      child : Stack(
         children: [
-          const ParentPageBackground(),
-            ParentPageTopWidget(size: size),
-            ParentPageModuleHolderWidget(size: size),
+          ParentPageBackground(),
+            ParentPageTopWidget(),
+            ParentPageModuleHolderWidget(),
             
         ],
       ),

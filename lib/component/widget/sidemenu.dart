@@ -25,11 +25,14 @@ isExists(List<ItemModel> list, String id) {
 }
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({super.key, required this.module});
+  const SideMenu(
+      {super.key, required this.module, required this.userDetailsForDrawer, required this.generateMenuItems});
   final main_app_menu module;
-
+  final UserDetailsForDrawer userDetailsForDrawer;
+  final GenerateMenuItems generateMenuItems;
   @override
   Widget build(BuildContext context) {
+    //print('Calling 1');
     return Container(
       height: MediaQuery.of(context).size.height,
       //padding: const EdgeInsets.only(top: kIsWeb ? 8 : 0),
@@ -45,16 +48,16 @@ class SideMenu extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(
                     top: kIsWeb ? 18 : 0, left: 6, right: 4),
-                child: UserDetailsForDrawer(module: module),
+                child: userDetailsForDrawer,
               ),
               HomeLogOut(module: module),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: ModuleNameDisplay(module: module),
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                child: GenerateMenuItems(mid: module.id.toString()),
+                child: generateMenuItems,
               ),
             ],
           ),
@@ -106,23 +109,27 @@ class GenerateMenuItems extends StatelessWidget {
                               return ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 horizontalTitleGap: 0,
-                              //  contentPadding: EdgeInsets.zero,
-                               // horizontalTitleGap: 0,
-                               
+                                //  contentPadding: EdgeInsets.zero,
+                                // horizontalTitleGap: 0,
+
                                 title: Padding(
-                                  padding: const EdgeInsets.only(left: 8,top: 0,bottom: 0),
+                                  padding: const EdgeInsets.only(
+                                      left: 8, top: 0, bottom: 0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const Icon(Icons.arrow_right),const SizedBox(width: 6,),
+                                      const Icon(Icons.arrow_right),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
                                       Text(
                                         e.smName!,
                                         style: GoogleFonts.titilliumWeb(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      
                                     ],
                                   ),
                                 ),
@@ -221,6 +228,7 @@ class UserDetailsForDrawer extends StatelessWidget {
     return FutureBuilder<User_Model>(
       future: getUserInfo(),
       builder: (context, snapshot) {
+        // print('Snapshot Call');
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             // Attempt to decode the base64 image

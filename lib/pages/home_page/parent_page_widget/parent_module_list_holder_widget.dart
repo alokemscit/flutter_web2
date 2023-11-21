@@ -5,10 +5,10 @@ import '../../../model/main_app_menu.dart';
 class ParentPageModuleHolderWidget extends StatelessWidget {
   const ParentPageModuleHolderWidget({
     super.key,
-    required this.size,
+    
   });
 
-  final Size size;
+  
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -26,7 +26,7 @@ class ParentPageModuleHolderWidget extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return ParentMainModuleListWidget(
-                      size: size,
+                    
                       list: snapshot.data!,
                     );
                   } else {

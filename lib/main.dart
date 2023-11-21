@@ -7,7 +7,7 @@ import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
 
 import 'component/settings/notifers/auth_provider.dart';
-import 'pages/appointment/doctor_leave_page/doctor_leave.dart';
+//import 'pages/appointment/doctor_leave_page/doctor_leave.dart';
 import 'pages/authentication/login_page.dart';
 
 import 'pages/home_page/parent_page.dart';
@@ -15,7 +15,7 @@ import 'pages/home_page/parent_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final userProvider = AuthProvider();
-  
+
   //await appTheame.darkTheme;
   await userProvider.loadUser();
   runApp(MyApp(
@@ -25,15 +25,15 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final AuthProvider userProvider; // = AuthProvider();
-final appTheame = AppTheme();
+  final appTheame = AppTheme();
   MyApp({super.key, required this.userProvider});
   @override
   Widget build(BuildContext context) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-    statusBarIconBrightness: Brightness.dark,
-    statusBarColor: Colors.transparent,
-    systemNavigationBarColor:Colors.black,
-    statusBarBrightness: Brightness.dark));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.black,
+        statusBarBrightness: Brightness.dark));
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<AuthProvider>(
@@ -43,19 +43,20 @@ final appTheame = AppTheme();
             create: (context) => appTheame,
           ),
         ],
-        child: Consumer2<AuthProvider,AppTheme>(
-            builder: (context, AuthProvider authNotifier,AppTheme appThemes, child) {
+        child: Consumer2<AuthProvider, AppTheme>(builder:
+            (context, AuthProvider authNotifier, AppTheme appThemes, child) {
           return MaterialApp(
             scrollBehavior: CustomScrollBehavior(),
             debugShowCheckedModeBanner: false,
-            theme:ThemeData( 
-              brightness: appThemes.darkTheme?Brightness.dark:Brightness.light,
-               //appThemes.darkTheme==true?Brightness.dark:Brightness.light
-               ),
-            home: userProvider.user != null ?  
-          const ParentPage() 
-           // DoctorLeave()
-            : Login(),
+            theme: ThemeData(
+              brightness:
+                  appThemes.darkTheme ? Brightness.dark : Brightness.light,
+              //appThemes.darkTheme==true?Brightness.dark:Brightness.light
+            ),
+            home: userProvider.user != null
+                ? const ParentPage()
+                //DoctorLeave()
+                : Login(),
           );
         }));
   }
