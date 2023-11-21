@@ -17,42 +17,51 @@ class CapWithTextFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            caption,
-            style: GoogleFonts.roboto(
-                color: Colors.black,
-                backgroundColor: Colors.transparent,
-                fontSize: 12,
-                fontWeight: FontWeight.bold),
-          ),
-          Container(
-            width: width,
-            height: 25,
-            color: const Color.fromARGB(255, 255, 255, 255),
-            child: TextField(
-              maxLength: maxlength,
-              // canRequestFocus : false,
-              maxLines: 1,
-              //   textCapitalization : TextCapitalization.none,
-              // keyboardType: TextInputType.number,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-              textAlignVertical: TextAlignVertical.center,
-              textAlign: TextAlign.start,
-              decoration: const InputDecoration(
-                  //  labelText: 'Enter text',
-                  counterText: '',
-                  border: OutlineInputBorder()),
-              controller: controller,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: width,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            child: Text(
+              caption,
+              style: GoogleFonts.roboto(
+                  color: Colors.black,
+                  backgroundColor: Colors.transparent,
+                  fontSize: 12,
+                  
+                  fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+
+        Container(
+          width: width,
+          height: 25,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          child: TextField(
+            maxLength: maxlength,
+            // canRequestFocus : false,
+            maxLines: 1,
+            //   textCapitalization : TextCapitalization.none,
+            // keyboardType: TextInputType.number,
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+            textAlignVertical: TextAlignVertical.center,
+            textAlign: TextAlign.start,
+            decoration: const InputDecoration(
+                //  labelText: 'Enter text',
+                counterText: '',
+                border: OutlineInputBorder(),
+                 contentPadding:
+               EdgeInsets.symmetric(vertical: 0, horizontal: 4),),
+               controller: controller,
+            
+          ),
+        )
+      ],
     );
   }
 }
