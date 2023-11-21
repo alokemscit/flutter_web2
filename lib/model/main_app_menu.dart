@@ -32,6 +32,13 @@ return  list.map((post) => main_app_menu.fromJson(post)).toList();
 
 List<dynamic> list = [
   {
+    "id": 19,
+    "name": "Admin",
+    "description":
+        "Setting up an admin module for  creating a robust and secure interface that allows administrators to manage various aspects of the ERP system",
+    "icon": "settings.png"
+  },
+  {
     "id": 1,
     "name": "Patient Registration",
     "description":

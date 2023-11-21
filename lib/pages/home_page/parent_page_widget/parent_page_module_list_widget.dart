@@ -107,7 +107,7 @@ class ParentMainModuleListWidget extends StatelessWidget {
                                   : (size.width > 650 && size.width < 805)
                                       ? 40
                                       : 60,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.contain,
                               //color: Colors.amber,
                               colorBlendMode: BlendMode.srcIn,
                             )),

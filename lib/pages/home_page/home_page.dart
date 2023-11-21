@@ -12,6 +12,7 @@ import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave_page.dart
 
 import '../../component/settings/config.dart';
 import '../../model/main_app_menu.dart';
+import '../admin/module_page/module_page.dart';
 import '../appointment/time_slot_page/time_slot_page.dart';
 import 'parent_page_widget/parent_background_widget.dart';
 
@@ -185,6 +186,9 @@ class TabAndBodyWidget extends StatelessWidget {
                   case "4":
                     {
                       return Text("4");
+                    }
+                    case "56":{
+                      return const ModulePage();
                     }
 
                   default:

@@ -65,7 +65,7 @@ class Test2 extends StatelessWidget {
                       //      //  // child:
                       child: Stack(
                         children: [
-                          const SideMenu(),
+                          //const SideMenu(),
                           Positioned(
                             top: 0,
                             right: 1,

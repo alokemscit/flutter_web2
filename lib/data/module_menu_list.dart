@@ -121,6 +121,34 @@ List<dynamic> menu_data = [
         "icon": "inbox.png"
       }
     ],
+  },
+
+
+
+
+{
+    "mid": 19,
+    "menu": [
+      {
+        "id": 1,
+        "name": "Setup",
+        "smenu": [
+          {"sm_id": 56, "sm_name": "Module Master"},
+          {"sm_id": 57, "sm_name": "Form Master"},
+         ],
+        "icon": "setting.png"
+      },
+      {
+        "id": 2,
+        "name": "Tasks",
+        "smenu": [
+           {"sm_id": 58, "sm_name": "User Assess"},
+                     
+        ],
+        "icon": "setting.png"
+      },
+      
+    ],
   }
 
 

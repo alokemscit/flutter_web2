@@ -80,7 +80,7 @@ class CustomTextBox extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: fontColor),
                 textAlignVertical: TextAlignVertical.center,
-
+              
                 textAlign: textAlign!,
                 decoration: InputDecoration(
                   fillColor: Colors.white,
