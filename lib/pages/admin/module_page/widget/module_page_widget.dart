@@ -1,7 +1,6 @@
-
-
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web_2/data/data_api.dart';
 
 import '../../../../component/settings/config.dart';
 import '../../../../component/widget/custom_button.dart';
@@ -11,8 +10,9 @@ import '../../../../component/widget/custom_search_box.dart';
 import '../../../../component/widget/custom_textbox.dart';
 import '../../../../data/module_image_data.dart';
 import '../../../appointment/doctor_leave_page/model/doctor_list_model.dart';
+import '../model/module_model.dart';
 
-Widget rightPanel( TextEditingController txtSearch) {
+Widget rightPanel(TextEditingController txtSearch) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
     child: CustomContainer(
@@ -145,6 +145,38 @@ Widget leftPanel(String? iid, TextEditingController txtModule,
   );
 }
 
+abstract class ModuleState {}
+
+class MoluleLodingState extends ModuleState {}
+
+class MoluleLInitState extends ModuleState {}
+
+class MoluleLodedState extends ModuleState {}
+
+class MoluleSaveSuccessState extends ModuleState {
+  final String message;
+  MoluleSaveSuccessState({required this.message});
+}
+
+class MoluleSaveErrorState extends ModuleState {
+  final String error;
+  MoluleSaveErrorState({required this.error});
+}
+
+abstract class ModuleEvent {}
+
+class ModuleSaveEvent extends ModuleEvent {
+  final List<String> valueList;
+  ModuleSaveEvent({required this.valueList});
+}
+
+class ModuleBloc extends Bloc<ModuleEvent, ModuleState> {
+  final data_api2 repo;
+  ModuleBloc(this.repo) : super(MoluleLInitState()) {
+    on<ModuleEvent>((event, emit) {});
+  }
+}
+
 class TablePart extends StatelessWidget {
   const TablePart({
     super.key,
@@ -153,32 +185,53 @@ class TablePart extends StatelessWidget {
   });
 
   final TextEditingController txtSearch;
-  final List<DoctorList> dList;
+  final List<ModelMenuList> dList;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomSearchBox(
-          isFilled: true,
-          width: double.infinity,
-          caption: "Search Module",
-          controller: txtSearch,
-          onChange: (String value) {},
-        ),
-        Expanded(
-            child: Column(
-          children: [
-            const TableHeader(),
-            Expanded(
-                child: SingleChildScrollView(
-                    child: ModuleListTable(dList: dList))),
-          ],
-        ))
-      ],
-    );
+    return FutureBuilder(
+        future: get_module_list(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              print(snapshot.data!.length.toString());
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomSearchBox(
+                    isFilled: true,
+                    width: double.infinity,
+                    caption: "Search Module",
+                    controller: txtSearch,
+                    onChange: (String value) {},
+                  ),
+                  Expanded(
+                      child: Column(
+                    children: [
+                      const TableHeader(),
+                      Expanded(
+                          child: SingleChildScrollView(
+                              child: ModuleListTable(dList: snapshot.data!))),
+                    ],
+                  ))
+                ],
+              );
+            } else {
+              return const Center(
+                  child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              ));
+            }
+          } else {
+            return const Center(
+                child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(),
+            ));
+          }
+        });
   }
 }
 
@@ -236,11 +289,11 @@ class ModuleListTable extends StatelessWidget {
     super.key,
     required this.dList,
   });
-
-  final List<DoctorList> dList;
+  final List<ModelMenuList> dList;
 
   @override
   Widget build(BuildContext context) {
+   
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Table(
@@ -257,18 +310,18 @@ class ModuleListTable extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Text(e.dOCID!),
+                  child: Text(e.id.toString()),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    e.dOCTORNAME!,
+                    e.name!,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Text(e.uNIT!),
+                  child: Text(e.desc==null?"":e.desc!),
                 ),
                 InkWell(
                   onTap: () {},

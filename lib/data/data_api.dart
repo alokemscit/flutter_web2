@@ -18,6 +18,7 @@ class data_api {
       body: jsonEncode(parameter),
     );
     if (response.statusCode == 200) {
+      //print(response.body);
       apiData1 = jsonDecode(response.body);
     } else {
       apiData1 = [];
@@ -39,7 +40,9 @@ class data_api {
       body: jsonEncode(parameter),
     );
     if (response.statusCode == 200) {
+      print(response.body);
       apiData1 = jsonDecode(response.body);
+      print(apiData1);
     } else {
       apiData1 = [];
     }
@@ -54,6 +57,7 @@ class data_api2 {
     List<dynamic> apiData1 = [];
     //print(object)
     String url = 'https://api.erphub.top/mob/$methods';
+    //print(url);
     final response = await http.post(
       Uri.parse(url),
       headers: {
@@ -65,10 +69,14 @@ class data_api2 {
       body: jsonEncode(parameter),
     );
     if (response.statusCode == 200) {
-      apiData1 = jsonDecode(response.body);
+     // print(response.body);
+      apiData1 = jsonDecode(response.body.toString());
+     // print(apiData1.length);
+      
+      return apiData1;
     } else {
-      apiData1 = [];
+      return [];
     }
-    return apiData1;
+    //return apiData1;
   }
 }
