@@ -50,7 +50,7 @@ List<dynamic> list = [
     "name": "Appointment Scheduling",
     "description":
         "This module enables the scheduling of patient appointments with doctors, helping to manage the hospital's daily schedule efficiently.",
-    "icon": "appintment3.png"
+    "icon": "appointment.png"
   },
    {
     "id": 3,
