@@ -85,7 +85,8 @@ class GenerateMenuItems extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      children: List.generate(list.length, (index) {
+                      children: 
+                      List.generate(list.length, (index) {
                         return ExpansionTile(
                             title: Container(
                                 // padding: const EdgeInsets.all(2),
