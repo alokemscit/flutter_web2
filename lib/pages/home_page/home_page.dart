@@ -11,7 +11,9 @@ import 'package:web_2/pages/appointment/doctor_appointment.dart';
 import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave_page.dart';
 
 import '../../component/settings/config.dart';
-import '../../model/main_app_menu.dart';
+
+import '../admin/module_page/form_page.dart';
+import '../admin/module_page/model/module_model.dart';
 import '../admin/module_page/module_page.dart';
 import '../appointment/time_slot_page/time_slot_page.dart';
 import 'parent_page_widget/parent_background_widget.dart';
@@ -33,7 +35,7 @@ List<dynamic> textControllerListGenerator(int length) {
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
-  final main_app_menu module;
+  final ModelMenuList module;
   const HomePage({super.key, required this.module});
 
   @override
@@ -58,7 +60,7 @@ class HomePagebodyWidget extends StatelessWidget {
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModelMenuList module;
 
   final List<SingleChildWidget> providers = [
     BlocProvider(
@@ -97,7 +99,7 @@ class DesktopWidget extends StatelessWidget {
     required this.sidemenu,
   });
   final SideMenu sidemenu;
-  final main_app_menu module;
+  final ModelMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +124,7 @@ class DesktopWidget extends StatelessWidget {
             return AnimatedSize(
               curve: Curves.easeIn,
               //  vsync: this,
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 200),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: ss),
                 //      //  // child:
@@ -137,7 +139,7 @@ class DesktopWidget extends StatelessWidget {
           },
         ),
 
-        const TabAndBodyWidget(),
+         TabAndBodyWidget(module: module,),
       ],
     );
   }
@@ -145,12 +147,11 @@ class DesktopWidget extends StatelessWidget {
 
 class TabAndBodyWidget extends StatelessWidget {
   const TabAndBodyWidget({
-    super.key,
+    super.key, required this.module,
   });
-
+  final ModelMenuList module;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     //print('Render Main Body ..........main00000000');
     // Size size = MediaQuery.of(context).size;
     return Expanded(
@@ -170,25 +171,30 @@ class TabAndBodyWidget extends StatelessWidget {
               //  print('Render Main Body ..........111');
               return (() {
                 switch (id) {
-                  case "1":
+                  case "28":
                     {
                       return const TimeSlotPage();
                     }
-                  case "2":
+                  case "30":
                     {
                       return const DoctorAppointment();
                     }
-                  case "3":
+                  case "31":
                     {
                       return const DoctorLeave();
                     }
 
                   case "4":
                     {
-                      return Text("4");
+                      return const Text("4");
                     }
-                    case "56":{
+                  case "24":
+                    {
                       return const ModulePage();
+                    }
+                  case "25":
+                    {
+                      return const FormPage();
                     }
 
                   default:

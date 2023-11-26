@@ -10,6 +10,7 @@ import 'package:web_2/model/user_model.dart';
 import 'package:web_2/pages/authentication/login_page.dart';
 import 'package:web_2/pages/home_page/home_page.dart';
 
+import '../../pages/admin/module_page/model/module_model.dart';
 import '../settings/config.dart';
 import '../settings/notifers/auth_provider.dart';
 
@@ -27,7 +28,7 @@ isExists(List<ItemModel> list, String id) {
 class SideMenu extends StatelessWidget {
   const SideMenu(
       {super.key, required this.module, required this.userDetailsForDrawer, required this.generateMenuItems});
-  final main_app_menu module;
+  final ModelMenuList module;
   final UserDetailsForDrawer userDetailsForDrawer;
   final GenerateMenuItems generateMenuItems;
   @override
@@ -85,7 +86,8 @@ class GenerateMenuItems extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      children: List.generate(list.length, (index) {
+                      children: 
+                      List.generate(list.length, (index) {
                         return ExpansionTile(
                             title: Container(
                                 // padding: const EdgeInsets.all(2),
@@ -169,7 +171,7 @@ class ModuleNameDisplay extends StatelessWidget {
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModelMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +223,7 @@ class UserDetailsForDrawer extends StatelessWidget {
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModelMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -306,7 +308,7 @@ class HomeLoginUserDetails extends StatelessWidget {
             ),
           ),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 140, maxHeight: 10),
+            constraints: const BoxConstraints(maxWidth: 140, maxHeight: 14),
             child: Text(
               snapshot.data!.dSGNAME!,
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w200),
@@ -325,7 +327,7 @@ class HomeLogOut extends StatelessWidget {
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModelMenuList module;
 
   @override
   Widget build(BuildContext context) {

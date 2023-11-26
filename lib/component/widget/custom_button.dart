@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 2,vertical: 2),
       margin: const EdgeInsets.all(0),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey,foregroundColor: Colors.black,textStyle: const TextStyle(fontSize: 13)),
+        style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 207, 207, 207),foregroundColor: const Color.fromARGB(255, 59, 59, 59),textStyle: const TextStyle(fontSize: 13)),
             
         onPressed: onPressed,
         child: Text(text),

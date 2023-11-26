@@ -58,6 +58,7 @@ class TimeSlotPage extends StatelessWidget {
                                 children: [
                                  
                                   Container(
+                                    constraints: const BoxConstraints(minHeight: 88),
                                     decoration: const BoxDecoration(
                                         color:
                                             kBgLightColor, //.withOpacity(0.8),
@@ -72,9 +73,9 @@ class TimeSlotPage extends StatelessWidget {
                                             spreadRadius: 3.1,
                                           )
                                         ]),
-                                    height: 80,
+                                   // height: 88,
                                     child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(4.0),
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -307,14 +308,17 @@ class DoctorListTable extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: Text(e.uNIT!),
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Icon(
-                      Icons.arrow_circle_right_sharp,
-                      color: Colors.black.withOpacity(0.4),
-                      size: 24,
+                TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: InkWell(
+                    onTap: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Icon(
+                        Icons.arrow_circle_right_sharp,
+                        color: kGrayColor,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ),

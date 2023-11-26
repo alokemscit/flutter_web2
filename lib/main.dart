@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
             ),
             home: userProvider.user != null
                 ? const ParentPage()
-                //DoctorLeave()
+                //ModulePage()
                 : Login(),
           );
         }));
