@@ -34,6 +34,23 @@ List<BoxShadow> myboxShadow = [
   ),
 ];
 
+
+
+// ignore: non_constant_identifier_names
+BoxDecoration BoxDecorationTopRounded = const BoxDecoration(
+    color: kBgLightColor, //.withOpacity(0.8),
+    // color: Color.fromARGB(255, 252, 251, 251),
+    borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.white,
+        blurRadius: 5.1,
+        spreadRadius: 3.1,
+      )
+    ]);
+
+
 class CustomScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {

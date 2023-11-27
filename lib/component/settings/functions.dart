@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
- 
- 
+
+// ignore: non_constant_identifier_names
 Future<void> CustomDialog(BuildContext context, Widget title,
     Widget bodyContent, void Function() onPress) {
   final GlobalKey buttonKey = GlobalKey();

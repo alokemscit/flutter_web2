@@ -51,13 +51,13 @@ Widget _futurebulder() {
   return FutureBuilder(
     future: get_module_list(),
     builder:
-        (BuildContext context, AsyncSnapshot<List<ModelMenuList>> snapshot) {
-      List<ModelMenuList> cdata = [];
-      // List<ModelMenuList> mdata = [];
+        (BuildContext context, AsyncSnapshot<List<ModuleMenuList>> snapshot) {
+      List<ModuleMenuList> cdata = [];
+      // List<ModuleMenuList> mdata = [];
       if (snapshot.hasData) {
         if (snapshot.connectionState == ConnectionState.done) {
           cdata = snapshot.data!;
-          List<ModelMenuList> parent = snapshot.data!
+          List<ModuleMenuList> parent = snapshot.data!
               .where(
                 (e) => e.pid!.toString() == "0",
               )
@@ -87,12 +87,12 @@ Widget _futurebulder() {
 class TreeExpandeWidget extends StatelessWidget {
   const TreeExpandeWidget(
       {super.key, required this.parent, required this.cdata});
-  final List<ModelMenuList> parent;
-  final List<ModelMenuList> cdata;
+  final List<ModuleMenuList> parent;
+  final List<ModuleMenuList> cdata;
   @override
   Widget build(BuildContext context) {
-    //List<ModelMenuList> cdata = [];
-    List<ModelMenuList> mdata = [];
+    //List<ModuleMenuList> cdata = [];
+    List<ModuleMenuList> mdata = [];
     TextEditingController txtManuName = TextEditingController();
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -234,7 +234,7 @@ class TreeExpandeWidget extends StatelessWidget {
   }
 }
 
-_dialog(BuildContext context, ModelMenuList pItem,
+_dialog(BuildContext context, ModuleMenuList pItem,
     TextEditingController txtManuName) {
   CustomDialog(
       context,
@@ -282,10 +282,10 @@ _dialog(BuildContext context, ModelMenuList pItem,
   });
 }
 
-_expandedMenu(List<ModelMenuList> parent, List<ModelMenuList> mdata,
+_expandedMenu(List<ModuleMenuList> parent, List<ModuleMenuList> mdata,
     bool isLast, BuildContext context, TextEditingController txtManuName) {
   return mdata.map((dataItem) {
-    List<ModelMenuList> kdata = parent
+    List<ModuleMenuList> kdata = parent
         .where((element) => element.pid!.toString() == dataItem.id!.toString())
         .toList();
     return Column(

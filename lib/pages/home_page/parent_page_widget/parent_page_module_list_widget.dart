@@ -9,7 +9,7 @@ import '../home_page.dart';
 
 // ignore: must_be_immutable
 class ParentMainModuleListWidget extends StatelessWidget {
-  List<ModelMenuList> list;
+  List<ModuleMenuList> list;
   ParentMainModuleListWidget({
     Key? key,
     required this.list,

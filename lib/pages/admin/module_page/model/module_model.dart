@@ -1,14 +1,14 @@
 import 'package:web_2/data/data_api.dart';
 
-class ModelMenuList {
+class ModuleMenuList {
   int? id;
   int? pid;
   String? name;
   String? img;
   int? isparent;
   String? desc;
-  ModelMenuList({this.id, this.pid, this.name, this.img, this.isparent});
-  ModelMenuList.fromJson(Map<String, dynamic> json) {
+  ModuleMenuList({this.id, this.pid, this.name, this.img, this.isparent});
+  ModuleMenuList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     pid = json['pid'];
     name = json['name'];
@@ -29,15 +29,15 @@ class ModelMenuList {
 }
 
 // ignore: non_constant_identifier_names
-Future<List<ModelMenuList>> get_module_list() async {
-  List<ModelMenuList> a = [];
+Future<List<ModuleMenuList>> get_module_list() async {
+  List<ModuleMenuList> a = [];
   data_api2 repo = data_api2();
   try {
     var x = await repo.createLead([
       {"tag": "3"}
     ]);
-    //print("calling"+a.length.toString());
-    a = x.map((e) => ModelMenuList.fromJson(e)).toList();
+    //print("calling"+x.toString());
+    a = x.map((e) => ModuleMenuList.fromJson(e)).toList();
   } on Exception catch (e) {
    print(e.toString());
   }

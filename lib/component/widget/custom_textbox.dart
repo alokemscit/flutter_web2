@@ -42,7 +42,7 @@ class CustomTextBox extends StatelessWidget {
     return BlocProvider(
       create: (context) => PasswordShowBloc(),
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: SizedBox(
           //  padding: const EdgeInsets.only(top: 4),
           // color: Colors.amber,

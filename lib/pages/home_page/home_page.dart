@@ -7,16 +7,10 @@ import 'package:provider/single_child_widget.dart';
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/menubutton.dart';
 import 'package:web_2/component/widget/sidemenu.dart';
-import 'package:web_2/pages/appointment/doctor_appointment.dart';
-import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave_page.dart';
-
-import '../../component/settings/config.dart';
-
-import '../admin/module_page/form_page.dart';
-import '../admin/module_page/model/module_model.dart';
-import '../admin/module_page/module_page.dart';
-import '../appointment/time_slot_page/time_slot_page.dart';
-import 'parent_page_widget/parent_background_widget.dart';
+ import '../../component/settings/config.dart';
+import '../../component/settings/router.dart';
+ import '../admin/module_page/model/module_model.dart';
+ import 'parent_page_widget/parent_background_widget.dart';
 
 // ignore: must_be_immutable
 
@@ -35,7 +29,7 @@ List<dynamic> textControllerListGenerator(int length) {
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
-  final ModelMenuList module;
+  final ModuleMenuList module;
   const HomePage({super.key, required this.module});
 
   @override
@@ -60,7 +54,7 @@ class HomePagebodyWidget extends StatelessWidget {
     required this.module,
   });
 
-  final ModelMenuList module;
+  final ModuleMenuList module;
 
   final List<SingleChildWidget> providers = [
     BlocProvider(
@@ -99,7 +93,7 @@ class DesktopWidget extends StatelessWidget {
     required this.sidemenu,
   });
   final SideMenu sidemenu;
-  final ModelMenuList module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +133,9 @@ class DesktopWidget extends StatelessWidget {
           },
         ),
 
-         TabAndBodyWidget(module: module,),
+        TabAndBodyWidget(
+          module: module,
+        ),
       ],
     );
   }
@@ -147,9 +143,10 @@ class DesktopWidget extends StatelessWidget {
 
 class TabAndBodyWidget extends StatelessWidget {
   const TabAndBodyWidget({
-    super.key, required this.module,
+    super.key,
+    required this.module,
   });
-  final ModelMenuList module;
+  final ModuleMenuList module;
   @override
   Widget build(BuildContext context) {
     //print('Render Main Body ..........main00000000');
@@ -167,40 +164,41 @@ class TabAndBodyWidget extends StatelessWidget {
                 builder: (context, state) {
               var id = state.id;
               print(id);
+            return  getPage(module, id);
               //   return //TabPageMain(id: state.id);
               //  print('Render Main Body ..........111');
-              return (() {
-                switch (id) {
-                  case "28":
-                    {
-                      return const TimeSlotPage();
-                    }
-                  case "30":
-                    {
-                      return const DoctorAppointment();
-                    }
-                  case "31":
-                    {
-                      return const DoctorLeave();
-                    }
+              // return (() {
+              //   switch (id) {
+              //     case "28":
+              //       {
+              //         return const TimeSlotPage();
+              //       }
+              //     case "30":
+              //       {
+              //         return const DoctorAppointment();
+              //       }
+              //     case "31":
+              //       {
+              //         return const DoctorLeave();
+              //       }
 
-                  case "4":
-                    {
-                      return const Text("4");
-                    }
-                  case "24":
-                    {
-                      return const ModulePage();
-                    }
-                  case "25":
-                    {
-                      return const FormPage();
-                    }
+              //     case "4":
+              //       {
+              //         return const Text("4");
+              //       }
+              //     case "24":
+              //       {
+              //         return const ModulePage();
+              //       }
+              //     case "25":
+              //       {
+              //         return const FormPage();
+              //       }
 
-                  default:
-                    return SizedBox();
-                }
-              })();
+              //     default:
+              //       return SizedBox();
+              //   }
+              // })();
             }),
           )
         ],

@@ -94,65 +94,61 @@ Widget leftPanel(String? iid, TextEditingController txtModule,
                     const SizedBox(
                       height: 4,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 2),
-                      child: FutureBuilder(
-                          future: moduleImageList(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.hasData) {
-                                var data = snapshot.data!;
-                                return CustomDropDown(
-                                  id: iid,
-                                  isFilled: true,
-                                  labeltext: "Select Icon",
-                                  list: data.map((item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item
-                                          .category, // Convert item.id to String.
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Image(
-                                              image: AssetImage(
-                                                  "assets/images/${item.category!}.png"),
-                                              width: 30,
-                                              height: 30,
-                                            ),
-                                            const SizedBox(
-                                              width: 6,
-                                            ),
-                                            Text(
-                                              item.category!,
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
+                    FutureBuilder(
+                        future: moduleImageList(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            if (snapshot.hasData) {
+                              var data = snapshot.data!;
+                              return CustomDropDown(
+                                id: iid,
+                                isFilled: true,
+                                labeltext: "Select Icon",
+                                list: data.map((item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item
+                                        .category, // Convert item.id to String.
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                                "assets/images/${item.category!}.png"),
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          const SizedBox(
+                                            width: 6,
+                                          ),
+                                          Text(
+                                            item.category!,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  }).toList(),
-                                  onTap: (String? value) {
-                                    iid = value!;
-                                  },
-                                  width: double.infinity,
-                                );
-                              } else {
-                                return const SizedBox();
-                              }
+                                    ),
+                                  );
+                                }).toList(),
+                                onTap: (String? value) {
+                                  iid = value!;
+                                },
+                                width: double.infinity,
+                              );
                             } else {
                               return const SizedBox();
                             }
-                          }),
-                    ),
+                          } else {
+                            return const SizedBox();
+                          }
+                        }),
                     Padding(
                       padding: const EdgeInsets.only(left: 4, right: 4, top: 8),
                       child: Row(
@@ -224,7 +220,7 @@ class TablePart extends StatelessWidget {
   });
 
   final TextEditingController txtSearch;
-  //final List<ModelMenuList> dList;
+  //final List<ModuleMenuList> dList;
 
   @override
   Widget build(BuildContext context) {
@@ -333,11 +329,11 @@ class ModuleListTable extends StatelessWidget {
     super.key,
     required this.dList,
   });
-  final List<ModelMenuList> dList;
+  final List<ModuleMenuList> dList;
 
   @override
   Widget build(BuildContext context) {
-    List<ModelMenuList> dlistTems = dList;
+    List<ModuleMenuList> dlistTems = dList;
 
     return BlocBuilder<ModuleSearchBloc, ModuleSearchState>(
       builder: (context, state) {

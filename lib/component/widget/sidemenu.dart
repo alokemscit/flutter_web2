@@ -28,7 +28,7 @@ isExists(List<ItemModel> list, String id) {
 class SideMenu extends StatelessWidget {
   const SideMenu(
       {super.key, required this.module, required this.userDetailsForDrawer, required this.generateMenuItems});
-  final ModelMenuList module;
+  final ModuleMenuList module;
   final UserDetailsForDrawer userDetailsForDrawer;
   final GenerateMenuItems generateMenuItems;
   @override
@@ -171,7 +171,7 @@ class ModuleNameDisplay extends StatelessWidget {
     required this.module,
   });
 
-  final ModelMenuList module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +223,7 @@ class UserDetailsForDrawer extends StatelessWidget {
     required this.module,
   });
 
-  final ModelMenuList module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -327,7 +327,7 @@ class HomeLogOut extends StatelessWidget {
     required this.module,
   });
 
-  final ModelMenuList module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {

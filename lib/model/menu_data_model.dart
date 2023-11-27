@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
+
 import '../data/data_api.dart';
 
 // class MenuData {
@@ -38,9 +40,11 @@ class Menu {
   Menu.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    if ( jsonDecode( json['smenu']) != null) {
+   //print(":::::"+json['smenu']);
+    if (json['smenu'] != null) {
+       
       smenu = <Smenu>[];
-      jsonDecode( json['smenu']).forEach((v) {
+      jsonDecode(json['smenu']).forEach((v) {
         smenu!.add(Smenu.fromJson(v));
       });
     }
@@ -50,11 +54,12 @@ class Menu {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    
     if (smenu != null) {
-      //  print(smenu);
+      
       data['smenu'] = smenu!.map((v) => v.toJson()).toList();
     }
-
+    //print(data);
     return data;
   }
 }
@@ -88,8 +93,8 @@ Future<List<Menu>> get_menu_data_list(String id) async {
       //@name, @pid int,@img
       {"tag": "4", "pid": id}
     ]);
-    //print(x);
-    list = x.map((e) => Menu.fromJson(e)).toList();
+    // print(x);
+    list = x.map((e) => Menu.fromJson(e)).toList().where((element) => element.smenu!=null).toList();
   } on Exception {
     return [];
   }
