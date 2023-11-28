@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../component/settings/functions.dart';
 import '../component/widget/custom_button.dart';
+import '../component/widget/doctor_panel.dart';
 import '../data/static_data.dart';
 
 class Test5 extends StatelessWidget {

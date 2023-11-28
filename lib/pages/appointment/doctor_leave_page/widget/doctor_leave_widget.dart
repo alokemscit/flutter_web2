@@ -344,7 +344,7 @@ Widget expandedPanel(){
                     if (value == true) {
                       context.read<DoctorSearchBloc>().add(
                           DoctorSearchCheckAllEvent(
-                              isSChecked: isChecked1, docID: ''));
+                              isSChecked: true, docID: ''));
                     } else {
                       context.read<DoctorSearchBloc>().add(
                           DoctorSearchCheckAllEvent(
@@ -436,6 +436,7 @@ Widget expandedPanel(){
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black)),
                           children: [
+
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(e.dOCID!),
@@ -461,11 +462,14 @@ Widget expandedPanel(){
                               child:
                                   Text(e.rEFDNAME == null ? '' : e.rEFDNAME!),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CustomButton(
-                                onPressed: () {},
-                                text: 'Edit',
+                             TableCell(
+                                verticalAlignment: TableCellVerticalAlignment.middle,
+                              child: InkWell(
+                                onTap: (){},
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(Icons.delete,size: 24,color: kGrayColor,),
+                                ),
                               ),
                             ),
                           ]);
@@ -725,6 +729,7 @@ Widget doctorListGenator(
                                           DoctorSearchCheckAllEvent(
                                               isSChecked: false,
                                               docID: Data_doctor_leave.docId));
+
 
                                       context.read<DoctorSearchBloc>().add(
                                           DoctorSearchSetDoctorListEvent(

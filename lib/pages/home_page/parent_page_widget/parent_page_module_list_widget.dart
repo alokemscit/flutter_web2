@@ -3,13 +3,13 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../../model/main_app_menu.dart';
+ 
+import '../../admin/module_page/model/module_model.dart';
 import '../home_page.dart';
 
 // ignore: must_be_immutable
 class ParentMainModuleListWidget extends StatelessWidget {
-  List<main_app_menu> list;
+  List<ModuleMenuList> list;
   ParentMainModuleListWidget({
     Key? key,
     required this.list,
@@ -31,7 +31,7 @@ class ParentMainModuleListWidget extends StatelessWidget {
               ? 1
               : (size.width > 650 && size.width < 1200)
                   ? 2
-                  : (size.width >= 1200 && size.width < 1600)
+                  : (size.width >= 1200 && size.width < 1730)
                       ? 3
                       : 4,
           childAspectRatio: 2.0,
@@ -96,7 +96,7 @@ class ParentMainModuleListWidget extends StatelessWidget {
                             ),
                             child: Image(
                               image: AssetImage(
-                                  "assets/images/${list[index].icon!}"),
+                                  "assets/images/${list[index].img!}.png"),
                               height: size.width < 650?40:(size.width >= 1200 && size.width < 1600)
                                   ? 60
                                   : (size.width > 650 && size.width < 805)
@@ -134,7 +134,7 @@ class ParentMainModuleListWidget extends StatelessWidget {
                                           ? 50
                                           : 100),
                           child: Text(
-                            list[index].description!,
+                            list[index].desc!,
                             style: GoogleFonts.roboto(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,

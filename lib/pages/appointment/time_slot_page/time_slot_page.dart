@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web_2/component/widget/custom_button.dart';
+import 'package:web_2/component/widget/custom_datepicker.dart';
 import 'package:web_2/component/widget/custom_search_box.dart';
 
 import '../../../component/settings/config.dart';
@@ -11,7 +13,10 @@ class TimeSlotPage extends StatelessWidget {
   const TimeSlotPage({super.key});
   @override
   Widget build(BuildContext context) {
+    String iD = '', name = '', unit = '';
     TextEditingController txtSearch = TextEditingController();
+    TextEditingController fromdate = TextEditingController();
+    TextEditingController todate = TextEditingController();
     List<DoctorList> dList = [];
     return Scaffold(
         body: RepositoryProvider(
@@ -54,64 +59,112 @@ class TimeSlotPage extends StatelessWidget {
                             flex: 5,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 4, left: 4),
-                              child: Column(
-                                children: [
-                                 
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                        color:
-                                            kBgLightColor, //.withOpacity(0.8),
-                                        // color: Color.fromARGB(255, 252, 251, 251),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8)),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.white,
-                                            blurRadius: 5.1,
-                                            spreadRadius: 3.1,
-                                          )
-                                        ]),
-                                    height: 80,
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CustomLabel(caption: 'Id', value: '1234',),
-                                          CustomLabel(caption: 'Name', value: 'Abcd efgjkhfjf dgfdg',),
-                                          CustomLabel(caption: 'Unit', value: 'Unit Name',),
-                                          ],
+                              child: BlocBuilder<DoctorSearchBloc, DoctorSearchState>(
+                                builder: (context, state) {
+                                     if (state
+                                              is DoctorSearchSetDoctorListState) {
+                                            iD = state.list.first.dOCID!;
+                                            name= state.list.first.dOCTORNAME!;
+                                            unit= state.list.first.uNIT!;
+                                          }
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        constraints:
+                                            const BoxConstraints(minHeight: 88),
+                                        decoration: const BoxDecoration(
+                                            color:
+                                                kBgLightColor, //.withOpacity(0.8),
+                                            // color: Color.fromARGB(255, 252, 251, 251),
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                topRight: Radius.circular(8)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.white,
+                                                blurRadius: 5.1,
+                                                spreadRadius: 3.1,
+                                              )
+                                            ]),
+                                        // height: 88,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: iD == ''
+                                              ? const SizedBox(
+                                                  width: double.infinity,
+                                                )
+                                              : Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    CustomLabel(
+                                                      caption: 'Id',
+                                                      value: iD.toString(),
+                                                    ),
+                                                    CustomLabel(
+                                                      caption: 'Name',
+                                                      value: name.toString(),
+                                                    ),
+                                                    CustomLabel(
+                                                      caption: 'Unit',
+                                                      value: unit.toString(),
+                                                    ),
+                                                  ],
+                                                ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-
-
-                                 Expanded(
-                                   child: Container(
-                                      decoration: const BoxDecoration(
-                                          color:
-                                              kBgLightColor, //.withOpacity(0.8),
-                                          // color: Color.fromARGB(255, 252, 251, 251),
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(8)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.white,
-                                              blurRadius: 5.1,
-                                              spreadRadius: 3.1,
-                                            )
-                                          ]),
-                                      height: 80,
-                                       
-                                    ),
-                                 )
-
-
-
-                                ],
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecorationTopRounded,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4, vertical: 12),
+                                            child: iD==''?const SizedBox(width: double.infinity,): Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    CustomDatePicker(
+                                                      date_controller: fromdate,
+                                                      label: "From Date",
+                                                      bgColor: Colors.white,
+                                                      isBackDate: true,
+                                                      height: 32,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 12,
+                                                    ),
+                                                    CustomDatePicker(
+                                                      date_controller: todate,
+                                                      label: "To Date",
+                                                      bgColor: Colors.white,
+                                                      height: 32,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 12,
+                                                    ),
+                                                    CustomButton(
+                                                        text: "Show",
+                                                        isPading: false,
+                                                        height: 30,
+                                                        onPressed: () {})
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
                               ),
                             )),
                       ],
@@ -127,7 +180,9 @@ class TimeSlotPage extends StatelessWidget {
 
 class CustomLabel extends StatelessWidget {
   const CustomLabel({
-    super.key, required this.caption, required this.value,
+    super.key,
+    required this.caption,
+    required this.value,
   });
   final String caption;
   final String value;
@@ -137,7 +192,7 @@ class CustomLabel extends StatelessWidget {
       padding: const EdgeInsets.all(2),
       child: Row(
         children: [
-           SizedBox(
+          SizedBox(
               width: 50,
               child: Text(
                 "$caption :",
@@ -203,7 +258,11 @@ class TablePart extends StatelessWidget {
           width: double.infinity,
           caption: "Search Doctor",
           controller: txtSearch,
-          onChange: (String value) {},
+          onChange: (String value) {
+            context
+                .read<DoctorSearchBloc>()
+                .add(DoctorListSearchEvent(txt: txtSearch.text));
+          },
         ),
         Expanded(
             child: Column(
@@ -275,53 +334,76 @@ class DoctorListTable extends StatelessWidget {
   });
 
   final List<DoctorList> dList;
-
   @override
   Widget build(BuildContext context) {
+    List<DoctorList> dLisTemp = dList;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Table(
-        columnWidths: const {
-          0: FixedColumnWidth(80),
-          1: FlexColumnWidth(100),
-          2: FlexColumnWidth(80),
-          3: FlexColumnWidth(30),
-        },
-        children: dList.map((e) {
-          return TableRow(
-              decoration: BoxDecoration(
-                  color: Colors.white, border: Border.all(color: Colors.black)),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(e.dOCID!),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    e.dOCTORNAME!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(e.uNIT!),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Icon(
-                      Icons.arrow_circle_right_sharp,
-                      color: Colors.black.withOpacity(0.4),
-                      size: 24,
+      child: BlocBuilder<DoctorSearchBloc, DoctorSearchState>(
+        builder: (context, state) {
+          if (state is DoctorListSearchState) {
+            dLisTemp = dList
+                .where((element) => element.dOCTORNAME!
+                    .toString()
+                    .toUpperCase()
+                    .contains(state.txt.toUpperCase()))
+                .toList();
+          }
+          return Table(
+            columnWidths: const {
+              0: FixedColumnWidth(80),
+              1: FlexColumnWidth(100),
+              2: FlexColumnWidth(80),
+              3: FlexColumnWidth(30),
+            },
+            children: dLisTemp.map((e) {
+              return TableRow(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black)),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(e.dOCID!),
                     ),
-                  ),
-                ),
-              ]);
-        }).toList(),
-        border: TableBorder.all(
-            width: 0.3, color: const Color.fromARGB(255, 89, 92, 92)),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        e.dOCTORNAME!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(e.uNIT!),
+                    ),
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.middle,
+                      child: InkWell(
+                        onTap: () {
+                          context.read<DoctorSearchBloc>().add(
+                              DoctorSearchSetDoctorListEvent(
+                                  docId: e.dOCID!,
+                                  docName: e.dOCTORNAME!,
+                                  isSelected: true,
+                                  list: [e]));
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Icon(
+                            Icons.arrow_circle_right_sharp,
+                            color: kGrayColor,
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]);
+            }).toList(),
+            border: TableBorder.all(
+                width: 0.3, color: const Color.fromARGB(255, 89, 92, 92)),
+          );
+        },
       ),
     );
   }

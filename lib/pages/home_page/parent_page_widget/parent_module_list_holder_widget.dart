@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:web_2/pages/home_page/parent_page_widget/parent_page_module_list_widget.dart';
-import '../../../model/main_app_menu.dart';
+
+import '../../admin/module_page/model/module_model.dart';
 
 class ParentPageModuleHolderWidget extends StatelessWidget {
   const ParentPageModuleHolderWidget({
     super.key,
-    
   });
 
-  
   @override
   Widget build(BuildContext context) {
+    //print(MediaQuery.of(context).size.width.toString());
     return Positioned(
       top: 80,
       child: SizedBox(
@@ -21,13 +21,14 @@ class ParentPageModuleHolderWidget extends StatelessWidget {
               horizontal: 14,
             ),
             child: FutureBuilder(
-              future: menu_app_list(),
+              future: get_module_list(), //menu_app_list(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return ParentMainModuleListWidget(
-                    
-                      list: snapshot.data!,
+                      list: snapshot.data!
+                          .where((element) => element.pid!.toString() == "0")
+                          .toList(),
                     );
                   } else {
                     return const SizedBox();

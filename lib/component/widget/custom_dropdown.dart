@@ -25,36 +25,41 @@ class CustomDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // margin: const EdgeInsets.only(left: 12,top: 12),
-      width: width,
-      height: height,
-      child: DropdownButtonFormField(
-        value: id,
-        items: list,
-        onChanged: onTap,
-        dropdownColor:dropdownColor,
-        decoration: InputDecoration(
-          filled: isFilled,
-          fillColor: Colors.white,
-          labelText: labeltext,
-          labelStyle: TextStyle(
-              color: Colors.grey.shade400,
-              fontWeight: FontWeight.w300,
-              fontSize: 13),
-          hintStyle: TextStyle(
-              color: Colors.grey.shade400, fontWeight: FontWeight.w300),
-          //labelStyle: const TextStyle(fontSize: 14),
-          border: const OutlineInputBorder(),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: borderColor, width: 0.5),
-            borderRadius: BorderRadius.circular(borderRadious),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: SizedBox(
+        // margin: const EdgeInsets.only(left: 12,top: 12),
+        width: width,
+        height: height,
+        child: DropdownButtonFormField(
+        
+          value: id,
+          items: list,
+          onChanged: onTap,
+          dropdownColor:dropdownColor,
+          decoration: InputDecoration(
+            
+            filled: isFilled,
+            fillColor: Colors.white,
+            labelText: labeltext,
+            labelStyle: TextStyle(
+                color: Colors.grey.shade400,
+                fontWeight: FontWeight.w300,
+                fontSize: 13),
+            hintStyle: TextStyle(
+                color: Colors.grey.shade400, fontWeight: FontWeight.w300),
+            //labelStyle: const TextStyle(fontSize: 14),
+            border: const OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: borderColor, width: 0.5),
+              borderRadius: BorderRadius.circular(borderRadious),
+            ),
+           contentPadding:
+               const EdgeInsets.symmetric(vertical: 0, horizontal: 1),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+          isDense: true,
+          isExpanded: true,
         ),
-        isDense: true,
-        isExpanded: true,
       ),
     );
   }
