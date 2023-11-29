@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
+ 
 
 import 'component/settings/notifers/auth_provider.dart';
 //import 'pages/appointment/doctor_leave_page/doctor_leave.dart';
@@ -51,11 +52,15 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               brightness:
                   appThemes.darkTheme ? Brightness.dark : Brightness.light,
+
+
+                  
               //appThemes.darkTheme==true?Brightness.dark:Brightness.light
             ),
             home: userProvider.user != null
-                ? const ParentPage()
-                //ModulePage()
+                ? 
+                const ParentPage()
+               // MyHomePage1()
                 : Login(),
           );
         }));

@@ -22,10 +22,7 @@ NextIndex(List<ItemModel> list, int index) {
   }
   return '';
 }
-
-List<dynamic> textControllerListGenerator(int length) {
-  return List.generate(length, (index) => TextEditingController());
-}
+ 
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {

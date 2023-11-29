@@ -57,6 +57,7 @@ class CustomTextBox extends StatelessWidget {
                 isObsText = state.isShow;
               }
               return TextField(
+                
                 onChanged: (value) => onChange(value),
                 keyboardType: textInputType,
                 obscureText: !isObsText ? isPassword : false,
@@ -76,7 +77,7 @@ class CustomTextBox extends StatelessWidget {
                 //   textCapitalization : TextCapitalization.none,
                 // keyboardType: TextInputType.number,
                 style: GoogleFonts.roboto(
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: fontColor),
                 textAlignVertical: TextAlignVertical.center,
@@ -118,7 +119,7 @@ class CustomTextBox extends StatelessWidget {
                         )
                       : null,
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                 ),
                 controller: controller,
               );

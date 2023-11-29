@@ -1,29 +1,29 @@
-
 import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
   final String caption;
   final IconData icon;
   final Function onTap;
+  final Color bgColor;
   const CustomIconButton({
     Key? key,
     required this.caption,
     required this.icon,
-    required this.onTap,
+    required this.onTap,  this.bgColor=const Color.fromARGB(255, 221, 217, 217),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () => onTap(),
-      icon:  Icon(icon),
-      label:  Padding(
+      icon: Icon(icon,size: 20,),
+      label: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(caption),
+        child: Text(caption,style: const TextStyle(fontSize: 13),),
       ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
-            const Color.fromARGB(255, 117, 117, 117)),
+            bgColor),
       ),
     );
   }
