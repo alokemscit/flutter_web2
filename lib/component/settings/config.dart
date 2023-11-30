@@ -16,6 +16,7 @@ const kBadgeColor = Color(0xFFEE376E);
 const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 const kTextColor = Color(0xFF4D5875);
+const kTextBgColor = Color.fromARGB(255, 253, 253, 255);
 
 const kDefaultPadding = 20.0;
 
@@ -34,8 +35,6 @@ List<BoxShadow> myboxShadow = [
   ),
 ];
 
-
-
 // ignore: non_constant_identifier_names
 BoxDecoration BoxDecorationTopRounded = const BoxDecoration(
     color: kBgLightColor, //.withOpacity(0.8),
@@ -50,7 +49,6 @@ BoxDecoration BoxDecorationTopRounded = const BoxDecoration(
       )
     ]);
 
-
 class CustomScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
@@ -61,34 +59,33 @@ class CustomScrollBehavior extends MaterialScrollBehavior {
 
 Future<Image> base64StringToImage() async {
   SharedPreferences ref = await SharedPreferences.getInstance();
-  String? image =  ref.getString('iMAGE');
+  String? image = ref.getString('iMAGE');
   Uint8List bytes = base64.decode(image!);
   return Image.memory(bytes);
 }
 
 Future<User_Model> getUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final eMPID = prefs.getString('eMPID');
-    final eMPNAME = prefs.getString('eMPNAME');
-    final dEPTID = prefs.getString('dEPTID');
-    final dEPTNAME = prefs.getString('dEPTNAME');
-    final uID = prefs.getString('uID');
-    final uNAME = prefs.getString('uNAME');
-    final dSGID = prefs.getString('dSGID');
-    final dSGNAME = prefs.getString('dSGNAME');
-    final iMAGE = prefs.getString('iMAGE');
-    Uint8List bytes = base64.decode(iMAGE!);
-   
-    return User_Model(
-      eMPID:eMPID,
-      eMPNAME:eMPNAME,
-      dEPTID:dEPTID,
-      dEPTNAME:dEPTNAME,
-      uID:uID,
-      uNAME:uNAME,
-      dSGID:dSGID,
-      dSGNAME:dSGNAME,
-      iMAGE:iMAGE,
-      pHOTO: Image.memory(bytes)
-      );
-  }
+  final prefs = await SharedPreferences.getInstance();
+  final eMPID = prefs.getString('eMPID');
+  final eMPNAME = prefs.getString('eMPNAME');
+  final dEPTID = prefs.getString('dEPTID');
+  final dEPTNAME = prefs.getString('dEPTNAME');
+  final uID = prefs.getString('uID');
+  final uNAME = prefs.getString('uNAME');
+  final dSGID = prefs.getString('dSGID');
+  final dSGNAME = prefs.getString('dSGNAME');
+  final iMAGE = prefs.getString('iMAGE');
+  Uint8List bytes = base64.decode(iMAGE!);
+
+  return User_Model(
+      eMPID: eMPID,
+      eMPNAME: eMPNAME,
+      dEPTID: dEPTID,
+      dEPTNAME: dEPTNAME,
+      uID: uID,
+      uNAME: uNAME,
+      dSGID: dSGID,
+      dSGNAME: dSGNAME,
+      iMAGE: iMAGE,
+      pHOTO: Image.memory(bytes));
+}

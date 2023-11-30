@@ -162,40 +162,7 @@ class TabAndBodyWidget extends StatelessWidget {
               var id = state.id;
               print(id);
             return  getPage(module, id);
-              //   return //TabPageMain(id: state.id);
-              //  print('Render Main Body ..........111');
-              // return (() {
-              //   switch (id) {
-              //     case "28":
-              //       {
-              //         return const TimeSlotPage();
-              //       }
-              //     case "30":
-              //       {
-              //         return const DoctorAppointment();
-              //       }
-              //     case "31":
-              //       {
-              //         return const DoctorLeave();
-              //       }
-
-              //     case "4":
-              //       {
-              //         return const Text("4");
-              //       }
-              //     case "24":
-              //       {
-              //         return const ModulePage();
-              //       }
-              //     case "25":
-              //       {
-              //         return const FormPage();
-              //       }
-
-              //     default:
-              //       return SizedBox();
-              //   }
-              // })();
+            
             }),
           )
         ],

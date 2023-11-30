@@ -89,8 +89,12 @@ class GenerateMenuItems extends StatelessWidget {
                       children: 
                       List.generate(list.length, (index) {
                         return ExpansionTile(
+
+                          leading: null, // Add your leading icon
+                  trailing: null,
+                           
                             title: Container(
-                                // padding: const EdgeInsets.all(2),
+                              padding: const EdgeInsets.all(0),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   color:
@@ -126,11 +130,13 @@ class GenerateMenuItems extends StatelessWidget {
                                       const SizedBox(
                                         width: 6,
                                       ),
-                                      Text(
-                                        e.smName!,
-                                        style: GoogleFonts.titilliumWeb(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
+                                      Expanded(
+                                        child: Text(
+                                          e.smName!,
+                                          style: GoogleFonts.titilliumWeb(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -164,6 +170,58 @@ class GenerateMenuItems extends StatelessWidget {
         });
   }
 }
+
+class CustomExpansionTile extends StatefulWidget {
+  final Color backgroundColor;
+  final Widget title;
+  final List<Widget> children;
+
+  const CustomExpansionTile({
+    Key? key,
+    required this.backgroundColor,
+    required this.title,
+    this.children = const <Widget>[],
+  }) : super(key: key);
+
+  @override
+  _CustomExpansionTileState createState() => _CustomExpansionTileState();
+}
+
+class _CustomExpansionTileState extends State<CustomExpansionTile> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: widget.backgroundColor,
+      child: ExpansionTile(
+        onExpansionChanged: (bool isExpanded) {
+          setState(() {
+            _isExpanded = isExpanded;
+          });
+        },
+        title: widget.title,
+        children: widget.children,
+        tilePadding: EdgeInsets.zero,
+        leading: Container(
+          color: widget.backgroundColor,
+          child: Icon(
+            _isExpanded ? Icons.expand_less : Icons.expand_more,
+            color: Colors.white,
+          ),
+        ),
+        trailing: Container(
+          color: widget.backgroundColor,
+          child: Icon(
+            _isExpanded ? Icons.expand_less : Icons.expand_more,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 class ModuleNameDisplay extends StatelessWidget {
   const ModuleNameDisplay({

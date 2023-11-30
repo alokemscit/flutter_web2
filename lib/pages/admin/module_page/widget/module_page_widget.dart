@@ -4,7 +4,7 @@ import 'package:web_2/component/widget/custom_snakbar.dart';
 
 import '../../../../component/settings/config.dart';
 import '../../../../component/widget/custom_button.dart';
-import '../../../../component/widget/custom_container.dart';
+ 
 import '../../../../component/widget/custom_dropdown.dart';
 import '../../../../component/widget/custom_search_box.dart';
 import '../../../../component/widget/custom_textbox.dart';
@@ -16,7 +16,19 @@ import '../model/module_model.dart';
 Widget rightPanel(TextEditingController txtSearch) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
-    child: CustomContainer(
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+            border: Border.all(color: Colors.grey, width: 0.3),
+          color: kBgLightColor,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.white,
+              blurRadius: 5.1,
+              spreadRadius: 3.1,
+            )
+          ]),
       child: TablePart(txtSearch: txtSearch),
     ),
   );

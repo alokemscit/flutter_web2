@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../settings/config.dart';
+
 class CustomTextBox extends StatelessWidget {
   final String caption;
   final double width;
@@ -84,7 +86,7 @@ class CustomTextBox extends StatelessWidget {
               
                 textAlign: textAlign!,
                 decoration: InputDecoration(
-                  fillColor: Colors.white,
+                  fillColor: kTextBgColor,// Color.fromARGB(255, 253, 253, 255), //Colors.white,
                   filled: isFilled,
                   labelText: caption,
                   labelStyle: TextStyle(

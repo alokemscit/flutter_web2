@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:web_2/component/settings/config.dart';
+import 'package:web_2/component/widget/custom_container.dart';
 import 'package:web_2/component/widget/custom_datepicker.dart';
 import 'package:web_2/component/widget/custom_dropdown.dart';
 import 'package:web_2/component/widget/custom_icon_button.dart';
@@ -157,10 +158,7 @@ List<dynamic> _data = [
 
 List<Widget> _widget = [
   _Reporting_supervisor(),
-  CustomTextBox(
-      caption: "Address",
-      controller: TextEditingController(),
-      onChange: (v) {}),
+ _Address(),
   CustomTextBox(
       caption: "Leave Info",
       controller: TextEditingController(),
@@ -174,6 +172,207 @@ List<Widget> _widget = [
       controller: TextEditingController(),
       onChange: (v) {}),
 ];
+
+
+
+_Address() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8,vertical:12),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+         children: [
+            Expanded(
+              flex: 5,
+              child: CustomContainer(
+                label: "Present Address",
+              child:  Column(
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                    Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomDropDown(
+                            id: null,
+                            height: 32,
+                            labeltext: "District",
+                            list: const [],
+                            onTap: (v) {},
+                            width: 100),
+                      ),
+                      const Icon(
+                        Icons.launch_outlined,
+                        size: 18,
+                        color: kGrayColor,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomDropDown(
+                            id: null,
+                            height: 32,
+                            labeltext: "Thana",
+                            list: const [],
+                            onTap: (v) {},
+                            width: 100),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: const Icon(
+                          Icons.launch_outlined,
+                          size: 18,
+                          color: kGrayColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+                
+
+               CustomTextBox(
+                caption: "Notes",
+                width: double.infinity,
+                textInputType: TextInputType.multiline,
+                isFilled: true,
+                maxLine: 4,
+                maxlength: 500,
+                height: 116,
+                controller: TextEditingController(),
+                onChange: (v) {}),
+
+             
+                ],
+               )
+             
+              )
+            
+            ),
+            const SizedBox(width: 8,),
+            Expanded(
+              flex: 5,
+              child: CustomContainer(
+                label: "Present Address",
+                child: Column(
+                children: [
+                    Row(
+               mainAxisAlignment: MainAxisAlignment.start,
+               crossAxisAlignment: CrossAxisAlignment.center,
+               children: [
+                  Checkbox(value: false, onChanged: (v){},
+                  
+                   ),const Text("Same as Permanent")
+               ],
+             ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomDropDown(
+                            id: null,
+                            height: 32,
+                            labeltext: "District",
+                            list: const [],
+                            onTap: (v) {},
+                            width: 100),
+                      ),
+                      const Icon(
+                        Icons.launch_outlined,
+                        size: 18,
+                        color: kGrayColor,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomDropDown(
+                            id: null,
+                            height: 32,
+                            labeltext: "Thana",
+                            list: const [],
+                            onTap: (v) {},
+                            width: 100),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: const Icon(
+                          Icons.launch_outlined,
+                          size: 18,
+                          color: kGrayColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+                
+              CustomTextBox(
+                caption: "Notes",
+                width: double.infinity,
+                textInputType: TextInputType.multiline,
+                isFilled: true,
+                maxLine: 4,
+                maxlength: 500,
+                height: 116,
+                controller: TextEditingController(),
+                onChange: (v) {}),
+
+                ],
+              ),)
+            
+            )
+    
+          ],
+        )
+      ],
+    ),
+  );
+}
+
+
 
 _Reporting_supervisor() {
   return Padding(

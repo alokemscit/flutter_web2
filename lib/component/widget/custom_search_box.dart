@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:web_2/component/settings/config.dart';
 
 class CustomSearchBox extends StatelessWidget {
   final String caption;
@@ -76,7 +77,7 @@ class CustomSearchBox extends StatelessWidget {
 
           textAlign: textAlign!,
           decoration: InputDecoration(
-          fillColor: Colors.white,
+          fillColor:kTextBgColor,
           filled: isFilled,
             labelText: caption,
             labelStyle: TextStyle(

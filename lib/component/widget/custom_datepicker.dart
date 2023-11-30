@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../settings/config.dart';
+
 class CustomDatePicker extends StatefulWidget {
   // ignore: non_constant_identifier_names
   final TextEditingController date_controller;
@@ -18,7 +20,7 @@ class CustomDatePicker extends StatefulWidget {
       this.bgColor = const Color.fromARGB(255, 218, 216, 216),
       this.height = 35,
       this.width = 140,
-      this.borderColor = Colors.black38,
+      this.borderColor =kTextBgColor,
       this.isBackDate = false});
 
   @override

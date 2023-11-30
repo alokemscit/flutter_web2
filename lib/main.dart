@@ -12,6 +12,7 @@ import 'component/settings/notifers/auth_provider.dart';
 import 'pages/authentication/login_page.dart';
 
 import 'pages/home_page/parent_page.dart';
+import 'pages/hrm/employee_master_page/employee_master.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
             home: userProvider.user != null
                 ? 
                 const ParentPage()
-               // MyHomePage1()
+               // const EmployeeMaster()
                 : Login(),
           );
         }));

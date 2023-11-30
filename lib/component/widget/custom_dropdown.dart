@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../settings/config.dart';
+
 class CustomDropDown extends StatelessWidget {
   const CustomDropDown(
       {super.key,
@@ -11,7 +13,7 @@ class CustomDropDown extends StatelessWidget {
       this.borderColor = Colors.black38,
       this.labeltext = 'Select',
       this.borderRadious = 4.0,
-      this.isFilled = true,  this.dropdownColor=Colors.white});
+      this.isFilled = true,  this.dropdownColor=kTextBgColor});
   final double? height;
   final double? width;
   final String? id;
@@ -40,7 +42,7 @@ class CustomDropDown extends StatelessWidget {
           decoration: InputDecoration(
             
             filled: isFilled,
-            fillColor: Colors.white,
+            fillColor:kTextBgColor,// Colors.white,
             labelText: labeltext,
             labelStyle: TextStyle(
                 color: Colors.grey.shade400,

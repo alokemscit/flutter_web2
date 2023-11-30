@@ -14,16 +14,19 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () => onTap(),
-      icon: Icon(icon,size: 20,),
-      label: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(caption,style: const TextStyle(fontSize: 13),),
-      ),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-            bgColor),
+    return SizedBox(
+      height: 32,
+      child: ElevatedButton.icon(
+        onPressed: () => onTap(),
+        icon: Icon(icon,size: 20,),
+        label: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(caption,style: const TextStyle(fontSize: 13),),
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(
+              bgColor),
+        ),
       ),
     );
   }
