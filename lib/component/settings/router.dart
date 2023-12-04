@@ -40,7 +40,7 @@ Widget getPage(ModuleMenuList module, String id) {
     case "81":
       return const EmployeeMaster();
  case "87":
-      return const DoctorCategorySetuo();
+      return const DoctorCategorySetup();
     default:
       return SizedBox();
   }
