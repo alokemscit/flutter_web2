@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_2/pages/admin/module_page/model/module_model.dart';
 import 'package:web_2/pages/hrm/employee_master_page/employee_master.dart';
-import 'package:web_2/pages/ot/doctor_cat_page/doctor_category_setup.dart';
+import 'package:web_2/pages/ot/ot_page/doctor_category_setup.dart';
+import 'package:web_2/pages/ot/ot_page/operation_type.dart';
 
 import '../../pages/admin/module_page/form_page.dart';
 import '../../pages/admin/module_page/module_page.dart';
@@ -39,9 +40,13 @@ Widget getPage(ModuleMenuList module, String id) {
       }
     case "81":
       return const EmployeeMaster();
- case "87":
+    case "88":
+      return const OperationType();
+    case "87":
       return const DoctorCategorySetup();
     default:
-      return SizedBox();
+      return const Center(
+        child: Text("Under Construction!"),
+      );
   }
 }

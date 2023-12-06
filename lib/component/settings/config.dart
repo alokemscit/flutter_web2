@@ -17,7 +17,7 @@ const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 const kTextColor = Color(0xFF4D5875);
 const kTextBgColor = Color.fromARGB(255, 253, 253, 255);
-
+const kMarkupColor = Color.fromARGB(255, 245, 244, 244);
 const kDefaultPadding = 20.0;
 
 List<BoxShadow> myboxShadow = [
