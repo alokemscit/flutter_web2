@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
+import 'package:web_2/component/widget/custom_snakbar.dart';
 
 import '../../component/settings/notifers/auth_provider.dart';
 import '../../component/settings/rive_config.dart';
@@ -34,7 +35,6 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     //final authProvider = Provider.of<AuthProvider>(context, listen: true);
     return Scaffold(
-      
       body: SafeArea(
         child: Stack(
           children: [
@@ -78,7 +78,8 @@ class Login extends StatelessWidget {
                       Center(
                         child: BlocProvider(
                           create: (context) => LoginBloc(
-                              Provider.of<AuthProvider>(context, listen: false)),
+                              Provider.of<AuthProvider>(context,
+                                  listen: false)),
                           child: Container(
                             decoration: BoxDecoration(
                                 //color: Colors.white,
@@ -132,10 +133,10 @@ class Login extends StatelessWidget {
                                   isDisable = false;
                                   confetti.fire();
                                   //check.fire();
-      
+
                                   //  Navigator.pop(context);
                                 }
-      
+
                                 return Stack(children: [
                                   Positioned(
                                     // width: MediaQuery.of(context).size.width * 1.7,
@@ -156,27 +157,27 @@ class Login extends StatelessWidget {
                                     right: 8,
                                     top: 80,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         const SizedBox(
                                           height: 20,
                                         ),
                                         CustomTextBox(
                                           //isPassword:true,
-      
+
                                           height: 42,
                                           fontColor: Colors.white,
-                                          borderBolor:
-                                              Colors.grey.withOpacity(0.9),
+                                         
                                           caption: 'EMP ID',
                                           borderRadious: 10.0,
-      
+
                                           width: 300,
                                           maxlength: 4,
                                           controller: _uid,
                                           onChange: (String value) {},
                                         ),
-      
+
                                         const SizedBox(
                                           height: 10,
                                         ),
@@ -184,8 +185,7 @@ class Login extends StatelessWidget {
                                           isPassword: true,
                                           height: 42,
                                           fontColor: Colors.white,
-                                          borderBolor:
-                                              Colors.grey.withOpacity(0.9),
+                                         
                                           caption: 'Password',
                                           borderRadious: 10.0,
                                           width: 300,
@@ -193,22 +193,32 @@ class Login extends StatelessWidget {
                                           controller: _pws,
                                           onChange: (String value) {},
                                         ),
-      
+
                                         const SizedBox(
                                           height: 20,
                                         ),
                                         // MyIconButton(buttonClick: () {
-      
+
                                         // }, text: 'Login', icon: Icons.lock_open ,width: 75,
                                         // color: Color.fromARGB(255, 2, 112, 131) .withOpacity(0.5),)
-      
+
                                         ElevatedButton.icon(
                                           onPressed: () {
+
+                                              
+
+
                                             if (_uid.text.length < 3 ||
                                                 _pws.text.isEmpty) {
+                                              CustomSnackbar(
+                                                  context: context,
+                                                  message:
+                                                      "Invalid User ID or Password!",
+                                                  type: MsgType.error);
+
                                               return;
                                             }
-      
+
                                             context
                                                 .read<LoginBloc>()
                                                 .add(LoginSubmitEvent(
@@ -221,16 +231,16 @@ class Login extends StatelessWidget {
                                             size: 20,
                                           ),
                                           label: const Padding(
-                                            padding:
-                                                EdgeInsets.symmetric(vertical: 8),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
                                             child: Text("Login"),
                                           ),
                                           style: ButtonStyle(
                                             backgroundColor:
-                                                MaterialStateProperty.all<Color>(
-                                                    const Color.fromARGB(
-                                                            255, 117, 117, 117)
-                                                        .withOpacity(0.01)),
+                                                MaterialStateProperty.all<
+                                                    Color>(const Color.fromARGB(
+                                                        255, 117, 117, 117)
+                                                    .withOpacity(0.01)),
                                           ),
                                         )
                                       ],
@@ -244,18 +254,22 @@ class Login extends StatelessWidget {
                                           child: RiveAnimation.asset(
                                             "assets/RiveAssets/check.riv",
                                             onInit: (artboard) {
-                                              StateMachineController controller =
+                                              StateMachineController
+                                                  controller =
                                                   getRiveController(artboard);
-                                              check = controller.findSMI("Check")
-                                                  as SMITrigger;
-                                              error = controller.findSMI("Error")
-                                                  as SMITrigger;
-                                              reset = controller.findSMI("Reset")
-                                                  as SMITrigger;
+                                              check =
+                                                  controller.findSMI("Check")
+                                                      as SMITrigger;
+                                              error =
+                                                  controller.findSMI("Error")
+                                                      as SMITrigger;
+                                              reset =
+                                                  controller.findSMI("Reset")
+                                                      as SMITrigger;
                                             },
                                           ))
                                       : const SizedBox(),
-      
+
                                   Customposition(
                                       child: Transform.scale(
                                     scale: 7,
@@ -264,7 +278,7 @@ class Login extends StatelessWidget {
                                       onInit: (artboard) {
                                         StateMachineController controller =
                                             getRiveController(artboard);
-      
+
                                         confetti = controller.findSMI(
                                             "Trigger explosion") as SMITrigger;
                                       },

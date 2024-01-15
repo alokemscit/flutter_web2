@@ -10,6 +10,7 @@ import 'package:web_2/model/user_model.dart';
 import 'package:web_2/pages/authentication/login_page.dart';
 import 'package:web_2/pages/home_page/home_page.dart';
 
+import '../../pages/admin/module_page/model/module_model.dart';
 import '../settings/config.dart';
 import '../settings/notifers/auth_provider.dart';
 
@@ -27,7 +28,7 @@ isExists(List<ItemModel> list, String id) {
 class SideMenu extends StatelessWidget {
   const SideMenu(
       {super.key, required this.module, required this.userDetailsForDrawer, required this.generateMenuItems});
-  final main_app_menu module;
+  final ModuleMenuList module;
   final UserDetailsForDrawer userDetailsForDrawer;
   final GenerateMenuItems generateMenuItems;
   @override
@@ -85,10 +86,15 @@ class GenerateMenuItems extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      children: List.generate(list.length, (index) {
+                      children: 
+                      List.generate(list.length, (index) {
                         return ExpansionTile(
+
+                          leading: null, // Add your leading icon
+                  trailing: null,
+                           
                             title: Container(
-                                // padding: const EdgeInsets.all(2),
+                              padding: const EdgeInsets.all(0),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   color:
@@ -124,11 +130,13 @@ class GenerateMenuItems extends StatelessWidget {
                                       const SizedBox(
                                         width: 6,
                                       ),
-                                      Text(
-                                        e.smName!,
-                                        style: GoogleFonts.titilliumWeb(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
+                                      Expanded(
+                                        child: Text(
+                                          e.smName!,
+                                          style: GoogleFonts.titilliumWeb(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -163,13 +171,65 @@ class GenerateMenuItems extends StatelessWidget {
   }
 }
 
+class CustomExpansionTile extends StatefulWidget {
+  final Color backgroundColor;
+  final Widget title;
+  final List<Widget> children;
+
+  const CustomExpansionTile({
+    Key? key,
+    required this.backgroundColor,
+    required this.title,
+    this.children = const <Widget>[],
+  }) : super(key: key);
+
+  @override
+  _CustomExpansionTileState createState() => _CustomExpansionTileState();
+}
+
+class _CustomExpansionTileState extends State<CustomExpansionTile> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: widget.backgroundColor,
+      child: ExpansionTile(
+        onExpansionChanged: (bool isExpanded) {
+          setState(() {
+            _isExpanded = isExpanded;
+          });
+        },
+        title: widget.title,
+        children: widget.children,
+        tilePadding: EdgeInsets.zero,
+        leading: Container(
+          color: widget.backgroundColor,
+          child: Icon(
+            _isExpanded ? Icons.expand_less : Icons.expand_more,
+            color: Colors.white,
+          ),
+        ),
+        trailing: Container(
+          color: widget.backgroundColor,
+          child: Icon(
+            _isExpanded ? Icons.expand_less : Icons.expand_more,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 class ModuleNameDisplay extends StatelessWidget {
   const ModuleNameDisplay({
     super.key,
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +281,7 @@ class UserDetailsForDrawer extends StatelessWidget {
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -306,7 +366,7 @@ class HomeLoginUserDetails extends StatelessWidget {
             ),
           ),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 140, maxHeight: 10),
+            constraints: const BoxConstraints(maxWidth: 140, maxHeight: 14),
             child: Text(
               snapshot.data!.dSGNAME!,
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w200),
@@ -325,7 +385,7 @@ class HomeLogOut extends StatelessWidget {
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {

@@ -7,14 +7,10 @@ import 'package:provider/single_child_widget.dart';
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/menubutton.dart';
 import 'package:web_2/component/widget/sidemenu.dart';
-import 'package:web_2/pages/appointment/doctor_appointment.dart';
-import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave_page.dart';
-
-import '../../component/settings/config.dart';
-import '../../model/main_app_menu.dart';
-import '../admin/module_page/module_page.dart';
-import '../appointment/time_slot_page/time_slot_page.dart';
-import 'parent_page_widget/parent_background_widget.dart';
+ import '../../component/settings/config.dart';
+import '../../component/settings/router.dart';
+ import '../admin/module_page/model/module_model.dart';
+ import 'parent_page_widget/parent_background_widget.dart';
 
 // ignore: must_be_immutable
 
@@ -26,14 +22,11 @@ NextIndex(List<ItemModel> list, int index) {
   }
   return '';
 }
-
-List<dynamic> textControllerListGenerator(int length) {
-  return List.generate(length, (index) => TextEditingController());
-}
+ 
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
-  final main_app_menu module;
+  final ModuleMenuList module;
   const HomePage({super.key, required this.module});
 
   @override
@@ -58,7 +51,7 @@ class HomePagebodyWidget extends StatelessWidget {
     required this.module,
   });
 
-  final main_app_menu module;
+  final ModuleMenuList module;
 
   final List<SingleChildWidget> providers = [
     BlocProvider(
@@ -97,7 +90,7 @@ class DesktopWidget extends StatelessWidget {
     required this.sidemenu,
   });
   final SideMenu sidemenu;
-  final main_app_menu module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +115,7 @@ class DesktopWidget extends StatelessWidget {
             return AnimatedSize(
               curve: Curves.easeIn,
               //  vsync: this,
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 200),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: ss),
                 //      //  // child:
@@ -137,7 +130,9 @@ class DesktopWidget extends StatelessWidget {
           },
         ),
 
-        const TabAndBodyWidget(),
+        TabAndBodyWidget(
+          module: module,
+        ),
       ],
     );
   }
@@ -146,11 +141,11 @@ class DesktopWidget extends StatelessWidget {
 class TabAndBodyWidget extends StatelessWidget {
   const TabAndBodyWidget({
     super.key,
+    required this.module,
   });
-
+  final ModuleMenuList module;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     //print('Render Main Body ..........main00000000');
     // Size size = MediaQuery.of(context).size;
     return Expanded(
@@ -166,35 +161,8 @@ class TabAndBodyWidget extends StatelessWidget {
                 builder: (context, state) {
               var id = state.id;
               print(id);
-              //   return //TabPageMain(id: state.id);
-              //  print('Render Main Body ..........111');
-              return (() {
-                switch (id) {
-                  case "1":
-                    {
-                      return const TimeSlotPage();
-                    }
-                  case "2":
-                    {
-                      return const DoctorAppointment();
-                    }
-                  case "3":
-                    {
-                      return const DoctorLeave();
-                    }
-
-                  case "4":
-                    {
-                      return Text("4");
-                    }
-                    case "56":{
-                      return const ModulePage();
-                    }
-
-                  default:
-                    return SizedBox();
-                }
-              })();
+            return  getPage(module, id);
+            
             }),
           )
         ],
