@@ -2,20 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
- 
 
 import 'component/settings/notifers/auth_provider.dart';
-//import 'pages/appointment/doctor_leave_page/doctor_leave.dart';
-import 'pages/authentication/bloc/registration_block.dart';
-import 'pages/authentication/login_page.dart';
-
 import 'pages/authentication/login_page2.dart';
 import 'pages/home_page/parent_page.dart';
-import 'pages/hrm/employee_master_page/employee_master.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,8 +40,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<AppTheme>(
             create: (context) => appTheame,
           ),
-
-         
         ],
         child: Consumer2<AuthProvider, AppTheme>(builder:
             (context, AuthProvider authNotifier, AppTheme appThemes, child) {
@@ -59,16 +50,15 @@ class MyApp extends StatelessWidget {
               brightness:
                   appThemes.darkTheme ? Brightness.dark : Brightness.light,
 
+              useMaterial3: true,
 
-                  
               //appThemes.darkTheme==true?Brightness.dark:Brightness.light
             ),
             home: userProvider.user != null
-                ? 
-                const ParentPage()
-               // const EmployeeMaster()
+                ? const ParentPage()
+                // const EmployeeMaster()
                 //: Login(),
-                :const LoginPage2(),
+                : const LoginPage2(),
           );
         }));
   }

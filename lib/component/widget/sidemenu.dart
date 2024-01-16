@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:web_2/component/widget/custom_avater.dart';
+import 'package:web_2/component/widget/custom_cached_network_image.dart';
 import 'package:web_2/model/main_app_menu.dart';
 import 'package:web_2/model/menu_data_model.dart';
+import 'package:web_2/model/model_user.dart';
 import 'package:web_2/model/user_model.dart';
 import 'package:web_2/pages/authentication/login_page.dart';
 import 'package:web_2/pages/home_page/home_page.dart';
@@ -285,7 +287,7 @@ class UserDetailsForDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User_Model>(
+    return FutureBuilder<ModelUser?>(
       future: getUserInfo(),
       builder: (context, snapshot) {
         // print('Snapshot Call');
@@ -293,8 +295,7 @@ class UserDetailsForDrawer extends StatelessWidget {
           if (snapshot.hasData) {
             // Attempt to decode the base64 image
             try {
-              final MemoryImage backgroundImage =
-                  MemoryImage(base64.decode(snapshot.data!.iMAGE!));
+             
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +304,15 @@ class UserDetailsForDrawer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomAvater(size: 55, backgroundImage: backgroundImage),
+                     // CustomAvater(size: 55, backgroundImage: backgroundImage),
+
+                      CustomCachedNetworkImage(
+                        width: 55,
+                        height: 55,
+                        img: snapshot.data!.img!) ,
+
+
+
                       const SizedBox(
                         width: 4,
                       ),
@@ -348,7 +357,7 @@ class HomeLoginUserDetails extends StatelessWidget {
     super.key,
     required this.snapshot,
   });
-  final AsyncSnapshot<User_Model> snapshot;
+  final AsyncSnapshot<ModelUser?> snapshot;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -360,7 +369,7 @@ class HomeLoginUserDetails extends StatelessWidget {
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 140, maxHeight: 30),
             child: Text(
-              snapshot.data!.eMPNAME!,
+              snapshot.data!.name!,
               style: GoogleFonts.headlandOne(
                   fontSize: 12, fontWeight: FontWeight.w600),
             ),
@@ -368,7 +377,7 @@ class HomeLoginUserDetails extends StatelessWidget {
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 140, maxHeight: 14),
             child: Text(
-              snapshot.data!.dSGNAME!,
+              snapshot.data!.dgname!,
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w200),
             ),
           ),

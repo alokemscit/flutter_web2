@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web_2/pages/home_page/parent_page_widget/parent_page_module_list_widget.dart';
 
@@ -23,6 +24,9 @@ class ParentPageModuleHolderWidget extends StatelessWidget {
             child: FutureBuilder(
               future: get_module_list(), //menu_app_list(),
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return ParentMainModuleListWidget(

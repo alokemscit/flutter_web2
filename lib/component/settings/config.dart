@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_2/model/model_user.dart';
 import 'package:web_2/model/user_model.dart';
 
 import '../widget/custom_app_bar_close_button.dart';
@@ -44,9 +45,11 @@ const kWebBackgroundColor = Color(0xFFf8fafb);
 const kWebBackgroundDeepColor = Color(0xFFedf2f5);
 const kWebHeaderColor = Color(0xFF1d94ee);
 const kWebButtonPrimaryColor = Color(0xFF389ef7);
+// ignore: constant_identifier_names
 const CPLineCChart1 = Color(0xFF02d39a);
- const CPLineCChart = Color(0xFF23b6e6);
- 
+// ignore: constant_identifier_names
+const CPLineCChart = Color(0xFF23b6e6);
+
 const kDefaultPadding = 20.0;
 
 List<BoxShadow> myboxShadow = [
@@ -93,30 +96,68 @@ Future<Image> base64StringToImage() async {
   return Image.memory(bytes);
 }
 
-Future<User_Model> getUserInfo() async {
+Future<ModelUser> getUserInfo() async {
   final prefs = await SharedPreferences.getInstance();
-  final eMPID = prefs.getString('eMPID');
-  final eMPNAME = prefs.getString('eMPNAME');
-  final dEPTID = prefs.getString('dEPTID');
-  final dEPTNAME = prefs.getString('dEPTNAME');
-  final uID = prefs.getString('uID');
-  final uNAME = prefs.getString('uNAME');
-  final dSGID = prefs.getString('dSGID');
-  final dSGNAME = prefs.getString('dSGNAME');
-  final iMAGE = prefs.getString('iMAGE');
-  Uint8List bytes = base64.decode(iMAGE!);
+  final uid = await prefs.getString('uid');
 
-  return User_Model(
-      eMPID: eMPID,
-      eMPNAME: eMPNAME,
-      dEPTID: dEPTID,
-      dEPTNAME: dEPTNAME,
-      uID: uID,
-      uNAME: uNAME,
-      dSGID: dSGID,
-      dSGNAME: dSGNAME,
-      iMAGE: iMAGE,
-      pHOTO: Image.memory(bytes));
+  final cid = await prefs.getString('cid');
+  final depId = await prefs.getString('depId');
+  final desigId =await prefs.getString('desigId');
+  final name =await prefs.getString('name');
+  final img =await prefs.getString('img');
+  final code =await prefs.getString('code');
+  final cname =await prefs.getString('cname');
+  final dpname =await prefs.getString('dpname');
+  final dgname =await prefs.getString('dgname');
+  final face1 =await prefs.getString('face1');
+  final face2 =await prefs.getString('face2');
+  final mob =await prefs.getString('mob');
+//_user = null;
+  // print('aaaaaaa'+id.toString());
+  if (uid != null && name != null) {
+    print(name);
+    return ModelUser(
+      uid: uid,
+      cid: cid,
+      depId: depId,
+      desigId: desigId,
+      name: name,
+      img: img,
+      code: code,
+      cname: cname,
+      dpname: dpname,
+      dgname: dgname,
+      face1: face1!,
+      face2: face2!,
+      mob: mob,
+    );
+  } else {
+    return null!;
+  }
+
+  // final prefs = await SharedPreferences.getInstance();
+  // final eMPID = prefs.getString('eMPID');
+  // final eMPNAME = prefs.getString('eMPNAME');
+  // final dEPTID = prefs.getString('dEPTID');
+  // final dEPTNAME = prefs.getString('dEPTNAME');
+  // final uID = prefs.getString('uID');
+  // final uNAME = prefs.getString('uNAME');
+  // final dSGID = prefs.getString('dSGID');
+  // final dSGNAME = prefs.getString('dSGNAME');
+  // final iMAGE = prefs.getString('iMAGE');
+  // Uint8List bytes = base64.decode(iMAGE!);
+
+  // return User_Model(
+  //     eMPID: eMPID,
+  //     eMPNAME: eMPNAME,
+  //     dEPTID: dEPTID,
+  //     dEPTNAME: dEPTNAME,
+  //     uID: uID,
+  //     uNAME: uNAME,
+  //     dSGID: dSGID,
+  //     dSGNAME: dSGNAME,
+  //     iMAGE: iMAGE,
+  //     pHOTO: Image.memory(bytes));
 }
 
 ButtonStyle customButtonStyle = ButtonStyle(
@@ -132,7 +173,10 @@ BoxDecoration customBoxDecoration = BoxDecoration(
   // color: appColorBlue.withOpacity(0.05),
   borderRadius:
       const BorderRadius.all(Radius.circular(12)), // Uncomment this line
-  border: Border.all(color: appColorBlue, width: 0.108,strokeAlign : BorderSide.strokeAlignCenter),
+  border: Border.all(
+      color: appColorBlue,
+      width: 0.108,
+      strokeAlign: BorderSide.strokeAlignCenter),
   boxShadow: [
     BoxShadow(
       color: appColorBlue.withOpacity(0.0085),
@@ -140,12 +184,6 @@ BoxDecoration customBoxDecoration = BoxDecoration(
       blurRadius: 5.2,
       offset: const Offset(0, 1),
     ),
-    // BoxShadow(
-    //   color: Colors.amber.withOpacity(0.01),
-    //   spreadRadius: 0.1,
-    //   blurRadius: 0.2,
-    //   offset: const Offset(0, 0),
-    // ),
     BoxShadow(
       color: appColorBlue.withOpacity(0.0085),
       spreadRadius: 0.2,
@@ -154,7 +192,7 @@ BoxDecoration customBoxDecoration = BoxDecoration(
     ),
   ],
 );
- 
+
 TextStyle customTextStyle = GoogleFonts.lato(
   color: Colors.black,
   fontSize: 14,

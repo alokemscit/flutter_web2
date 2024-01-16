@@ -25,6 +25,9 @@ class LoginPage2 extends StatelessWidget {
              BlocProvider<LoginUserBloc>(
               create: (BuildContext context) => LoginUserBloc(),
             ),
+            BlocProvider<LoadComBloc>(
+              create: (BuildContext context) => LoadComBloc(),
+            ),
       ],
       child: Scaffold(
         extendBody: true,

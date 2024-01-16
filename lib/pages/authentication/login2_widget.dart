@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:web_2/component/settings/functions.dart';
+import 'package:web_2/component/widget/custom_elevated_button.dart';
+import 'package:web_2/pages/home_page/parent_page.dart';
 
 import '../../component/settings/config.dart';
 import '../../component/widget/custom_dropdown.dart';
@@ -62,168 +64,215 @@ Widget leftPanel() => Expanded(
 Widget rightpart(
   String? cid,
   BuildContext context,
-) =>
-    Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Spacer(
-            flex: 1,
-          ),
-          Text(
-            "Welcome.......!",
-            style:
-                customTextStyle.copyWith(color: kWebHeaderColor, fontSize: 18),
-          ),
-          Text(
-            "Use your user id & password to Login!",
-            style:
-                customTextStyle.copyWith(color: kWebHeaderColor, fontSize: 12),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Container(
-              width: 400,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-              decoration: customBoxDecoration,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Login",
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w300,
-                        fontStyle: FontStyle.italic,
-                        color: kWebHeaderColor),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  BlocBuilder<LoginUserBloc, LoginUserState>(
-                    builder: (context, state) {
-                      return _dropdown(cid);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  CustomTextBox(
-                      labelTextColor: Colors.black54,
-                      isFilled: true,
-                      width: double.infinity,
-                      maxlength: 15,
-                      caption: "User ID",
-                      controller: TextEditingController(),
-                      onChange: (v) {}),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  CustomTextBox(
-                      labelTextColor: Colors.black54,
-                      width: double.infinity,
-                      surfixIconColor: kWebHeaderColor.withOpacity(0.5),
-                      maxlength: 15,
-                      isFilled: true,
-                      isPassword: true,
-                      caption: "Password",
-                      controller: TextEditingController(),
-                      onChange: (v) {}),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: customButtonStyle.copyWith(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                kWebHeaderColor.withOpacity(0.6))),
-                        child: Text(
-                          "Login Now",
-                          style: customTextStyle.copyWith(
-                              fontSize: 12, color: Colors.white),
-                        ),
-                      ),
-                      const Spacer(),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Flexible(
-                                child: BlocListener<ComRegBloc, ComRegState>(
-                              listener: (context, state) {
-                                if (state is ComRegErrorState) {
-                                  customAwesamDialodOk(
-                                      context,
-                                      DialogType.error,
-                                      "Error!",
-                                      state.message);
-                                }
-                                if (state is ComRegSuccessState) {
-                                  Navigator.of(context).pop();
-                                  customAwesamDialodOk(
-                                      context,
-                                      DialogType.success,
-                                      "Success!",
-                                      state.message);
-                                  context
-                                      .read<LoginUserBloc>()
-                                      .add(LoginUserCompanyLoadedEvent());
-                                  cid = state.comid;
-                                }
+) {
+  TextEditingController _txt_uid = TextEditingController();
+  TextEditingController _txt_pws = TextEditingController();
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Spacer(
+          flex: 1,
+        ),
+        Text(
+          "Welcome.......!",
+          style: customTextStyle.copyWith(color: kWebHeaderColor, fontSize: 18),
+        ),
+        Text(
+          "Use your user id & password to Login!",
+          style: customTextStyle.copyWith(color: kWebHeaderColor, fontSize: 12),
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Container(
+            width: 400,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+            decoration: customBoxDecoration,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Login",
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
+                      fontStyle: FontStyle.italic,
+                      color: kWebHeaderColor),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                BlocBuilder<LoadComBloc, LoadComState>(
+                  builder: (context, state) {
+                    return _dropdown(cid);
+                  },
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                CustomTextBox(
+                    labelTextColor: Colors.black54,
+                    isFilled: true,
+                    width: double.infinity,
+                    maxlength: 15,
+                    caption: "User ID",
+                    controller: _txt_uid,
+                    onChange: (v) {}),
+                const SizedBox(
+                  height: 6,
+                ),
+                CustomTextBox(
+                    labelTextColor: Colors.black54,
+                    width: double.infinity,
+                    surfixIconColor: kWebHeaderColor.withOpacity(0.5),
+                    maxlength: 15,
+                    isFilled: true,
+                    isPassword: true,
+                    caption: "Password",
+                    controller: _txt_pws,
+                    onChange: (v) {}),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _login(_txt_uid, _txt_pws, cid),
+                    const Spacer(),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                              child: BlocListener<ComRegBloc, ComRegState>(
+                            listener: (context, state) {
+                              if (state is ComRegErrorState) {
+                                customAwesamDialodOk(context, DialogType.error,
+                                    "Error!", state.message);
+                              }
+                              if (state is ComRegSuccessState) {
+                                Navigator.of(context).pop();
+                                // customAwesamDialodOk(
+                                //     context,
+                                //     DialogType.success,
+                                //     "Success!",
+                                //     state.message);
+                                context
+                                    .read<LoadComBloc>()
+                                    .add(LoadComLoadEvent(cid: state.comid));
+                                cid = state.comid;
+                              }
+                            },
+                            child: BlocBuilder<ComRegBloc, ComRegState>(
+                              builder: (context, state) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Dont have account?",
+                                      overflow: TextOverflow.clip,
+                                      style: customTextStyle.copyWith(
+                                          fontSize: 12, color: Colors.black54),
+                                    ),
+                                    InkWell(
+                                        onTap: () {
+                                          _dialogBox(context);
+                                        },
+                                        child: Text(
+                                          "Create One",
+                                          overflow: TextOverflow.clip,
+                                          style: customTextStyle.copyWith(
+                                              fontSize: 10,
+                                              color: kWebHeaderColor),
+                                        )),
+                                  ],
+                                );
                               },
-                              child: BlocBuilder<ComRegBloc, ComRegState>(
-                                builder: (context, state) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "Dont have account?",
-                                        overflow: TextOverflow.clip,
-                                        style: customTextStyle.copyWith(
-                                            fontSize: 12,
-                                            color: Colors.black54),
-                                      ),
-                                      InkWell(
-                                          onTap: () {
-                                            _dialogBox(context);
-                                          },
-                                          child: Text(
-                                            "Create One",
-                                            overflow: TextOverflow.clip,
-                                            style: customTextStyle.copyWith(
-                                                fontSize: 10,
-                                                color: kWebHeaderColor),
-                                          )),
-                                    ],
-                                  );
-                                },
-                              ),
-                            )),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+                            ),
+                          )),
+                        ],
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
           ),
-          const Spacer(
-            flex: 2,
+        ),
+        const Spacer(
+          flex: 2,
+        ),
+      ],
+    ),
+  );
+}
+
+_login(TextEditingController _txt_uid, TextEditingController _txt_pws,
+    String? cid) {
+  return BlocListener<LoginUserBloc, LoginUserState>(
+    listener: (context, state) {
+      if (state is LoginUserErrorState) {
+        customAwesamDialodOk(
+            context, DialogType.error, "Error!", state.message);
+      }
+      if (state is LoginUserSuccessState) {
+        customAwesamDialodOk(
+            context, DialogType.success, "Success!", state.message);
+        Future.delayed(const Duration(milliseconds: 2000));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ParentPage()),
+        );
+      }
+      if (state is LoginUserGetComIDState) {
+        cid = state.cid;
+      }
+    },
+    child: BlocBuilder<LoginUserBloc, LoginUserState>(
+      builder: (context, state) {
+        if (state is LoginUserLoadingState) {
+          return const Center(child: CupertinoActivityIndicator());
+        }
+
+        return CustomElevatedButton(
+          onTap: () {
+            if (cid == null) {
+              customAwesamDialodOk(context, DialogType.warning, "Warning!",
+                  "Please select company name");
+              return;
+            }
+            if (_txt_uid.text.length < 4) {
+              customAwesamDialodOk(context, DialogType.warning, "Warning!",
+                  "Please enter valid user ID");
+              return;
+            }
+            if (_txt_pws.text.length < 6) {
+              customAwesamDialodOk(context, DialogType.warning, "Warning!",
+                  "Please enter valid password");
+              return;
+            }
+            context.read<LoginUserBloc>().add(LoginUserLoginEvent(
+                uid: _txt_uid.text, pws: _txt_pws.text, cid: cid!));
+          },
+          style: customButtonStyle.copyWith(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  kWebHeaderColor.withOpacity(0.6))),
+          child: Text(
+            "Login Now",
+            style: customTextStyle.copyWith(fontSize: 12, color: Colors.white),
           ),
-        ],
-      ),
-    );
+        );
+      },
+    ),
+  );
+}
 
 _dialogBox(
   BuildContext context,
@@ -407,6 +456,11 @@ _dialogBox(
           "Please enter your mobile number");
       return;
     }
+    if (_uid.text.length < 4) {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "New user ID lenth should be atleast 4");
+      return;
+    }
     if (_pws.text.length < 6) {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
           "Please enter new password, Password length should be atleast 6");
@@ -456,7 +510,12 @@ Widget _dropdown(String? cid) => FutureBuilder(
                       child: Text(e.name!),
                     ))
                 .toList(),
-            onTap: (v) {},
+            onTap: (v) {
+              // print(v);
+              context
+                  .read<LoginUserBloc>()
+                  .add(LoginUserSetComIDEvent(cid: v!));
+            },
             width: double.infinity);
       },
     );

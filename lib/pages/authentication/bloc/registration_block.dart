@@ -53,10 +53,11 @@ class ComRegBloc extends Bloc<ComRegEvent, ComRegState> {
           "code": event.code,
           "uid": event.uid,
           "uname": event.name,
-          "pws": event.pws
+          "pws": event.pws,
+          "mob":event.mob
         }
       ]);
-      print(x);
+      //print(x);
       ms = x.map((e) => ModelStatus.fromJson(e)).toList().first;
       // ignore: unrelated_type_equality_checks
       if (ms.status != "1") {

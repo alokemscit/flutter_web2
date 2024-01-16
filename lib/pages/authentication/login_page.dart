@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:web_2/component/widget/custom_snakbar.dart';
+import 'package:web_2/model/model_user.dart';
 
 import '../../component/settings/notifers/auth_provider.dart';
 import '../../component/settings/rive_config.dart';
@@ -401,17 +402,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         //  print(e.toString());
       }
 
-      List<User_Model> lst =
-          mList.map((post) => User_Model.fromJson(post)).toList();
+      List<ModelUser> lst =
+          mList.map((post) => ModelUser.fromJson(post)).toList();
       // print(lst[0].eMPNAME);
       await Future.delayed(const Duration(milliseconds: 1000));
 
       if (lst.isEmpty) {
         emit(LoginErrorSate(msg: 'Invalid User ID or Passwors'));
         //return;
-      } else if (lst[0].sTATUS.toString() != '1') {
+      } else if (lst[0].status.toString() != '1') {
         // print(lst[0].sMSG.toString());
-        emit(LoginErrorSate(msg: lst[0].sMSG.toString()));
+        emit(LoginErrorSate(msg: lst[0].msg.toString()));
 
         // return;
       } else {
@@ -421,17 +422,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginNavigateSate());
         await Future.delayed(const Duration(milliseconds: 2000));
         // ignore: use_build_context_synchronously
-        User_Model lsta = lst.first;
+        ModelUser lsta = lst.first;
         authProvider.login(
-            lsta.eMPID!,
-            lsta.eMPNAME!,
-            lsta.dEPTID!,
-            lsta.dEPTNAME!,
-            lsta.uID!,
-            lsta.uNAME!,
-            lsta.dSGID!,
-            lsta.dSGNAME!,
-            lsta.iMAGE!);
+           lsta.uid!,
+            lsta.cid!,
+            lsta.depId!,
+            lsta.desigId!,
+            lsta.name!,
+            lsta.img!,
+lsta.code!,
+lsta.cname!,
+lsta.dpname!,
+lsta.dgname!,
+lsta.face1!,
+lsta.face2!,
+lsta.mob!
+            );
       }
       await Future.delayed(const Duration(milliseconds: 2000));
 

@@ -9,24 +9,27 @@ class ParentPageTopWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+   // Size size = MediaQuery.of(context).size;
     return Positioned(
       top: 0,
       left: 0,
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.width < 380 ? 4 : 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                "ERP System",
-                style: GoogleFonts.carlito(
-                    fontSize: size.width < 400 ? 30 : 34,
-                    fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(left: 6),
+                child: Text(
+                  "ERP System",
+                  style: GoogleFonts.carlito(
+                      fontSize: 30 ,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               const LoginUsersImageAndDetails(),
             ],

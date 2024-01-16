@@ -2,7 +2,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:web_2/component/settings/config.dart';
+ 
 
 // ignore: non_constant_identifier_names
 Future<void> CustomDialog(BuildContext context, Widget title,
@@ -34,8 +34,8 @@ Future<void> CustomDialog(BuildContext context, Widget title,
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor:Colors.white.withOpacity(0.8),
-        surfaceTintColor:Colors.white.withOpacity(0.5),
+        backgroundColor: Colors.white.withOpacity(0.8),
+        surfaceTintColor: Colors.white.withOpacity(0.5),
         scrollable: scrollable,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -98,18 +98,21 @@ void capertinoAlertDialog(BuildContext context) {
 }
 
 void customAwesamDialodOk(BuildContext context, DialogType dialogtype,
-        String title, String message) =>
+        String title, String message,
+        [Function? onOk]) =>
     AwesomeDialog(
       width: 400,
       context: context,
-      isDense :false,
+      isDense: false,
       dialogType: dialogtype,
       animType: AnimType.bottomSlide,
       dismissOnTouchOutside: true,
       dismissOnBackKeyPress: false,
       title: title,
       desc: message,
-      btnOkOnPress: () {},
+      btnOkOnPress: () {
+        onOk!();
+      },
       btnOkText: 'OK',
     ).show();
 
@@ -121,15 +124,7 @@ void CupertinioAlertDialog(BuildContext context, String msg) {
       title: const Text('Alert'),
       content: Text(msg),
       actions: <CupertinoDialogAction>[
-        // CupertinoDialogAction(
-        //   /// This parameter indicates this action is the default,
-        //   /// and turns the action's text to bold text.
-        //   isDefaultAction: true,
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        //   child: const Text('No'),
-        // ),
+       
         CupertinoDialogAction(
           isDestructiveAction: true,
           onPressed: () {
