@@ -169,7 +169,7 @@ class Login extends StatelessWidget {
 
                                           height: 42,
                                           fontColor: Colors.white,
-                                         
+
                                           caption: 'EMP ID',
                                           borderRadious: 10.0,
 
@@ -186,7 +186,6 @@ class Login extends StatelessWidget {
                                           isPassword: true,
                                           height: 42,
                                           fontColor: Colors.white,
-                                         
                                           caption: 'Password',
                                           borderRadious: 10.0,
                                           width: 300,
@@ -205,10 +204,6 @@ class Login extends StatelessWidget {
 
                                         ElevatedButton.icon(
                                           onPressed: () {
-
-                                              
-
-
                                             if (_uid.text.length < 3 ||
                                                 _pws.text.isEmpty) {
                                               CustomSnackbar(
@@ -424,27 +419,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // ignore: use_build_context_synchronously
         ModelUser lsta = lst.first;
         authProvider.login(
-           lsta.uid!,
+            lsta.uid!,
             lsta.cid!,
             lsta.depId!,
             lsta.desigId!,
             lsta.name!,
             lsta.img!,
-lsta.code!,
-lsta.cname!,
-lsta.dpname!,
-lsta.dgname!,
-lsta.face1!,
-lsta.face2!,
-lsta.mob!
-            );
+            lsta.code!,
+            lsta.cname!,
+            lsta.dpname!,
+            lsta.dgname!,
+            lsta.face1!,
+            lsta.face2!,
+            lsta.mob!);
       }
       await Future.delayed(const Duration(milliseconds: 2000));
 
       emit(LoginRefrashSate());
     });
     on<LogOutEvent>((event, emit) async {
-      authProvider.logout();
+      await authProvider.logout();
+      print("object log out");
       emit(LoginOutSate());
     });
   }

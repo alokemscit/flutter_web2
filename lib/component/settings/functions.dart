@@ -1,8 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:awesome_dialog/awesome_dialog.dart';
+
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
+
+import '../awesom_dialog/awesome_dialog.dart';
  
+
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 
 // ignore: non_constant_identifier_names
 Future<void> CustomDialog(BuildContext context, Widget title,
@@ -97,22 +107,21 @@ void capertinoAlertDialog(BuildContext context) {
   );
 }
 
-void customAwesamDialodOk(BuildContext context, DialogType dialogtype,
-        String title, String message,
-        [Function? onOk]) =>
+void customAwesamDialodOk(BuildContext context, DialogType dialogType,
+        String title, String message, Function onOk) =>
     AwesomeDialog(
       width: 400,
       context: context,
       isDense: false,
-      dialogType: dialogtype,
+      dialogType: dialogType,
       animType: AnimType.bottomSlide,
       dismissOnTouchOutside: true,
       dismissOnBackKeyPress: false,
       title: title,
       desc: message,
       btnOkOnPress: () {
-        onOk!();
-      },
+        onOk();
+      }, // Use onOk directly as the callback
       btnOkText: 'OK',
     ).show();
 
@@ -124,7 +133,6 @@ void CupertinioAlertDialog(BuildContext context, String msg) {
       title: const Text('Alert'),
       content: Text(msg),
       actions: <CupertinoDialogAction>[
-       
         CupertinoDialogAction(
           isDestructiveAction: true,
           onPressed: () {
@@ -135,4 +143,19 @@ void CupertinioAlertDialog(BuildContext context, String msg) {
       ],
     ),
   );
+}
+
+
+Future<Uint8List?> proxyImageRequest(String imageUrl) async {
+  try {
+    final response = await http.get(Uri.parse('https://your-proxy-server.com/proxy?url=$imageUrl'));
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
+
+  return null;
 }

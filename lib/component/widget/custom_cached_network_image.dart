@@ -1,13 +1,15 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+ 
+//import 'package:http/http.dart' as http;
 
 class CustomCachedNetworkImage extends StatelessWidget {
   const CustomCachedNetworkImage({
     super.key,
     required this.img,
     this.width = 40,
-    this.height = 40,  this.radious=150,
+    this.height = 40,
+    this.radious = 150,
   });
 
   final String img;
@@ -16,12 +18,13 @@ class CustomCachedNetworkImage extends StatelessWidget {
   final double radious;
   @override
   Widget build(BuildContext context) {
+    
     return CachedNetworkImage(
       fit: BoxFit.cover,
       width: width,
       height: height,
       imageUrl: img,
-      placeholder: (context, url) =>  CircleAvatar(
+      placeholder: (context, url) => CircleAvatar(
         backgroundColor: Colors.blue,
         radius: radious,
       ),
@@ -34,14 +37,13 @@ class CustomCachedNetworkImage extends StatelessWidget {
   }
 }
 
-
-
 class CustomCachedNetworkImageSquareShape extends StatelessWidget {
   const CustomCachedNetworkImageSquareShape({
     super.key,
     required this.img,
     this.width = 40,
-    this.height = 40,  this.radious=8,
+    this.height = 40,
+    this.radious = 8,
   });
 
   final String img;
@@ -51,20 +53,17 @@ class CustomCachedNetworkImageSquareShape extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-            width: width,
-            height: height,
-            fit: BoxFit.fill,
-            imageUrl: img,
-            placeholder: (context, url) => Container(
-              color: Colors.blue,
-              height: height,
-              width: width,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(radious)),
-            ),
-           
-            errorWidget: (context, url, error) =>
-                const Icon(Icons.person_off_sharp),
-          );
+      width: width,
+      height: height,
+      fit: BoxFit.fill,
+      imageUrl: img,
+      placeholder: (context, url) => Container(
+        color: Colors.blue,
+        height: height,
+        width: width,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(radious)),
+      ),
+      errorWidget: (context, url, error) => const Icon(Icons.person_off_sharp),
+    );
   }
 }

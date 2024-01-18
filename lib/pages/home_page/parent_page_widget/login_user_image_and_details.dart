@@ -20,11 +20,15 @@ class LoginUsersImageAndDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     
     return Padding(
       padding: const EdgeInsets.only(right: 8, top: 4, bottom: 4),
       child: FutureBuilder<ModelUser?>(
           future: getUserInfo(),
           builder: (context, snapshot) {
+            if (snapshot.connectionState==ConnectionState.waiting) {
+              return const Center(child: CupertinoActivityIndicator());
+            }
             if (!snapshot.hasData) {
               return const Center(child: CupertinoActivityIndicator());
             } else if (snapshot.hasError) {
@@ -33,6 +37,7 @@ class LoginUsersImageAndDetails extends StatelessWidget {
                 style: const TextStyle(color: Colors.red, fontSize: 12),
               );
             } else if (snapshot.hasData) {
+              
               return Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,

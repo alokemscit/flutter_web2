@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +6,7 @@ import 'package:web_2/component/settings/functions.dart';
 import 'package:web_2/component/widget/custom_elevated_button.dart';
 import 'package:web_2/pages/home_page/parent_page.dart';
 
+import '../../component/awesom_dialog/awesome_dialog.dart';
 import '../../component/settings/config.dart';
 import '../../component/widget/custom_dropdown.dart';
 import '../../component/widget/custom_textbox.dart';
@@ -155,7 +155,7 @@ Widget rightpart(
                             listener: (context, state) {
                               if (state is ComRegErrorState) {
                                 customAwesamDialodOk(context, DialogType.error,
-                                    "Error!", state.message);
+                                    "Error!", state.message, () {});
                               }
                               if (state is ComRegSuccessState) {
                                 Navigator.of(context).pop();
@@ -220,11 +220,11 @@ _login(TextEditingController _txt_uid, TextEditingController _txt_pws,
     listener: (context, state) {
       if (state is LoginUserErrorState) {
         customAwesamDialodOk(
-            context, DialogType.error, "Error!", state.message);
+            context, DialogType.error, "Error!", state.message, () {});
       }
       if (state is LoginUserSuccessState) {
         customAwesamDialodOk(
-            context, DialogType.success, "Success!", state.message);
+            context, DialogType.success, "Success!", state.message, () {});
         Future.delayed(const Duration(milliseconds: 2000));
         Navigator.pushReplacement(
           context,
@@ -245,17 +245,17 @@ _login(TextEditingController _txt_uid, TextEditingController _txt_pws,
           onTap: () {
             if (cid == null) {
               customAwesamDialodOk(context, DialogType.warning, "Warning!",
-                  "Please select company name");
+                  "Please select company name", () {});
               return;
             }
             if (_txt_uid.text.length < 4) {
               customAwesamDialodOk(context, DialogType.warning, "Warning!",
-                  "Please enter valid user ID");
+                  "Please enter valid user ID", () {});
               return;
             }
             if (_txt_pws.text.length < 6) {
               customAwesamDialodOk(context, DialogType.warning, "Warning!",
-                  "Please enter valid password");
+                  "Please enter valid password", () {});
               return;
             }
             context.read<LoginUserBloc>().add(LoginUserLoginEvent(
@@ -438,37 +438,43 @@ _dialogBox(
       ), () {
     if (_cname.text.length < 3) {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
-          "Please enter valid company name");
+          "Please enter valid company name", () {
+        print("object");
+      });
       return;
     }
     if (_name.text.isEmpty) {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
-          "Please enter your full name");
+          "Please enter your full name", () {});
       return;
     }
     if (code == null) {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
-          "Please select country code");
+          "Please select country code", () {});
       return;
     }
     if (_mob.text.isEmpty) {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
-          "Please enter your mobile number");
+          "Please enter your mobile number", () {});
       return;
     }
     if (_uid.text.length < 4) {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
-          "New user ID lenth should be atleast 4");
+          "New user ID lenth should be atleast 4", () {});
       return;
     }
     if (_pws.text.length < 6) {
-      customAwesamDialodOk(context, DialogType.warning, "Warning!",
-          "Please enter new password, Password length should be atleast 6");
+      customAwesamDialodOk(
+          context,
+          DialogType.warning,
+          "Warning!",
+          "Please enter new password, Password length should be atleast 6",
+          () {});
       return;
     }
     if (_pws.text != _cpws.text) {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
-          "New password and confirm passord should be same");
+          "New password and confirm passord should be same", () {});
       return;
     }
     context.read<ComRegBloc>().add(ComRegSaveEvent(

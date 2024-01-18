@@ -114,7 +114,7 @@ class ParentMainModuleListWidget extends StatelessWidget {
                         Text(
                           list[index].name!,
                           style: GoogleFonts.roboto(
-                              fontSize: size.width < 650?15:(size.width > 650 && size.width < 805)
+                              fontSize: size.width < 650?13:(size.width > 650 && size.width < 805)
                                   ? 16
                                   : 20,
                               fontWeight: FontWeight.bold,
@@ -124,22 +124,24 @@ class ParentMainModuleListWidget extends StatelessWidget {
                         const SizedBox(
                           height: 4,
                         ),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                              maxHeight:  (size.width > 650 && size.width <= 705)
-                                  ? 30
-                                  : (size.width > 705 && size.width < 805)
-                                      ? 45
-                                      : (size.width >= 1200 && size.width < 1600)
-                                          ? 50
-                                          : 100),
-                          child: Text(
-                            list[index].desc!,
-                            style: GoogleFonts.roboto(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.black),
+                        Expanded(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxHeight: size.width < 650?200: (size.width > 650 && size.width <= 705)
+                                    ? 30
+                                    : (size.width > 705 && size.width < 805)
+                                        ? 45
+                                        : (size.width >= 1200 && size.width < 1600)
+                                            ? 50
+                                            : 100),
+                            child: Text(
+                              list[index].desc!,overflow: TextOverflow.clip,
+                              style: GoogleFonts.roboto(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.black),
+                            ),
                           ),
                         ),
                       ],

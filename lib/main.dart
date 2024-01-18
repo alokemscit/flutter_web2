@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +10,17 @@ import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
 import 'component/settings/notifers/auth_provider.dart';
 import 'pages/authentication/login_page2.dart';
 import 'pages/home_page/parent_page.dart';
+ 
+
+
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   final userProvider = AuthProvider();
-
+// if (kIsWeb) {
+// setPathUrlStrategy();
+// }
   //await appTheame.darkTheme;
   await userProvider.loadUser();
   runApp(MyApp(

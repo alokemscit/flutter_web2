@@ -13,27 +13,24 @@ class ParentPageTopWidget extends StatelessWidget {
     return Positioned(
       top: 0,
       left: 0,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 6),
-                child: Text(
-                  "ERP System",
-                  style: GoogleFonts.carlito(
-                      fontSize: 30 ,
-                      fontWeight: FontWeight.bold),
-                ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
+         // mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 6),
+              child: Text(
+                "ERP System",
+                style: GoogleFonts.carlito(
+                    fontSize: 30 ,
+                    fontWeight: FontWeight.bold),
               ),
-              const LoginUsersImageAndDetails(),
-            ],
-          ),
+            ),
+            const LoginUsersImageAndDetails(),
+          ],
         ),
       ),
     );
