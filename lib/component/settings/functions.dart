@@ -1,16 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 
 import '../awesom_dialog/awesome_dialog.dart';
  
 
-import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
@@ -108,7 +104,7 @@ void capertinoAlertDialog(BuildContext context) {
 }
 
 void customAwesamDialodOk(BuildContext context, DialogType dialogType,
-        String title, String message, Function onOk) =>
+        String title, String message,  Function() onOk) =>
     AwesomeDialog(
       width: 400,
       context: context,

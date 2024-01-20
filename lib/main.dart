@@ -51,14 +51,16 @@ class MyApp extends StatelessWidget {
         child: Consumer2<AuthProvider, AppTheme>(builder:
             (context, AuthProvider authNotifier, AppTheme appThemes, child) {
           return MaterialApp(
-            scrollBehavior: CustomScrollBehavior(),
+            scrollBehavior: kIsWeb? CustomScrollBehavior():null,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+              primaryColor: kWebHeaderColor,
               brightness:
                   appThemes.darkTheme ? Brightness.dark : Brightness.light,
 
-              useMaterial3: true,
 
+              useMaterial3: true,
+ 
               //appThemes.darkTheme==true?Brightness.dark:Brightness.light
             ),
             home: userProvider.user != null
@@ -72,37 +74,3 @@ class MyApp extends StatelessWidget {
 }
 
 
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   final prefs = await SharedPreferences.getInstance();
-//   final String? eMPID = prefs.getString('eMPID');
-
-//   runApp(
-//     MultiProvider(
-//       providers: [
-//         ChangeNotifierProvider(create: (context) => AuthProvider()),
-//       ],
-//       child: MyApp(eMPID: eMPID),
-//     ),
-//   );
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key, required this.eMPID});
-//   final String? eMPID;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     //print(eMPID);
-//     return MaterialApp(
-//         scrollBehavior: CustomScrollBehavior(),
-//         debugShowCheckedModeBanner: false,
-//         home: eMPID==null?Login():Test5(),
-//         //const Test5(), //
-//         // Test2(),
-//         //const DoctorAppointment(),
-//         );
-//   }
-// }

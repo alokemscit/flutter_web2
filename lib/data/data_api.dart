@@ -56,7 +56,7 @@ class data_api2 {
       [String methods = "getdata"]) async {
     List<dynamic> apiData1 = [];
     //print(object)
-    String url = 'https://api.erphub.top/mob/$methods';
+    String url = 'https://erphub.top/mob/$methods';
     //print(url);
     final response = await http.post(
       Uri.parse(url),

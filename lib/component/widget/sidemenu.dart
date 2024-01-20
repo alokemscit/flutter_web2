@@ -1,14 +1,14 @@
-import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:web_2/component/widget/custom_avater.dart';
+
 import 'package:web_2/component/widget/custom_cached_network_image.dart';
 import 'package:web_2/model/main_app_menu.dart';
 import 'package:web_2/model/menu_data_model.dart';
 import 'package:web_2/model/model_user.dart';
-import 'package:web_2/model/user_model.dart';
+
 import 'package:web_2/pages/authentication/login_page.dart';
 import 'package:web_2/pages/home_page/home_page.dart';
 
@@ -29,7 +29,10 @@ isExists(List<ItemModel> list, String id) {
 
 class SideMenu extends StatelessWidget {
   const SideMenu(
-      {super.key, required this.module, required this.userDetailsForDrawer, required this.generateMenuItems});
+      {super.key,
+      required this.module,
+      required this.userDetailsForDrawer,
+      required this.generateMenuItems});
   final ModuleMenuList module;
   final UserDetailsForDrawer userDetailsForDrawer;
   final GenerateMenuItems generateMenuItems;
@@ -40,8 +43,17 @@ class SideMenu extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       //padding: const EdgeInsets.only(top: kIsWeb ? 8 : 0),
       decoration: const BoxDecoration(
-          color: kBgLightColor,
-          border: Border(right: BorderSide(color: Colors.black12, width: 0.5))),
+          color: kWebBackgroundDeepColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.white,
+              blurRadius: 0.5,
+              spreadRadius: 0.1,
+              offset: Offset(0, 0),
+            )
+          ],
+          border: Border(right: BorderSide(color: Colors.black12, width: 0.15))
+          ),
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -54,10 +66,12 @@ class SideMenu extends StatelessWidget {
                 child: userDetailsForDrawer,
               ),
               HomeLogOut(module: module),
+               const SizedBox(height: 6,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: ModuleNameDisplay(module: module),
               ),
+             
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                 child: generateMenuItems,
@@ -88,78 +102,98 @@ class GenerateMenuItems extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      children: 
-                      List.generate(list.length, (index) {
-                        return ExpansionTile(
-
-                          leading: null, // Add your leading icon
-                  trailing: null,
-                           
-                            title: Container(
-                              padding: const EdgeInsets.all(0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color:
-                                      const Color.fromARGB(255, 197, 197, 197)
-                                          .withOpacity(0.09),
-                                ),
-                                child: Text(
-                                  list[index].name!,
-                                  style: GoogleFonts.titilliumWeb(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                            tilePadding: EdgeInsets.zero,
-
-                            //  leading: const Icon(Icons.insert_emoticon),
-                            // childrenPadding: EdgeInsets.only(left: 4),
-                            children: list[index].smenu!.map((e) {
-                              return ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                horizontalTitleGap: 0,
-                                //  contentPadding: EdgeInsets.zero,
-                                // horizontalTitleGap: 0,
-
-                                title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8, top: 0, bottom: 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Icon(Icons.arrow_right),
-                                      const SizedBox(
-                                        width: 6,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          e.smName!,
-                                          style: GoogleFonts.titilliumWeb(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                    ],
+                      children: List.generate(list.length, (index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.circular(4),
+                            color: kWebBackgroundDeepColor,
+                            border: Border.all(color: Colors.grey[300]!,width: 0.6),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: kWebBackgroundColor,
+                                spreadRadius: 1,
+                                blurRadius: 2,
+                                offset: Offset(0, 0),
+                              )
+                            ]
+                          ),
+                          child: ExpansionTile(
+                         //   initiallyExpanded: true,
+                            maintainState: true,
+                            shape: const Border(),
+                              leading: null, // Add your leading icon
+                              trailing: null,
+                              title: Container(
+                                  padding: const EdgeInsets.all(0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color:
+                                        const Color.fromARGB(255, 197, 197, 197)
+                                            .withOpacity(0.09),
                                   ),
-                                ),
-                                onTap: () {
-                                  final itemList = state.menuitem;
-                                  if (!isExists(itemList, e.smId.toString())) {
-                                    // ignore: non_constant_identifier_names
-                                    final Item = ItemModel(
-                                        id: e.smId.toString(),
-                                        name: e.smName.toString());
-                                    context
-                                        .read<MenuItemBloc>()
-                                        .add(ItemMenuAdd(menuitem: Item));
-                                  }
-                                  context
-                                      .read<CurrentIDBloc>()
-                                      .add(SetCurrentId(id: e.smId.toString()));
-                                },
-                              );
-                            }).toList());
+                                  child: Text(
+                                    list[index].name!,
+                                    style: GoogleFonts.titilliumWeb(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                              tilePadding: EdgeInsets.zero,
+                          
+                              //  leading: const Icon(Icons.insert_emoticon),
+                              // childrenPadding: EdgeInsets.only(left: 4),
+                              children: list[index].smenu!.map((e) {
+                                return Container(
+                                  color:kBgColorG, //kWebBackgroundColor.withOpacity(0.8),
+                                  child: ListTile(
+                                    dense:false,
+                                    contentPadding: EdgeInsets.zero,
+                                    horizontalTitleGap: 0,
+                                    trailing:const SizedBox(),
+                                    //  contentPadding: EdgeInsets.zero,
+                                    // horizontalTitleGap: 0,
+                                  
+                                    title: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, top: 0, bottom: 0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Icon(Icons.arrow_right),
+                                          const SizedBox(
+                                            width: 6,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              e.smName!,
+                                              style: GoogleFonts.titilliumWeb(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      final itemList = state.menuitem;
+                                      if (!isExists(itemList, e.smId.toString())) {
+                                        // ignore: non_constant_identifier_names
+                                        final Item = ItemModel(
+                                            id: e.smId.toString(),
+                                            name: e.smName.toString());
+                                        context
+                                            .read<MenuItemBloc>()
+                                            .add(ItemMenuAdd(menuitem: Item));
+                                      }
+                                      context
+                                          .read<CurrentIDBloc>()
+                                          .add(SetCurrentId(id: e.smId.toString()));
+                                    },
+                                  ),
+                                );
+                              }).toList()),
+                        );
                       }));
                 },
               );
@@ -186,6 +220,7 @@ class CustomExpansionTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomExpansionTileState createState() => _CustomExpansionTileState();
 }
 
@@ -203,7 +238,6 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
           });
         },
         title: widget.title,
-        children: widget.children,
         tilePadding: EdgeInsets.zero,
         leading: Container(
           color: widget.backgroundColor,
@@ -219,11 +253,11 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
             color: Colors.white,
           ),
         ),
+        children: widget.children,
       ),
     );
   }
 }
-
 
 class ModuleNameDisplay extends StatelessWidget {
   const ModuleNameDisplay({
@@ -253,7 +287,7 @@ class ModuleNameDisplay extends StatelessWidget {
         Text(
           module.name!,
           style: GoogleFonts.bungeeInline(
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: FontWeight.w100,
               fontStyle: FontStyle.italic,
               color: const Color.fromARGB(255, 15, 20, 22).withOpacity(0.5)),
@@ -290,49 +324,62 @@ class UserDetailsForDrawer extends StatelessWidget {
     return FutureBuilder<ModelUser?>(
       future: getUserInfo(),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CupertinoActivityIndicator());
+        }
         // print('Snapshot Call');
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             // Attempt to decode the base64 image
             try {
-             
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                     // CustomAvater(size: 55, backgroundImage: backgroundImage),
-
-                      CustomCachedNetworkImage(
-                        width: 55,
-                        height: 55,
-                        img: snapshot.data!.img!) ,
-
-
-
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      HomeLoginUserDetails(
-                        snapshot: snapshot,
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: Container(
-                          height: 1,
-                          color: Colors.black12.withOpacity(0.1),
+              return Container(
+                margin: const EdgeInsets.only(top: 12),
+                decoration: BoxDecoration(
+                  color: kWebBackgroundDeepColor,
+                borderRadius: BorderRadiusDirectional.circular(2),
+                boxShadow: const [
+                  BoxShadow(
+                    color: kWebBackgroundColor,
+                    spreadRadius: 5.5,
+                    blurRadius: 5.2,
+                    offset: Offset(0, 0)
+                  )
+                ]
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // CustomAvater(size: 55, backgroundImage: backgroundImage),
+                
+                        CustomCachedNetworkImage(
+                            width: 50, height: 50, img: snapshot.data!.img!),
+                
+                        const SizedBox(
+                          width: 4,
                         ),
-                      )
-                    ],
-                  ),
-                ],
+                        HomeLoginUserDetails(
+                          snapshot: snapshot,
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: Container(
+                            height: 1,
+                            color: Colors.black12.withOpacity(0.1),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               );
             } catch (e) {
               // Handle the error by displaying a placeholder or an error message
@@ -403,14 +450,27 @@ class HomeLogOut extends StatelessWidget {
           LoginBloc(Provider.of<AuthProvider>(context, listen: false)),
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return SizedBox(
-            width: 200,
+          return Container(
+            margin: const EdgeInsets.only(right: 4),
+            padding: const EdgeInsets.only(left: 6,right: 12,top: 4,bottom: 4),
+            decoration: const BoxDecoration(
+              color: kWebBackgroundDeepColor,
+              boxShadow: [
+                BoxShadow(
+                  color: kWebBackgroundColor,
+                  blurRadius: 10.5,
+                spreadRadius: 1.5,
+                offset: Offset(0, 0),
+                )
+              ]
+            ),
+           // width: 200,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextButton(
-                    onPressed: () {
+                InkWell(
+                    onTap: () {
                       context.read<LoginBloc>().add(LogOutEvent());
 
                       Navigator.pop(context, HomePage(module: module));
@@ -423,21 +483,16 @@ class HomeLogOut extends StatelessWidget {
                           color: Colors.deepPurple,
                           fontWeight: FontWeight.w600),
                     )),
-                TextButton(
+                InkWell(
                     //style: ButtonStyle(textStyle: TextStyle()) ),
-                    onPressed: () {
+                    onTap: () {
                       //  context.read<LoginBloc>().add(LogOutEvent());
 
                       Navigator.pop(context, HomePage(module: module));
                     },
-                    child: const Text(
+                    child:  Text(
                       '< Back To Main',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontStyle: FontStyle.italic,
-                          color: Color.fromARGB(255, 1, 10, 65),
-                          fontWeight: FontWeight.normal),
-                    )),
+                      style: customTextStyle.copyWith(color: Colors.black87,fontSize: 11)),),
               ],
             ),
           );

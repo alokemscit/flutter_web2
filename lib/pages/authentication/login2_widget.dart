@@ -158,16 +158,26 @@ Widget rightpart(
                                     "Error!", state.message, () {});
                               }
                               if (state is ComRegSuccessState) {
-                                Navigator.of(context).pop();
+                                customAwesamDialodOk(
+                                  context,
+                                  DialogType.success,
+                                  "Success",
+                                  state.message,
+                                  () {
+                                    Navigator.of(context).pop();
+
+                                    context.read<LoadComBloc>().add(
+                                        LoadComLoadEvent(cid: state.comid));
+                                    cid = state.comid;
+                                  },
+                                );
+
+                                // Navigator.of(context).pop();
                                 // customAwesamDialodOk(
                                 //     context,
                                 //     DialogType.success,
                                 //     "Success!",
                                 //     state.message);
-                                context
-                                    .read<LoadComBloc>()
-                                    .add(LoadComLoadEvent(cid: state.comid));
-                                cid = state.comid;
                               }
                             },
                             child: BlocBuilder<ComRegBloc, ComRegState>(
@@ -241,32 +251,38 @@ _login(TextEditingController _txt_uid, TextEditingController _txt_pws,
           return const Center(child: CupertinoActivityIndicator());
         }
 
-        return CustomElevatedButton(
-          onTap: () {
-            if (cid == null) {
-              customAwesamDialodOk(context, DialogType.warning, "Warning!",
-                  "Please select company name", () {});
-              return;
-            }
-            if (_txt_uid.text.length < 4) {
-              customAwesamDialodOk(context, DialogType.warning, "Warning!",
-                  "Please enter valid user ID", () {});
-              return;
-            }
-            if (_txt_pws.text.length < 6) {
-              customAwesamDialodOk(context, DialogType.warning, "Warning!",
-                  "Please enter valid password", () {});
-              return;
-            }
-            context.read<LoginUserBloc>().add(LoginUserLoginEvent(
-                uid: _txt_uid.text, pws: _txt_pws.text, cid: cid!));
+        return BlocListener<ComRegBloc, ComRegState>(
+          listener: (context, state) {
+           if (state is ComRegSuccessState) { cid = state.comid;}
           },
-          style: customButtonStyle.copyWith(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  kWebHeaderColor.withOpacity(0.6))),
-          child: Text(
-            "Login Now",
-            style: customTextStyle.copyWith(fontSize: 12, color: Colors.white),
+          child: CustomElevatedButton(
+            onTap: () {
+              if (cid == null) {
+                customAwesamDialodOk(context, DialogType.warning, "Warning!",
+                    "Please select company name", () {});
+                return;
+              }
+              if (_txt_uid.text.length < 4) {
+                customAwesamDialodOk(context, DialogType.warning, "Warning!",
+                    "Please enter valid user ID", () {});
+                return;
+              }
+              if (_txt_pws.text.length < 6) {
+                customAwesamDialodOk(context, DialogType.warning, "Warning!",
+                    "Please enter valid password", () {});
+                return;
+              }
+              context.read<LoginUserBloc>().add(LoginUserLoginEvent(
+                  uid: _txt_uid.text, pws: _txt_pws.text, cid: cid!));
+            },
+            style: customButtonStyle.copyWith(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    kWebHeaderColor.withOpacity(0.6))),
+            child: Text(
+              "Login Now",
+              style:
+                  customTextStyle.copyWith(fontSize: 12, color: Colors.white),
+            ),
           ),
         );
       },

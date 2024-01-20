@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: non_constant_identifier_names
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: kWebBackgroundDeepColor,
       body: Stack(
         children: [
           const ParentPageBackground(imageOpacity: 0.03),
@@ -94,7 +94,7 @@ class DesktopWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Secon-----------  widget');
+   // print('Secon-----------  widget');
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +115,7 @@ class DesktopWidget extends StatelessWidget {
             return AnimatedSize(
               curve: Curves.easeIn,
               //  vsync: this,
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 150),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: ss),
                 //      //  // child:
@@ -160,7 +160,7 @@ class TabAndBodyWidget extends StatelessWidget {
             child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
                 builder: (context, state) {
               var id = state.id;
-              print(id);
+             // print(id);
             return  getPage(module, id);
             
             }),
@@ -179,7 +179,7 @@ class DrawerBackIconWithTabEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: kBgLightColor,
+      color: kWebBackgroundDeepColor,
       width: double.infinity,
       height: 28,
       child: Row(
@@ -212,7 +212,7 @@ class TabMenuWithEvent extends StatelessWidget {
           return BlocBuilder<CurrentIDBloc, CurrentIdState>(
             builder: (context1, state1) {
               return ListView.builder(
-                  padding: const EdgeInsets.only(left: 4),
+                  padding: const EdgeInsets.only(left: 2),
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   scrollDirection: Axis.horizontal,
