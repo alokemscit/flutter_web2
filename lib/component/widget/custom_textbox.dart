@@ -15,6 +15,7 @@ class CustomTextBox extends StatelessWidget {
   final double? height;
   final TextAlign? textAlign;
   final Function(String value) onChange;
+  //final Function(RawKeyEvent event) onKey;
   final double borderRadious;
   final Color fontColor;
   final Color borderColor;
@@ -30,32 +31,35 @@ class CustomTextBox extends StatelessWidget {
   final Color enabledBorderColor;
   final double enabledBorderwidth;
   final Color surfixIconColor;
+  final void Function(String) onSubmitted;
 
-  const CustomTextBox({
-    super.key,
-    required this.caption,
-    this.width = 65,
-    this.maxlength = 6,
-    required this.controller,
-    this.textInputType = TextInputType.text,
-    this.maxLine = 1,
-    this.height = 32,
-    this.textAlign = TextAlign.start,
-    required this.onChange,
-    this.borderRadious = 4.0,
-    this.fontColor = Colors.black87,
-    this.borderColor = Colors.black,
-    this.isPassword = false,
-    this.isFilled = false,
-    this.isReadonly = false,
-    this.isDisable = true,
-    this.hintTextColor = Colors.black,
-    this.labelTextColor = Colors.black,
-    this.focusedBorderColor = CPLineCChart,
-    this.focusedBorderWidth = 0.5,
-    this.enabledBorderColor = CPLineCChart,
-    this.enabledBorderwidth = 0.25,  this.surfixIconColor=kWebHeaderColor,
-  });
+  CustomTextBox(
+      {super.key,
+      required this.caption,
+      this.width = 65,
+      this.maxlength = 6,
+      required this.controller,
+      this.textInputType = TextInputType.text,
+      this.maxLine = 1,
+      this.height = 32,
+      this.textAlign = TextAlign.start,
+      required this.onChange,
+      this.borderRadious = 4.0,
+      this.fontColor = Colors.black87,
+      this.borderColor = Colors.black,
+      this.isPassword = false,
+      this.isFilled = false,
+      this.isReadonly = false,
+      this.isDisable = true,
+      this.hintTextColor = Colors.black,
+      this.labelTextColor = Colors.black,
+      this.focusedBorderColor = CPLineCChart,
+      this.focusedBorderWidth = 0.5,
+      this.enabledBorderColor = CPLineCChart,
+      this.enabledBorderwidth = 0.25,
+      this.surfixIconColor = kWebHeaderColor,
+      void Function(String)? onSubmitted})
+      : onSubmitted = onSubmitted ?? ((String v) {});
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +85,10 @@ class CustomTextBox extends StatelessWidget {
                 enabled: isDisable,
                 readOnly: isReadonly,
                 onChanged: (value) => onChange(value),
+                onSubmitted: (v) {
+                  onSubmitted(v);
+                },
+
                 keyboardType: textInputType,
                 obscureText: !isObsText ? isPassword : false,
                 inputFormatters: textInputType == TextInputType.multiline
@@ -141,7 +149,8 @@ class CustomTextBox extends StatelessWidget {
                               !isObsText
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              size: 20,color: surfixIconColor,
+                              size: 20,
+                              color: surfixIconColor,
                             ),
                           )
                         : null,
