@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
+import '../settings/config.dart';
+ 
 
 class CustomDatePicker extends StatefulWidget {
   // ignore: non_constant_identifier_names
@@ -10,16 +14,37 @@ class CustomDatePicker extends StatefulWidget {
   final double? width;
   final bool? isBackDate;
   final Color borderColor;
-
+   final Color fontColor;
+final TextAlign? textAlign;
+final bool isFilled;
+ final Color labelTextColor;
+ final Color hintTextColor;
+ final double borderRadious;
+ final Color focusedBorderColor;
+  final double focusedBorderWidth;
+  final Color enabledBorderColor;
+  final double enabledBorderwidth;
   const CustomDatePicker(
       {super.key,
+      // ignore: non_constant_identifier_names
       required this.date_controller,
       this.label = 'Select Date',
       this.bgColor = const Color.fromARGB(255, 218, 216, 216),
-      this.height = 35,
+      this.height = 32,
       this.width = 140,
-      this.borderColor = Colors.black38,
-      this.isBackDate = false});
+      this.borderColor =kTextBgColor,
+      this.isBackDate = false,
+        this.isFilled = false,
+        this.fontColor = Colors.black87, 
+        this.textAlign=TextAlign.start,
+          this.labelTextColor=Colors.black, 
+           this.hintTextColor= Colors.black, 
+            this.borderRadious=4.0, 
+             this.focusedBorderColor=CPLineCChart, 
+             this.focusedBorderWidth=0.5, 
+             this.enabledBorderColor=CPLineCChart, 
+             this.enabledBorderwidth=0.25,
+      });
 
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();
@@ -40,23 +65,48 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       width: widget.width,
       height: widget.height,
       child: Container(
-        decoration: BoxDecoration(
-          color: widget.bgColor,
+        decoration: const BoxDecoration(
+          //color: widget.bgColor,
           //border: Border.all(color: Colors.grey.shade400),
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
         child: TextFormField(
           onTap: () {
             getDates();
           },
           controller: widget.date_controller,
-          decoration: InputDecoration(
-            labelText: widget.label,
-            labelStyle: const TextStyle(fontSize: 14),
-            border: const OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: widget.borderColor, width: 0.5),
-            ),
+          style: GoogleFonts.cabin(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: widget.fontColor),
+                textAlignVertical: TextAlignVertical.center,
+
+                textAlign: widget.textAlign!,
+                decoration: InputDecoration(
+                  fillColor: Colors
+                      .white, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
+                  filled: widget.isFilled,
+                  labelText: widget.label,
+                   labelStyle:  TextStyle(
+              color:widget.labelTextColor, fontWeight: FontWeight.w300, fontSize: 14),
+          hintStyle:
+               TextStyle(color:widget. hintTextColor, fontWeight: FontWeight.w300),
+                  counterText: '',
+                  border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(widget. borderRadious)),
+                      borderSide: const BorderSide(color: Colors.white)),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(widget.borderRadious),
+                    borderSide:
+                         BorderSide(color:widget. focusedBorderColor, width: widget.focusedBorderWidth),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(widget.borderRadious),
+                    borderSide:
+                         BorderSide(color: widget. enabledBorderColor, width: widget.enabledBorderwidth),
+                  ),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
             suffixIcon: InkWell(

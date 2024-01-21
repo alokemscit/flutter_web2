@@ -50,12 +50,19 @@ dependencies:
   shared_preferences: ^2.2.2
   provider: ^6.0.5
   stacked: ^3.4.1+1
-  rive: ^0.12.1
+  rive: ^0.12.4
   remove_background: ^0.0.1
   glassmorphism: ^3.0.0
   glassmorphism_ui: ^0.3.0
   get: ^4.6.6
   context_menus: ^1.0.2
+  image_picker: ^1.0.4
+  path_provider: ^2.1.1
+  #awesome_dialog: ^3.2.0
+  cached_network_image: ^3.3.1
+  url_strategy: ^0.2.0
+  shelf: ^1.4.1
+  shelf_proxy: ^1.0.4
   
 dev_dependencies:
   flutter_test:
@@ -72,6 +79,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -85,7 +93,15 @@ flutter:
     - assets/Backgrounds/
     - assets/icons/
     - assets/RiveAssets/
-
+    - assets/rive/
+    - assets/rive/warning.riv
+    - assets/rive/success.riv
+    - assets/rive/info.riv
+    - assets/rive/question.riv
+    - assets/rive/error.riv
+    - assets/rive/info_reverse.riv
+    - assets/flare/
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
