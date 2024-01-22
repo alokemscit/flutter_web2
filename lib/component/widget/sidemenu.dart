@@ -50,12 +50,12 @@ class SideMenu extends StatelessWidget {
             BoxShadow(
               color: Colors.white,
               blurRadius: 0.5,
-              spreadRadius: 0.1,
+              spreadRadius: 1,
               offset: Offset(0, 0),
             )
           ],
           border:
-              Border(right: BorderSide(color: Colors.black12, width: 0.15))),
+              Border(right: BorderSide(color: Colors.black12, width: 0.35))),
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -128,7 +128,8 @@ class GenerateMenuItems extends StatelessWidget {
                                   blurRadius: 2,
                                   offset: Offset(0, 0),
                                 )
-                              ]),
+                              ]
+                              ),
                           child: ExpansionTile(
                               //   initiallyExpanded: true,
                               maintainState: true,

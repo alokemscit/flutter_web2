@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
@@ -50,10 +51,19 @@ class MyApp extends StatelessWidget {
         ],
         child: Consumer2<AuthProvider, AppTheme>(builder:
             (context, AuthProvider authNotifier, AppTheme appThemes, child) {
-          return MaterialApp(
+          return GetMaterialApp(
             scrollBehavior: kIsWeb? CustomScrollBehavior():null,
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
+            theme: ThemeData.light().copyWith(
+
+
+//ThemeData.light().copyWith(
+           // primaryColor: Colors.teal, // Adjust the color of the header
+            //accentColor: Colors.teal, // Adjust the color of the text and icons
+            colorScheme: const ColorScheme.light(primary: kWebHeaderColor),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+       //   ),
+        
               primaryColor: kWebHeaderColor,
               brightness:
                   appThemes.darkTheme ? Brightness.dark : Brightness.light,

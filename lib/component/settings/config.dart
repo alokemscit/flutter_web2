@@ -76,7 +76,7 @@ BoxDecoration BoxDecorationTopRounded = const BoxDecoration(
     boxShadow: [
       BoxShadow(
         color: Colors.white,
-        blurRadius: 5.1,
+        blurRadius: 15.1,
         spreadRadius: 3.1,
       )
     ]);

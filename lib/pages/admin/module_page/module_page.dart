@@ -12,6 +12,7 @@ class ModulePage extends StatelessWidget {
     TextEditingController txtSearch = TextEditingController();
     TextEditingController txtDesc = TextEditingController();
     String? iid;
+    print("Modle page");
     return MultiBlocProvider(
       // create: (context) => ModuleBloc(),
       providers: [

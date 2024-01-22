@@ -54,8 +54,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   @override
   void initState() {
     super.initState();
-    widget.date_controller.text =
-        DateFormat('dd/MM/yyyy').format(DateTime.now());
+   
+    // widget.date_controller.text =
+    //     DateFormat('dd/MM/yyyy').format(DateTime.now());
   }
 
   @override

@@ -50,7 +50,7 @@ class CustomTextBox extends StatelessWidget {
       this.isPassword = false,
       this.isFilled = false,
       this.isReadonly = false,
-      this.isDisable = true,
+      this.isDisable = false,
       this.hintTextColor = Colors.black,
       this.labelTextColor = Colors.black,
       this.focusedBorderColor = CPLineCChart,
@@ -82,7 +82,7 @@ class CustomTextBox extends StatelessWidget {
                 isObsText = state.isShow;
               }
               return TextField(
-                enabled: isDisable,
+                enabled: !isDisable,
                 readOnly: isReadonly,
                 onChanged: (value) => onChange(value),
                 onSubmitted: (v) {
@@ -125,6 +125,11 @@ class CustomTextBox extends StatelessWidget {
                     hintStyle: TextStyle(
                         color: hintTextColor, fontWeight: FontWeight.w300),
                     counterText: '',
+                    disabledBorder:  OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadious),
+                      borderSide: BorderSide(
+                          color: enabledBorderColor.withOpacity(0.1), width: enabledBorderwidth),
+                    ),
                     border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.all(Radius.circular(borderRadious)),

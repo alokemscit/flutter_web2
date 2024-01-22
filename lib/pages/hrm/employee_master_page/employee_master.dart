@@ -2,66 +2,98 @@
 
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:web_2/component/settings/config.dart';
+import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/custom_container.dart';
 import 'package:web_2/component/widget/custom_datepicker.dart';
 import 'package:web_2/component/widget/custom_dropdown.dart';
+import 'package:web_2/component/widget/custom_elevated_button.dart';
 import 'package:web_2/component/widget/custom_icon_button.dart';
 import 'package:web_2/component/widget/custom_textbox.dart';
+import 'package:web_2/pages/hrm/employee_master_page/widget/controller/employee_controller.dart';
 
 import '../../../component/widget/menubutton.dart';
 
+//Responsive(mobile: _mobile(), tablet: _desktopTab(), desktop: _desktopTab()),
+
 class EmployeeMaster extends StatelessWidget {
   const EmployeeMaster({super.key});
+
   @override
   Widget build(BuildContext context) {
+    //final EmployeeController econtroller = EmployeeController();
+    final EmployeeController econtroller = Get.put(EmployeeController());
+    
+    print("Call Widget");
+    //List<ModelMasterEmpTable> list = [];
     // print(MediaQuery.of(context).size.width.toString());
     return BlocProvider(
       create: (context) => EmployeeBloc(),
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: _leftPart(),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: _middlePart(),
-                  ),
-                  const Expanded(
-                    flex: 2,
-                    child: _RoghtPart(), //_rightPart(context, _image),
-                  ),
-                ],
-              ),
-            ),
-            const _TabContainer(),
-            const Expanded(
-              child: SingleChildScrollView(
-                  child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: _TabBody(),
-              )),
-            )
-          ],
+        backgroundColor: Colors.white,
+        body: Container(
+          margin: const EdgeInsets.only(top: 4, left: 4),
+          // child: _mobile()
+          child: Obx(() {
+            if (econtroller.isLoading.value) {
+              return const Center(child: CupertinoActivityIndicator());
+            }
+            if (econtroller.isError.value) {
+              return Text(
+                econtroller.errorMessage.value.toString(),
+                style: const TextStyle(color: Colors.red),
+              );
+            }
+            // list = econtroller.elist;
+            // print(list);
+            return Responsive(
+              mobile: _mobile(context, econtroller),
+              tablet: _desktopTab(context, econtroller),
+              desktop: _desktopTab(context, econtroller),
+            );
+          }),
         ),
       ),
     );
   }
 }
+
+_mobile(BuildContext context, EmployeeController econtroller) =>
+    SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _leftPart(econtroller),
+              _middlePart(context, econtroller),
+            ],
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          const _TabContainer(),
+          const _TabBody(),
+          // const Expanded(
+          //   child: SingleChildScrollView(
+          //       child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 12),
+          //     child: _TabBody(),
+          //   )),
+          // )
+        ],
+      ),
+    );
 
 class _TabBody extends StatelessWidget {
   const _TabBody({super.key});
@@ -84,6 +116,43 @@ class _TabBody extends StatelessWidget {
     );
   }
 }
+
+_desktopTab(BuildContext context, EmployeeController econtroller) =>
+    SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 5,
+                child: _leftPart(econtroller),
+              ),
+              Expanded(
+                flex: 5,
+                child: _middlePart(context, econtroller),
+              ),
+            ],
+          ),
+
+          const SizedBox(
+            height: 4,
+          ),
+          const _TabContainer(),
+          // const Expanded(
+          //   child: SingleChildScrollView(
+          //       child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 12),
+          //     child: _TabBody(),
+          //   )),
+          // )
+          _TabBody(),
+        ],
+      ),
+    );
 
 class _TabContainer extends StatelessWidget {
   const _TabContainer();
@@ -147,6 +216,7 @@ class _TabContainer extends StatelessWidget {
 }
 
 List<dynamic> _data = [
+  "Photo",
   "Reporting Authority",
   "Address",
   "Leave Info",
@@ -155,21 +225,30 @@ List<dynamic> _data = [
 ];
 
 List<Widget> _widget = [
+  _photoPart(),
   _Reporting_supervisor(),
   _Address(),
   CustomTextBox(
+      labelTextColor: Colors.black54,
       caption: "Leave Info",
       controller: TextEditingController(),
       onChange: (v) {}),
   CustomTextBox(
+      labelTextColor: Colors.black54,
       caption: "Employeement History",
       controller: TextEditingController(),
       onChange: (v) {}),
   CustomTextBox(
+      labelTextColor: Colors.black54,
       caption: "Academic History",
       controller: TextEditingController(),
       onChange: (v) {}),
 ];
+
+_photoPart() => const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: _RoghtPart(), //_rightPart(context, _image),
+    );
 
 _Address() {
   return Padding(
@@ -203,6 +282,7 @@ _Address() {
                                 children: [
                                   Expanded(
                                     child: CustomDropDown(
+                                        labelTextColor: Colors.black54,
                                         id: null,
                                         height: 32,
                                         labeltext: "District",
@@ -229,6 +309,7 @@ _Address() {
                                 children: [
                                   Expanded(
                                     child: CustomDropDown(
+                                        labelTextColor: Colors.black54,
                                         id: null,
                                         height: 32,
                                         labeltext: "Thana",
@@ -250,6 +331,7 @@ _Address() {
                           ],
                         ),
                         CustomTextBox(
+                            labelTextColor: Colors.black54,
                             caption: "Notes",
                             width: double.infinity,
                             textInputType: TextInputType.multiline,
@@ -293,6 +375,7 @@ _Address() {
                               children: [
                                 Expanded(
                                   child: CustomDropDown(
+                                      labelTextColor: Colors.black54,
                                       id: null,
                                       height: 32,
                                       labeltext: "District",
@@ -319,6 +402,7 @@ _Address() {
                               children: [
                                 Expanded(
                                   child: CustomDropDown(
+                                      labelTextColor: Colors.black54,
                                       id: null,
                                       height: 32,
                                       labeltext: "Thana",
@@ -340,6 +424,7 @@ _Address() {
                         ],
                       ),
                       CustomTextBox(
+                          labelTextColor: Colors.black54,
                           caption: "Notes",
                           width: double.infinity,
                           textInputType: TextInputType.multiline,
@@ -371,6 +456,7 @@ _Reporting_supervisor() {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomDropDown(
+                labelTextColor: Colors.black54,
                 id: null,
                 height: 33,
                 labeltext: "Report to",
@@ -381,6 +467,7 @@ _Reporting_supervisor() {
               width: 8,
             ),
             CustomTextBox(
+                labelTextColor: Colors.black54,
                 width: 120,
                 caption: "Emp ID",
                 isFilled: true,
@@ -424,9 +511,13 @@ _Reporting_supervisor() {
   );
 }
 
-_leftPart() {
+_leftPart(EmployeeController econtroller) {
+  print("Call Again");
+  String? pid, countryId, genderId, religionId, maritalId, bgId, identityId;
+  final TextEditingController txt_emp_name = TextEditingController();
   return Container(
-    decoration: BoxDecorationTopRounded,
+    decoration:
+        BoxDecorationTopRounded.copyWith(color: kWebBackgroundDeepColor),
     // height: 200,
     //  color: Colors.amber,
     child: Padding(
@@ -437,42 +528,50 @@ _leftPart() {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 4, bottom: 8),
+            Padding(
+              padding: const EdgeInsets.only(left: 4, bottom: 8),
               child: Text(
                 "Basic Information:",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
+                style: customTextStyle.copyWith(
                     fontStyle: FontStyle.italic,
-                    decoration: TextDecoration.underline),
+                    decoration: TextDecoration.underline,
+                    decorationColor: kWebHeaderColor,
+                    color: kWebHeaderColor),
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomTextBox(
-                  caption: "ID",
-                  width: 100,
-                  maxlength: 10,
-                  isFilled: true,
-                  controller: TextEditingController(),
-                  onChange: (v) {},
-                  onSubmitted: (p0) {
-                    //print("p0.characters");
-                  },
-                ),
+                Obx(() => CustomTextBox(
+                      labelTextColor: Colors.black54,
+                      isDisable: econtroller.isDisableID.value, // true,
+                      isReadonly: econtroller.isDisableID.value,
+                      caption: "ID",
+                      width: 100,
+                      maxlength: 10,
+                      isFilled: true,
+                      controller: TextEditingController(),
+                      onChange: (v) {},
+                      onSubmitted: (p0) {
+                        //print("p0.characters");
+                      },
+                    )),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    econtroller.setEnableDisableID();
+                  },
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                         border: Border.all(color: kWebBackgroundDeepColor)),
-                    child: const Icon(
-                      Icons.edit,
-                      size: 18,
-                      color: kGrayColor,
-                    ),
+                    child: Obx(() => Icon(
+                          econtroller.isDisableID.value
+                              ? Icons.edit
+                              : Icons.undo,
+                          size: 18,
+                          color: kGrayColor,
+                        )),
                   ),
                 ),
               ],
@@ -481,13 +580,14 @@ _leftPart() {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomDropDown(
-                    id: null,
-                    height: 33,
+                Obx(() => CustomDropDown(
+                    labelTextColor: Colors.black54,
+                    id: pid,
+                    height: 32,
                     labeltext: "Prefix",
-                    list: const [],
+                    list: _getDropdownItem(econtroller, "prefix"),
                     onTap: (v) {},
-                    width: 100),
+                    width: 100)),
                 const Icon(
                   Icons.launch_outlined,
                   size: 18,
@@ -497,13 +597,17 @@ _leftPart() {
                   width: 4,
                 ),
                 Expanded(
-                    child: CustomTextBox(
-                        caption: "Name",
-                        width: double.infinity,
-                        maxlength: 100,
-                        isFilled: true,
-                        controller: TextEditingController(),
-                        onChange: (v) {})),
+                  child: CustomTextBox(
+                      labelTextColor: Colors.black54,
+                      caption: "Name",
+                      width: double.infinity,
+                      maxlength: 100,
+                      isFilled: true,
+                      controller: txt_emp_name,
+                      onChange: (v) {
+                        //econtroller.setName(txt_emp_name.text);
+                      }),
+                ),
               ],
             ),
             Row(
@@ -513,7 +617,9 @@ _leftPart() {
                 Expanded(
                   flex: 3,
                   child: CustomDatePicker(
+                    labelTextColor: Colors.black54,
                     date_controller: TextEditingController(),
+                    isFilled: true,
                     label: "Date of Birth",
                     bgColor: Colors.white,
                     height: 32,
@@ -525,17 +631,19 @@ _leftPart() {
                 ),
                 Expanded(
                   flex: 5,
-                  child: CustomDropDown(
-                      id: null,
+                  child: Obx(() => CustomDropDown(
+                      labelTextColor: Colors.black54,
+                      id: countryId,
                       height: 32,
                       labeltext: "Nationality",
-                      list: const [],
+                      list: _getDropdownItem(econtroller, "country"),
                       onTap: (v) {},
-                      width: 100),
+                      width: 100)),
                 ),
               ],
             ),
             CustomTextBox(
+                labelTextColor: Colors.black54,
                 caption: "Father's Name",
                 width: double.infinity,
                 maxlength: 100,
@@ -543,6 +651,7 @@ _leftPart() {
                 controller: TextEditingController(),
                 onChange: (v) {}),
             CustomTextBox(
+                labelTextColor: Colors.black54,
                 caption: "Mother's name",
                 width: double.infinity,
                 maxlength: 100,
@@ -550,6 +659,7 @@ _leftPart() {
                 controller: TextEditingController(),
                 onChange: (v) {}),
             CustomTextBox(
+                labelTextColor: Colors.black54,
                 caption: "Spouse Name",
                 width: double.infinity,
                 maxlength: 100,
@@ -568,10 +678,11 @@ _leftPart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                            id: null,
+                            labelTextColor: Colors.black54,
+                            id: genderId,
                             height: 32,
                             labeltext: "Gender",
-                            list: const [],
+                            list: _getDropdownItem(econtroller, "gender"),
                             onTap: (v) {},
                             width: 100),
                       ),
@@ -594,10 +705,11 @@ _leftPart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                            id: null,
+                            labelTextColor: Colors.black54,
+                            id: religionId,
                             height: 32,
                             labeltext: "Religion",
-                            list: const [],
+                            list: _getDropdownItem(econtroller, "religion"),
                             onTap: (v) {},
                             width: 100),
                       ),
@@ -623,10 +735,11 @@ _leftPart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                            id: null,
+                            labelTextColor: Colors.black54,
+                            id: maritalId,
                             height: 32,
-                            labeltext: "Maritial Status",
-                            list: const [],
+                            labeltext: "Marital Status",
+                            list: _getDropdownItem(econtroller, "marital"),
                             onTap: (v) {},
                             width: 100),
                       ),
@@ -649,10 +762,11 @@ _leftPart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                            id: null,
+                            labelTextColor: Colors.black54,
+                            id: bgId,
                             height: 32,
                             labeltext: "Blood Group",
-                            list: const [],
+                            list: _getDropdownItem(econtroller, "bloodgroup"),
                             onTap: (v) {},
                             width: 100),
                       ),
@@ -675,13 +789,15 @@ _leftPart() {
               children: [
                 Expanded(
                   flex: 3,
-                  child: CustomDropDown(
-                      id: null,
+                  child: Obx(() => CustomDropDown(
+                      labelTextColor: Colors.black54,
+                      //identitytype
+                      id: identityId,
                       height: 32,
                       labeltext: "Identity Type",
-                      list: const [],
+                      list: _getDropdownItem(econtroller, "identitytype"),
                       onTap: (v) {},
-                      width: 100),
+                      width: 100)),
                 ),
                 const SizedBox(
                   width: 8,
@@ -689,6 +805,7 @@ _leftPart() {
                 Expanded(
                   flex: 5,
                   child: CustomTextBox(
+                      labelTextColor: Colors.black54,
                       caption: "Identity Number",
                       width: double.infinity,
                       maxlength: 100,
@@ -705,33 +822,45 @@ _leftPart() {
   );
 }
 
-_middlePart() {
+_getDropdownItem(EmployeeController econtroller, String tag) =>
+    econtroller.elist.where((p0) => p0.tp == tag && p0.status == '1').map((e) {
+      return DropdownMenuItem<String>(
+        value: e.id,
+        child: Text(e.name!),
+      );
+    }).toList();
+
+_middlePart(BuildContext context, EmployeeController econtroller) {
+  String? dpId, desigId;
   return Container(
-    decoration: BoxDecorationTopRounded,
+    decoration:
+        BoxDecorationTopRounded.copyWith(color: kWebBackgroundDeepColor),
     // height: 200,
     //  color: Colors.amber,
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      padding: EdgeInsets.symmetric(
+          horizontal: 4, vertical:  8  ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: EdgeInsets.symmetric(
+            horizontal:  8  ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 4, bottom: 8),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: 4, bottom:   8  ),
               child: Text(
                 "General Official Information:",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
+                style: customTextStyle.copyWith(
                     fontStyle: FontStyle.italic,
-                    decoration: TextDecoration.underline),
+                    decoration: TextDecoration.underline,
+                    decorationColor: kWebHeaderColor,
+                    color: kWebHeaderColor),
               ),
             ),
-            const SizedBox(
-              height: 38,
+            SizedBox(
+              height:  38 ,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -739,6 +868,7 @@ _middlePart() {
               children: [
                 Expanded(
                   child: CustomDropDown(
+                      labelTextColor: Colors.black54,
                       id: null,
                       height: 32,
                       labeltext: "Company",
@@ -768,10 +898,11 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                            id: null,
+                            labelTextColor: Colors.black54,
+                            id: desigId,
                             height: 32,
                             labeltext: "Designation",
-                            list: const [],
+                            list: _getDropdownItem(econtroller, "designation"),
                             onTap: (v) {},
                             width: 100),
                       ),
@@ -794,6 +925,7 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
+                            labelTextColor: Colors.black54,
                             id: null,
                             height: 32,
                             labeltext: "Grade",
@@ -823,10 +955,11 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
-                            id: null,
+                            labelTextColor: Colors.black54,
+                            id: dpId,
                             height: 32,
                             labeltext: "Department",
-                            list: const [],
+                            list: _getDropdownItem(econtroller, "department"),
                             onTap: (v) {},
                             width: 100),
                       ),
@@ -849,6 +982,7 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
+                            labelTextColor: Colors.black54,
                             id: null,
                             height: 32,
                             labeltext: "Unit/Section",
@@ -878,6 +1012,7 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
+                            labelTextColor: Colors.black54,
                             id: null,
                             height: 32,
                             labeltext: "Type of Employeement",
@@ -904,6 +1039,7 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
+                            labelTextColor: Colors.black54,
                             id: null,
                             height: 32,
                             labeltext: "Current Job Status",
@@ -933,7 +1069,9 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDatePicker(
+                          labelTextColor: Colors.black54,
                           date_controller: TextEditingController(),
+                          isFilled: true,
                           label: "Date of Join",
                           bgColor: Colors.white,
                           height: 32,
@@ -954,6 +1092,7 @@ _middlePart() {
                     children: [
                       Expanded(
                         child: CustomDropDown(
+                            labelTextColor: Colors.black54,
                             id: null,
                             height: 32,
                             labeltext: "Current Job Status",
@@ -975,15 +1114,31 @@ _middlePart() {
               ],
             ),
             CustomTextBox(
+                labelTextColor: Colors.black54,
                 caption: "Notes",
                 width: double.infinity,
                 textInputType: TextInputType.multiline,
                 isFilled: true,
-                maxLine: 4,
-                maxlength: 500,
-                height: 116,
+                maxLine: 3,
+                // maxlength: 250,
+                height: 70,
                 controller: TextEditingController(),
                 onChange: (v) {}),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomElevatedButton(
+                  child: Text("Save"),
+                  onTap: () {
+                    econtroller.SaveData();
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            )
           ],
         ),
       ),
