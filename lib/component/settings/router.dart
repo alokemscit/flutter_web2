@@ -11,7 +11,7 @@ import '../../pages/appointment/doctor_appointment.dart';
 import '../../pages/appointment/doctor_leave_page/doctor_leave_page.dart';
 import '../../pages/appointment/time_slot_page/time_slot_page.dart';
 
-Widget getPage(ModuleMenuList module, String id) {
+Widget getPage( String id) {
   switch (id) {
     case "28":
       {

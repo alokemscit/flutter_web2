@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:web_2/component/settings/responsive.dart';
@@ -48,7 +49,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<SingleChildWidget> providers = _provider(context);
-     
+
     return MultiProvider(
       providers: providers,
       child: Scaffold(
@@ -66,7 +67,7 @@ class HomePage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class HomePagebodyWidget extends StatelessWidget {
-   HomePagebodyWidget({
+  HomePagebodyWidget({
     super.key,
     required this.module,
   });
@@ -75,7 +76,6 @@ class HomePagebodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     var sidemenu = SideMenu(
       module: module,
       userDetailsForDrawer: UserDetailsForDrawer(module: module),
@@ -241,6 +241,16 @@ class DesktopWidget extends StatelessWidget {
   }
 }
 
+// void _disposePage(int pageIndex) {
+//     // Do any cleanup or resource disposal related to the page at the given index
+//     // For example, if your page has a StatefulWidget, you can call its dispose method
+//     // You may need to maintain a list of your pages' states to call their dispose methods
+
+//     // For demonstration purposes, assuming MyPage is a StatefulWidget
+//     final GlobalKey<_MyPageState> key = _pageKeys[pageIndex];
+//     key.currentState?.dispose();
+//   }
+
 class TabAndBodyWidget extends StatelessWidget {
   const TabAndBodyWidget({
     super.key,
@@ -261,8 +271,12 @@ class TabAndBodyWidget extends StatelessWidget {
                 child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
                     builder: (context, state) {
                   var id = state.id;
+
+                  Get.reset();
+                  Get.deleteAll();
                   // print(id);
-                  return getPage(module, id);
+                  //Get.to(getPage(module, id));
+                  return getPage(id);
                 }),
               )
             ],
@@ -276,9 +290,18 @@ class TabAndBodyWidget extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
                       builder: (context, state) {
+                    //  print("-------------------- block call");
+                    // if (state.delid != '') {
+                    //  return SizedBox();
+                    //}
+                    // print("Delete block call");
+
+//print("-------------------- block call");
+                    print(state.id);
+
                     var id = state.id;
                     // print(id);
-                    return getPage(module, id);
+                    return getPage(id);
                   }),
                 )
               ],
@@ -353,12 +376,38 @@ class TabMenuWithEvent extends StatelessWidget {
                         //print(menuitem.id);
                       },
                       crossButtonClick: () {
+                        // Get.reset();
+                        // Get.deleteAll();
+
+                        // try {
+
+                        //   var x = getPage(menuitem.id);
+                        //   var methods = getMethods(x);
+                        //   methods.forEach((method) {
+                        //     method();
+                        //   });
+
+                        //  // print(t);
+                        // } catch (e) {
+                        //   print(e.toString());
+                        // }
+
+                        // deleteController(menuitem.id);
+                        var menuid=menuitem.id;
                         context
                             .read<MenuItemBloc>()
                             .add(ItemMenuDelete(menuitem: menuitem));
-                        context1
-                            .read<CurrentIDBloc>()
-                            .add(SetCurrentId(id: NextIndex(itemList, index)));
+
+                        context1.read<CurrentIDBloc>().add(SetCurrentId(
+                             
+                            id: NextIndex(itemList, index)));
+
+                        // Future.delayed(const Duration(milliseconds: 3000));
+
+                        Future.delayed(const Duration(microseconds: 100), () {
+                        deleteController(menuid);
+                        });
+
                       },
                       color: state1.id.trim() != menuitem.id.trim()
                           ? kSecondaryColor
@@ -376,6 +425,24 @@ class TabMenuWithEvent extends StatelessWidget {
       },
     );
   }
+}
+
+void deleteController(String id) {
+  try {
+    var x = getPage(id);
+    var methods = getMethods(x);
+    methods.forEach((method) {
+      method();
+    });
+
+    // print(t);
+  } catch (e) {
+    print(e.toString());
+  }
+}
+
+List<Function> getMethods(x) {
+  return [x.disposeController];
 }
 
 class DrawerMenueIcon extends StatelessWidget {
@@ -509,6 +576,11 @@ class CurrentIDSet extends CurrentIdState {
   CurrentIDSet({required super.id, required this.currentId});
 }
 
+class CurrentIdDeleteState extends CurrentIdState {
+  final String delid;
+  CurrentIdDeleteState({required this.delid, required super.id});
+}
+
 abstract class CurrenIdEvent {
   final String id;
 
@@ -516,6 +588,7 @@ abstract class CurrenIdEvent {
 }
 
 class SetCurrentId extends CurrenIdEvent {
+ 
   SetCurrentId({required super.id});
 }
 
@@ -523,7 +596,10 @@ class CurrentIDBloc extends Bloc<CurrenIdEvent, CurrentIdState> {
   CurrentIDBloc() : super(CurrentIDInit(id: "")) {
     on<CurrenIdEvent>((event, emit) {
       if (event is SetCurrentId) {
+        //emit(CurrentIdDeleteState(delid: event.delid,id: event.id));
+
         emit(CurrentIDSet(id: event.id, currentId: event.id));
+        //
       }
     });
   }

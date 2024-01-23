@@ -41,10 +41,10 @@ class CustomTextBox extends StatelessWidget {
       required this.controller,
       this.textInputType = TextInputType.text,
       this.maxLine = 1,
-      this.height = 32,
+      this.height = 28,
       this.textAlign = TextAlign.start,
       required this.onChange,
-      this.borderRadious = 4.0,
+      this.borderRadious = 2.0,
       this.fontColor = Colors.black87,
       this.borderColor = Colors.black,
       this.isPassword = false,
@@ -53,13 +53,19 @@ class CustomTextBox extends StatelessWidget {
       this.isDisable = false,
       this.hintTextColor = Colors.black,
       this.labelTextColor = Colors.black,
-      this.focusedBorderColor = CPLineCChart,
-      this.focusedBorderWidth = 0.5,
-      this.enabledBorderColor = CPLineCChart,
-      this.enabledBorderwidth = 0.25,
+      this.focusedBorderColor =  Colors.black,
+      this.focusedBorderWidth = 0.3,
+      this.enabledBorderColor =  Colors.grey,
+      this.enabledBorderwidth = 0.4,
       this.surfixIconColor = kWebHeaderColor,
       void Function(String)? onSubmitted})
       : onSubmitted = onSubmitted ?? ((String v) {});
+
+
+ 
+                   
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,28 +113,28 @@ class CustomTextBox extends StatelessWidget {
                 //   textCapitalization : TextCapitalization.none,
                 // keyboardType: TextInputType.number,
                 style: GoogleFonts.cabin(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: fontColor),
                 textAlignVertical: TextAlignVertical.center,
 
                 textAlign: textAlign!,
                 decoration: InputDecoration(
-                    fillColor: Colors
-                        .white, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
+                    fillColor: !isDisable? Colors
+                        .white:Colors.white70, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
                     filled: isFilled,
                     labelText: caption,
                     labelStyle: TextStyle(
                         color: labelTextColor,
                         fontWeight: FontWeight.w300,
-                        fontSize: 14),
+                        fontSize: 13),
                     hintStyle: TextStyle(
                         color: hintTextColor, fontWeight: FontWeight.w300),
                     counterText: '',
                     disabledBorder:  OutlineInputBorder(
                       borderRadius: BorderRadius.circular(borderRadious),
                       borderSide: BorderSide(
-                          color: enabledBorderColor.withOpacity(0.1), width: enabledBorderwidth),
+                          color: enabledBorderColor.withOpacity(0.8), width: enabledBorderwidth),
                     ),
                     border: OutlineInputBorder(
                         borderRadius:

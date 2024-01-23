@@ -251,7 +251,7 @@ class GenerateMenuItems extends StatelessWidget {
                                           }
                                           context.read<CurrentIDBloc>().add(
                                               SetCurrentId(
-                                                  id: e.smId.toString()));
+                                                  id: e.smId.toString(),));
                                         },
                                       ),
                                     );

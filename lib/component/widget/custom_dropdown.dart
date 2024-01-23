@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../settings/config.dart';
+ 
  
 
 class CustomDropDown extends StatelessWidget {
@@ -10,23 +10,30 @@ class CustomDropDown extends StatelessWidget {
       required this.id,
       required this.list,
       required this.onTap,
-      this.height = 32.5,
+      this.height = 28,
       required this.width,
       this.borderColor = Colors.black38,
       this.labeltext = 'Select',
-      this.borderRadious = 4.0,
+      this.borderRadious = 2,
       this.fontColor = Colors.black87,
       this.isFilled = true,
       this.dropdownColor = Colors.white,
       this.fillColor = Colors.white,
-      this.focusedBorderColor=CPLineCChart, 
+      this.focusedBorderColor=Colors.black, 
       this.focusedBorderWidth=0.3, 
-      this.enabledBorderColor=CPLineCChart,
-       this.enabledBorderwidth= 0.2, 
+      this.enabledBorderColor=Colors.grey,
+       this.enabledBorderwidth= 0.4, 
        this.hintTextColor= Colors.black,
         this.labelTextColor= Colors.black,
       
       });
+
+   
+                    
+              
+
+
+
   final double? height;
   final double? width;
   final String? id;
@@ -59,7 +66,7 @@ final Color fillColor;
         height: height,
         child: DropdownButtonFormField(
            style: GoogleFonts.roboto(
-            fontSize: 14, fontWeight: FontWeight.w500, color: fontColor),
+            fontSize: 13, fontWeight: FontWeight.w500, color: fontColor),
           value: id,
           items: list,
           onChanged: onTap,
@@ -73,7 +80,7 @@ final Color fillColor;
               labelStyle:  TextStyle(
                       color: labelTextColor,
                       fontWeight: FontWeight.w300,
-                      fontSize: 14),
+                      fontSize: 13),
                   hintStyle:  TextStyle(
                       color:hintTextColor, fontWeight: FontWeight.w300),
             //labelStyle: const TextStyle(fontSize: 14),

@@ -6,19 +6,24 @@ import 'package:web_2/pages/hrm/employee_master_page/model/model_emp_load_master
 import '../../../../../component/settings/config.dart';
 
 class EmployeeController extends GetxController {
+
+ 
   var isDisableID = true.obs;
   var elist = <ModelMasterEmpTable>[].obs;
   //var elist_prifix = <ModelMasterEmpTable>[].obs;
   var isLoading = false.obs;
   var isError = false.obs;
   var errorMessage = "".obs;
+  var companyName = "".obs;
 
-  late TextEditingController txt_emp_name = TextEditingController();
+  final TextEditingController txt_emp_name = TextEditingController();
 
-
-   SaveData(){
+  SaveData() {
     print(txt_emp_name.text);
-   }
+  }
+
+
+    
 
   setEnableDisableID() {
     isDisableID(!isDisableID.value);
@@ -26,6 +31,7 @@ class EmployeeController extends GetxController {
 
   @override
   void onInit() async {
+    print("init call");
     isLoading(true);
     data_api2 api = data_api2();
     try {
@@ -36,6 +42,7 @@ class EmployeeController extends GetxController {
         isError(true);
         errorMessage('You have to re login!');
       } else {
+        companyName(user.cname);
         var x = await api.createLead([
           {"tag": "13", "cid": user.cid.toString()}
         ]);
@@ -58,10 +65,15 @@ class EmployeeController extends GetxController {
     super.onInit();
   }
 
+ 
+  
+
   @override
   void onClose() {
     txt_emp_name.dispose();
     elist.close();
+    super.dispose();
+    print("super call dispose");
     super.onClose();
   }
 }

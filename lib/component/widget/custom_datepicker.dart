@@ -30,7 +30,7 @@ final bool isFilled;
       required this.date_controller,
       this.label = 'Select Date',
       this.bgColor = const Color.fromARGB(255, 218, 216, 216),
-      this.height = 32,
+      this.height = 28,
       this.width = 140,
       this.borderColor =kTextBgColor,
       this.isBackDate = false,
@@ -39,12 +39,20 @@ final bool isFilled;
         this.textAlign=TextAlign.start,
           this.labelTextColor=Colors.black, 
            this.hintTextColor= Colors.black, 
-            this.borderRadious=4.0, 
-             this.focusedBorderColor=CPLineCChart, 
-             this.focusedBorderWidth=0.5, 
-             this.enabledBorderColor=CPLineCChart, 
-             this.enabledBorderwidth=0.25,
+            this.borderRadious=2, 
+             this.focusedBorderColor=Colors.black, 
+             this.focusedBorderWidth=0.3, 
+             this.enabledBorderColor=Colors.grey, 
+             this.enabledBorderwidth=0.4,
       });
+
+
+
+ 
+                   
+                    
+                  
+
 
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();
@@ -77,7 +85,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           },
           controller: widget.date_controller,
           style: GoogleFonts.cabin(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: widget.fontColor),
                 textAlignVertical: TextAlignVertical.center,
@@ -89,7 +97,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   filled: widget.isFilled,
                   labelText: widget.label,
                    labelStyle:  TextStyle(
-              color:widget.labelTextColor, fontWeight: FontWeight.w300, fontSize: 14),
+              color:widget.labelTextColor, fontWeight: FontWeight.w300, fontSize: 13),
           hintStyle:
                TextStyle(color:widget. hintTextColor, fontWeight: FontWeight.w300),
                   counterText: '',

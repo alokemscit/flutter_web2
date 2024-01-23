@@ -26,43 +26,49 @@ import '../../../component/widget/menubutton.dart';
 class EmployeeMaster extends StatelessWidget {
   const EmployeeMaster({super.key});
 
+  void disposeController() {
+    try {
+      Get.delete<EmployeeController>();
+    } catch (e) {
+      print('Error disposing EmployeeController: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    //final EmployeeController econtroller = EmployeeController();
+    //  Get.delete<EmployeeController>();
+    // Get.delete<EmployeeController>();
     final EmployeeController econtroller = Get.put(EmployeeController());
-    
-    print("Call Widget");
-    //List<ModelMasterEmpTable> list = [];
-    // print(MediaQuery.of(context).size.width.toString());
+
+    print("Call Widget employee");
+
     return BlocProvider(
       create: (context) => EmployeeBloc(),
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
-          margin: const EdgeInsets.only(top: 4, left: 4),
-          // child: _mobile()
-          child: Obx(() {
-            if (econtroller.isLoading.value) {
-              return const Center(child: CupertinoActivityIndicator());
-            }
-            if (econtroller.isError.value) {
-              return Text(
-                econtroller.errorMessage.value.toString(),
-                style: const TextStyle(color: Colors.red),
-              );
-            }
-            // list = econtroller.elist;
-            // print(list);
-            return Responsive(
-              mobile: _mobile(context, econtroller),
-              tablet: _desktopTab(context, econtroller),
-              desktop: _desktopTab(context, econtroller),
+        body: Obx(() {
+          if (econtroller.isLoading.value) {
+            return const Center(child: CupertinoActivityIndicator());
+          }
+          if (econtroller.isError.value) {
+            return Text(
+              econtroller.errorMessage.value.toString(),
+              style: const TextStyle(color: Colors.red),
             );
-          }),
-        ),
+          }
+          // list = econtroller.elist;
+          // print(list);
+          return Responsive(
+            mobile: _mobile(context, econtroller),
+            tablet: _desktopTab(context, econtroller),
+            desktop: _desktopTab(context, econtroller),
+          );
+        }),
       ),
     );
   }
+
+ 
 }
 
 _mobile(BuildContext context, EmployeeController econtroller) =>
@@ -119,38 +125,36 @@ class _TabBody extends StatelessWidget {
 
 _desktopTab(BuildContext context, EmployeeController econtroller) =>
     SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 5,
-                child: _leftPart(econtroller),
-              ),
-              Expanded(
-                flex: 5,
-                child: _middlePart(context, econtroller),
-              ),
-            ],
-          ),
-
-          const SizedBox(
-            height: 4,
-          ),
-          const _TabContainer(),
-          // const Expanded(
-          //   child: SingleChildScrollView(
-          //       child: Padding(
-          //     padding: EdgeInsets.symmetric(horizontal: 12),
-          //     child: _TabBody(),
-          //   )),
-          // )
-          _TabBody(),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: _leftPart(econtroller),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  flex: 5,
+                  child: _middlePart(context, econtroller),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            const _TabContainer(),
+            const _TabBody(),
+          ],
+        ),
       ),
     );
 
@@ -512,311 +516,333 @@ _Reporting_supervisor() {
 }
 
 _leftPart(EmployeeController econtroller) {
-  print("Call Again");
+  // print("Call Again");
   String? pid, countryId, genderId, religionId, maritalId, bgId, identityId;
   final TextEditingController txt_emp_name = TextEditingController();
   return Container(
+    // decoration:customBoxDecoration.copyWith(color: kWebBackgroundDeepColor),
     decoration:
         BoxDecorationTopRounded.copyWith(color: kWebBackgroundDeepColor),
     // height: 200,
     //  color: Colors.amber,
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 8),
-              child: Text(
-                "Basic Information:",
-                style: customTextStyle.copyWith(
-                    fontStyle: FontStyle.italic,
-                    decoration: TextDecoration.underline,
-                    decorationColor: kWebHeaderColor,
-                    color: kWebHeaderColor),
-              ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 18,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8, top: 2),
+            child: Text(
+              "Basic Information:",
+              style: customTextStyle.copyWith(
+                  fontStyle: FontStyle.italic,
+                  decoration: TextDecoration.underline,
+                  decorationColor: kWebHeaderColor,
+                  color: kWebHeaderColor),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Obx(() => CustomTextBox(
-                      labelTextColor: Colors.black54,
-                      isDisable: econtroller.isDisableID.value, // true,
-                      isReadonly: econtroller.isDisableID.value,
-                      caption: "ID",
-                      width: 100,
-                      maxlength: 10,
-                      isFilled: true,
-                      controller: TextEditingController(),
-                      onChange: (v) {},
-                      onSubmitted: (p0) {
-                        //print("p0.characters");
-                      },
-                    )),
-                InkWell(
-                  onTap: () {
-                    econtroller.setEnableDisableID();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: kWebBackgroundDeepColor)),
-                    child: Obx(() => Icon(
-                          econtroller.isDisableID.value
-                              ? Icons.edit
-                              : Icons.undo,
-                          size: 18,
-                          color: kGrayColor,
-                        )),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Obx(() => CustomDropDown(
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Obx(() => CustomTextBox(
                     labelTextColor: Colors.black54,
-                    id: pid,
-                    height: 32,
-                    labeltext: "Prefix",
-                    list: _getDropdownItem(econtroller, "prefix"),
+                    isDisable: econtroller.isDisableID.value, // true,
+                    isReadonly: econtroller.isDisableID.value,
+                    caption: "ID",
+                    width: 100,
+                    maxlength: 10,
+                    height: 28,
+                    isFilled: true,
+                    controller: TextEditingController(),
+                    onChange: (v) {},
+                    onSubmitted: (p0) {
+                      //print("p0.characters");
+                    },
+                  )),
+              InkWell(
+                onTap: () {
+                  econtroller.setEnableDisableID();
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: kWebBackgroundDeepColor)),
+                  child: Obx(() => Icon(
+                        econtroller.isDisableID.value ? Icons.edit : Icons.undo,
+                        size: 18,
+                        color: kGrayColor,
+                      )),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Obx(() => CustomDropDown(
+                  labelTextColor: Colors.black54,
+                  id: pid,
+                  height: 28,
+                  borderRadious: 2,
+                  enabledBorderColor: Colors.grey,
+                  focusedBorderColor: Colors.black,
+                  enabledBorderwidth: 0.4,
+                  focusedBorderWidth: 0.3,
+                  labeltext: "Prefix",
+                  list: _getDropdownItem(econtroller, "prefix"),
+                  onTap: (v) {},
+                  width: 100)),
+              const Icon(
+                Icons.launch_outlined,
+                size: 18,
+                color: kGrayColor,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              Expanded(
+                child: CustomTextBox(
+                    labelTextColor: Colors.black54,
+                    caption: "Name",
+                    borderRadious: 2,
+                    enabledBorderColor: Colors.grey,
+                    focusedBorderColor: Colors.black,
+                    enabledBorderwidth: 0.4,
+                    focusedBorderWidth: 0.3,
+                    width: double.infinity,
+                    maxlength: 100,
+                    height: 28,
+                    isFilled: true,
+                    controller: econtroller.txt_emp_name,
+                    onChange: (v) {
+                      //econtroller.setName(txt_emp_name.text);
+                    }),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 3,
+                child: CustomDatePicker(
+                  labelTextColor: Colors.black54,
+                  date_controller: TextEditingController(),
+                  isFilled: true,
+                  label: "Date of Birth",
+                  borderRadious: 2,
+                  enabledBorderColor: Colors.grey,
+                  focusedBorderColor: Colors.black,
+                  enabledBorderwidth: 0.4,
+                  focusedBorderWidth: 0.3,
+                  bgColor: Colors.white,
+                  height: 28,
+                  isBackDate: true,
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: Obx(() => CustomDropDown(
+                    labelTextColor: Colors.black54,
+                    id: countryId,
+                    height: 28,
+                    labeltext: "Nationality",
+                    list: _getDropdownItem(econtroller, "country"),
                     onTap: (v) {},
                     width: 100)),
-                const Icon(
-                  Icons.launch_outlined,
-                  size: 18,
-                  color: kGrayColor,
+              ),
+            ],
+          ),
+          CustomTextBox(
+              labelTextColor: Colors.black54,
+              caption: "Father's Name",
+              width: double.infinity,
+              height: 28,
+              maxlength: 100,
+              isFilled: true,
+              controller: TextEditingController(),
+              onChange: (v) {}),
+          CustomTextBox(
+              labelTextColor: Colors.black54,
+              caption: "Mother's name",
+              width: double.infinity,
+              maxlength: 100,
+              height: 28,
+              isFilled: true,
+              controller: TextEditingController(),
+              onChange: (v) {}),
+          CustomTextBox(
+              labelTextColor: Colors.black54,
+              caption: "Spouse Name",
+              width: double.infinity,
+              maxlength: 100,
+              height: 28,
+              isFilled: true,
+              controller: TextEditingController(),
+              onChange: (v) {}),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: genderId,
+                          height: 28,
+                          labeltext: "Gender",
+                          list: _getDropdownItem(econtroller, "gender"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: 4,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: religionId,
+                          height: 28,
+                          labeltext: "Religion",
+                          list: _getDropdownItem(econtroller, "religion"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: CustomTextBox(
-                      labelTextColor: Colors.black54,
-                      caption: "Name",
-                      width: double.infinity,
-                      maxlength: 100,
-                      isFilled: true,
-                      controller: txt_emp_name,
-                      onChange: (v) {
-                        //econtroller.setName(txt_emp_name.text);
-                      }),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: maritalId,
+                          height: 28,
+                          labeltext: "Marital Status",
+                          list: _getDropdownItem(econtroller, "marital"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: CustomDatePicker(
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: bgId,
+                          height: 28,
+                          labeltext: "Blood Group",
+                          list: _getDropdownItem(econtroller, "bloodgroup"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.launch_outlined,
+                        size: 18,
+                        color: kGrayColor,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 3,
+                child: Obx(() => CustomDropDown(
                     labelTextColor: Colors.black54,
-                    date_controller: TextEditingController(),
+                    //identitytype
+                    id: identityId,
+                    height: 28,
+                    labeltext: "Identity Type",
+                    list: _getDropdownItem(econtroller, "identitytype"),
+                    onTap: (v) {},
+                    width: 100)),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: CustomTextBox(
+                    labelTextColor: Colors.black54,
+                    caption: "Identity Number",
+                    width: double.infinity,
+                    height: 28,
+                    maxlength: 100,
                     isFilled: true,
-                    label: "Date of Birth",
-                    bgColor: Colors.white,
-                    height: 32,
-                    isBackDate: true,
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Obx(() => CustomDropDown(
-                      labelTextColor: Colors.black54,
-                      id: countryId,
-                      height: 32,
-                      labeltext: "Nationality",
-                      list: _getDropdownItem(econtroller, "country"),
-                      onTap: (v) {},
-                      width: 100)),
-                ),
-              ],
-            ),
-            CustomTextBox(
-                labelTextColor: Colors.black54,
-                caption: "Father's Name",
-                width: double.infinity,
-                maxlength: 100,
-                isFilled: true,
-                controller: TextEditingController(),
-                onChange: (v) {}),
-            CustomTextBox(
-                labelTextColor: Colors.black54,
-                caption: "Mother's name",
-                width: double.infinity,
-                maxlength: 100,
-                isFilled: true,
-                controller: TextEditingController(),
-                onChange: (v) {}),
-            CustomTextBox(
-                labelTextColor: Colors.black54,
-                caption: "Spouse Name",
-                width: double.infinity,
-                maxlength: 100,
-                isFilled: true,
-                controller: TextEditingController(),
-                onChange: (v) {}),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: genderId,
-                            height: 32,
-                            labeltext: "Gender",
-                            list: _getDropdownItem(econtroller, "gender"),
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: religionId,
-                            height: 32,
-                            labeltext: "Religion",
-                            list: _getDropdownItem(econtroller, "religion"),
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: maritalId,
-                            height: 32,
-                            labeltext: "Marital Status",
-                            list: _getDropdownItem(econtroller, "marital"),
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: bgId,
-                            height: 32,
-                            labeltext: "Blood Group",
-                            list: _getDropdownItem(econtroller, "bloodgroup"),
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: const Icon(
-                          Icons.launch_outlined,
-                          size: 18,
-                          color: kGrayColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Obx(() => CustomDropDown(
-                      labelTextColor: Colors.black54,
-                      //identitytype
-                      id: identityId,
-                      height: 32,
-                      labeltext: "Identity Type",
-                      list: _getDropdownItem(econtroller, "identitytype"),
-                      onTap: (v) {},
-                      width: 100)),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: CustomTextBox(
-                      labelTextColor: Colors.black54,
-                      caption: "Identity Number",
-                      width: double.infinity,
-                      maxlength: 100,
-                      isFilled: true,
-                      controller: TextEditingController(),
-                      onChange: (v) {}),
-                ),
-              ],
-            ),
-          ],
-        ),
+                    controller: TextEditingController(),
+                    onChange: (v) {}),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 8,
+          )
+        ],
       ),
     ),
   );
@@ -838,309 +864,303 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
     // height: 200,
     //  color: Colors.amber,
     child: Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 4, vertical:  8  ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal:  8  ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 4, bottom:   8  ),
-              child: Text(
-                "General Official Information:",
-                style: customTextStyle.copyWith(
-                    fontStyle: FontStyle.italic,
-                    decoration: TextDecoration.underline,
-                    decorationColor: kWebHeaderColor,
-                    color: kWebHeaderColor),
-              ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 18,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8, top: 2),
+            child: Text(
+              "General Official Information:",
+              style: customTextStyle.copyWith(
+                  fontStyle: FontStyle.italic,
+                  decoration: TextDecoration.underline,
+                  decorationColor: kWebHeaderColor,
+                  color: kWebHeaderColor),
             ),
-            SizedBox(
-              height:  38 ,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: CustomDropDown(
+          ),
+          // const SizedBox(
+          //   height:  8 ,
+          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Obx(() => CustomTextBox(
                       labelTextColor: Colors.black54,
-                      id: null,
-                      height: 32,
-                      labeltext: "Company",
-                      list: const [],
-                      onTap: (v) {},
-                      width: double.infinity),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.launch_outlined,
-                    size: 18,
-                    color: kGrayColor,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: desigId,
-                            height: 32,
-                            labeltext: "Designation",
-                            list: _getDropdownItem(econtroller, "designation"),
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: null,
-                            height: 32,
-                            labeltext: "Grade",
-                            list: const [],
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: dpId,
-                            height: 32,
-                            labeltext: "Department",
-                            list: _getDropdownItem(econtroller, "department"),
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: null,
-                            height: 32,
-                            labeltext: "Unit/Section",
-                            list: const [],
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: null,
-                            height: 32,
-                            labeltext: "Type of Employeement",
-                            list: const [],
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: null,
-                            height: 32,
-                            labeltext: "Current Job Status",
-                            list: const [],
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      const Icon(
-                        Icons.launch_outlined,
-                        size: 18,
-                        color: kGrayColor,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDatePicker(
+                      isFilled: true,
+                      height: 28,
+                      isDisable: true,
+                      width: double.infinity,
+                      caption: 'Company',
+                      controller: TextEditingController(
+                          text: econtroller.companyName.value),
+                      onChange: (String value) {},
+                    )),
+              ),
+            ],
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          date_controller: TextEditingController(),
-                          isFilled: true,
-                          label: "Date of Join",
-                          bgColor: Colors.white,
-                          height: 32,
-                          isBackDate: true,
-                        ),
-                      ),
-                    ],
-                  ),
+                          id: desigId,
+                          height: 28,
+                          labeltext: "Designation",
+                          list: _getDropdownItem(econtroller, "designation"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: 8,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: null,
+                          height: 28,
+                          labeltext: "Grade",
+                          list: _getDropdownItem(econtroller, "grade"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
                 ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomDropDown(
-                            labelTextColor: Colors.black54,
-                            id: null,
-                            height: 32,
-                            labeltext: "Current Job Status",
-                            list: const [],
-                            onTap: (v) {},
-                            width: 100),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: const Icon(
-                          Icons.launch_outlined,
-                          size: 18,
-                          color: kGrayColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            CustomTextBox(
-                labelTextColor: Colors.black54,
-                caption: "Notes",
-                width: double.infinity,
-                textInputType: TextInputType.multiline,
-                isFilled: true,
-                maxLine: 3,
-                // maxlength: 250,
-                height: 70,
-                controller: TextEditingController(),
-                onChange: (v) {}),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomElevatedButton(
-                  child: Text("Save"),
-                  onTap: () {
-                    econtroller.SaveData();
-                  },
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: dpId,
+                          height: 28,
+                          labeltext: "Department",
+                          list: _getDropdownItem(econtroller, "department"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 12,
-            )
-          ],
-        ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: null,
+                          height: 28,
+                          labeltext: "Unit/Section",
+                          list: _getDropdownItem(econtroller, "section"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: null,
+                          height: 28,
+                          labeltext: "Type of Employeement",
+                          list:
+                              _getDropdownItem(econtroller, "employementtype"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: null,
+                          height: 28,
+                          labeltext: "Current Job Staus",
+                          list: _getDropdownItem(econtroller, "jobstatus"),
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    const Icon(
+                      Icons.launch_outlined,
+                      size: 18,
+                      color: kGrayColor,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDatePicker(
+                        labelTextColor: Colors.black54,
+                        date_controller: TextEditingController(),
+                        isFilled: true,
+                        label: "Date of Join",
+                        bgColor: Colors.white,
+                        height: 28,
+                        isBackDate: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomDropDown(
+                          labelTextColor: Colors.black54,
+                          id: null,
+                          height: 28,
+                          labeltext: "Current Job Status",
+                          list: const [],
+                          onTap: (v) {},
+                          width: 100),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.launch_outlined,
+                        size: 18,
+                        color: kGrayColor,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          CustomTextBox(
+              labelTextColor: Colors.black54,
+              caption: "Notes",
+              width: double.infinity,
+              textInputType: TextInputType.multiline,
+              isFilled: true,
+              maxLine: 3,
+              // maxlength: 250,
+              height: 70,
+              controller: TextEditingController(),
+              onChange: (v) {}),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomElevatedButton(
+                child: Text("Save"),
+                onTap: () {
+                  print(econtroller.companyName.value);
+                  econtroller.SaveData();
+                },
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 40,
+          )
+        ],
       ),
     ),
   );
