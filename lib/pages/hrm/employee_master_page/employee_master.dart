@@ -17,6 +17,7 @@ import 'package:web_2/component/widget/custom_dropdown.dart';
 import 'package:web_2/component/widget/custom_elevated_button.dart';
 import 'package:web_2/component/widget/custom_icon_button.dart';
 import 'package:web_2/component/widget/custom_textbox.dart';
+
 import 'package:web_2/pages/hrm/employee_master_page/widget/controller/employee_controller.dart';
 
 import '../../../component/widget/menubutton.dart';
@@ -67,8 +68,6 @@ class EmployeeMaster extends StatelessWidget {
       ),
     );
   }
-
- 
 }
 
 _mobile(BuildContext context, EmployeeController econtroller) =>
@@ -517,8 +516,8 @@ _Reporting_supervisor() {
 
 _leftPart(EmployeeController econtroller) {
   // print("Call Again");
-  String? pid, countryId, genderId, religionId, maritalId, bgId, identityId;
-  final TextEditingController txt_emp_name = TextEditingController();
+   
+
   return Container(
     // decoration:customBoxDecoration.copyWith(color: kWebBackgroundDeepColor),
     decoration:
@@ -557,7 +556,7 @@ _leftPart(EmployeeController econtroller) {
                     maxlength: 10,
                     height: 28,
                     isFilled: true,
-                    controller: TextEditingController(),
+                    controller: econtroller.txt_emp_id,
                     onChange: (v) {},
                     onSubmitted: (p0) {
                       //print("p0.characters");
@@ -586,7 +585,9 @@ _leftPart(EmployeeController econtroller) {
             children: [
               Obx(() => CustomDropDown(
                   labelTextColor: Colors.black54,
-                  id: pid,
+                  id: econtroller.cmb_prefix.value == ''
+                      ? null
+                      : econtroller.cmb_prefix.value,
                   height: 28,
                   borderRadious: 2,
                   enabledBorderColor: Colors.grey,
@@ -595,7 +596,9 @@ _leftPart(EmployeeController econtroller) {
                   focusedBorderWidth: 0.3,
                   labeltext: "Prefix",
                   list: _getDropdownItem(econtroller, "prefix"),
-                  onTap: (v) {},
+                  onTap: (v) {
+                    econtroller.cmb_prefix.value = v.toString();
+                  },
                   width: 100)),
               const Icon(
                 Icons.launch_outlined,
@@ -630,22 +633,21 @@ _leftPart(EmployeeController econtroller) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                flex: 3,
-                child: CustomDatePicker(
-                  labelTextColor: Colors.black54,
-                  date_controller: TextEditingController(),
-                  isFilled: true,
-                  label: "Date of Birth",
-                  borderRadious: 2,
-                  enabledBorderColor: Colors.grey,
-                  focusedBorderColor: Colors.black,
-                  enabledBorderwidth: 0.4,
-                  focusedBorderWidth: 0.3,
-                  bgColor: Colors.white,
-                  height: 28,
-                  isBackDate: true,
-                ),
-              ),
+                  flex: 3,
+                  child: CustomDatePicker(
+                    labelTextColor: Colors.black54,
+                    date_controller: econtroller.txt_emp_dob,
+                    isFilled: true,
+                    label: "Date of Birth",
+                    borderRadious: 2,
+                    enabledBorderColor: Colors.grey,
+                    focusedBorderColor: Colors.black,
+                    enabledBorderwidth: 0.4,
+                    focusedBorderWidth: 0.3,
+                    bgColor: Colors.white,
+                    height: 28,
+                    isBackDate: true,
+                  )),
               const SizedBox(
                 width: 8,
               ),
@@ -653,11 +655,13 @@ _leftPart(EmployeeController econtroller) {
                 flex: 5,
                 child: Obx(() => CustomDropDown(
                     labelTextColor: Colors.black54,
-                    id: countryId,
+                    id: econtroller.cmb_nationality.value,
                     height: 28,
                     labeltext: "Nationality",
                     list: _getDropdownItem(econtroller, "country"),
-                    onTap: (v) {},
+                    onTap: (v) {
+                      econtroller.cmb_nationality.value = v.toString();
+                    },
                     width: 100)),
               ),
             ],
@@ -669,7 +673,7 @@ _leftPart(EmployeeController econtroller) {
               height: 28,
               maxlength: 100,
               isFilled: true,
-              controller: TextEditingController(),
+              controller: econtroller.txt_emp_father,
               onChange: (v) {}),
           CustomTextBox(
               labelTextColor: Colors.black54,
@@ -678,7 +682,7 @@ _leftPart(EmployeeController econtroller) {
               maxlength: 100,
               height: 28,
               isFilled: true,
-              controller: TextEditingController(),
+              controller: econtroller.txt_emp_mother,
               onChange: (v) {}),
           CustomTextBox(
               labelTextColor: Colors.black54,
@@ -687,7 +691,7 @@ _leftPart(EmployeeController econtroller) {
               maxlength: 100,
               height: 28,
               isFilled: true,
-              controller: TextEditingController(),
+              controller: econtroller.txt_emp_spouse,
               onChange: (v) {}),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -700,14 +704,16 @@ _leftPart(EmployeeController econtroller) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: CustomDropDown(
+                      child: Obx(() => CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: genderId,
+                          id: econtroller.cmb_gender.value,
                           height: 28,
                           labeltext: "Gender",
                           list: _getDropdownItem(econtroller, "gender"),
-                          onTap: (v) {},
-                          width: 100),
+                          onTap: (v) {
+                            econtroller.cmb_gender.value = v.toString();
+                          },
+                          width: 100)),
                     ),
                     const Icon(
                       Icons.launch_outlined,
@@ -727,14 +733,16 @@ _leftPart(EmployeeController econtroller) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: CustomDropDown(
+                      child: Obx(() => CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: religionId,
+                          id: econtroller.cmb_religion.value,
                           height: 28,
                           labeltext: "Religion",
                           list: _getDropdownItem(econtroller, "religion"),
-                          onTap: (v) {},
-                          width: 100),
+                          onTap: (v) {
+                            econtroller.cmb_religion.value = v.toString();
+                          },
+                          width: 100)),
                     ),
                     const Icon(
                       Icons.launch_outlined,
@@ -757,14 +765,16 @@ _leftPart(EmployeeController econtroller) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: CustomDropDown(
+                      child: Obx(() => CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: maritalId,
+                          id: econtroller.cmb_maritalstatus.value,
                           height: 28,
                           labeltext: "Marital Status",
                           list: _getDropdownItem(econtroller, "marital"),
-                          onTap: (v) {},
-                          width: 100),
+                          onTap: (v) {
+                            econtroller.cmb_maritalstatus.value = v.toString();
+                          },
+                          width: 100)),
                     ),
                     const Icon(
                       Icons.launch_outlined,
@@ -784,14 +794,16 @@ _leftPart(EmployeeController econtroller) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: CustomDropDown(
+                      child: Obx(() => CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: bgId,
+                          id: econtroller.cmb_bloodgroup.value,
                           height: 28,
                           labeltext: "Blood Group",
                           list: _getDropdownItem(econtroller, "bloodgroup"),
-                          onTap: (v) {},
-                          width: 100),
+                          onTap: (v) {
+                            econtroller.cmb_bloodgroup.value = v.toString();
+                          },
+                          width: 100)),
                     ),
                     InkWell(
                       onTap: () {},
@@ -815,11 +827,13 @@ _leftPart(EmployeeController econtroller) {
                 child: Obx(() => CustomDropDown(
                     labelTextColor: Colors.black54,
                     //identitytype
-                    id: identityId,
+                    id: econtroller.cmb_identitytype.value,
                     height: 28,
                     labeltext: "Identity Type",
                     list: _getDropdownItem(econtroller, "identitytype"),
-                    onTap: (v) {},
+                    onTap: (v) {
+                      econtroller.cmb_identitytype.value = v.toString();
+                    },
                     width: 100)),
               ),
               const SizedBox(
@@ -834,7 +848,7 @@ _leftPart(EmployeeController econtroller) {
                     height: 28,
                     maxlength: 100,
                     isFilled: true,
-                    controller: TextEditingController(),
+                    controller: econtroller.txt_emp_identityname,
                     onChange: (v) {}),
               ),
             ],
@@ -918,7 +932,7 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: desigId,
+                          id: econtroller.cmb_designation.value,
                           height: 28,
                           labeltext: "Designation",
                           list: _getDropdownItem(econtroller, "designation"),

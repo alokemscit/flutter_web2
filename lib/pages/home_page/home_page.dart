@@ -290,17 +290,8 @@ class TabAndBodyWidget extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
                       builder: (context, state) {
-                    //  print("-------------------- block call");
-                    // if (state.delid != '') {
-                    //  return SizedBox();
-                    //}
-                    // print("Delete block call");
-
-//print("-------------------- block call");
-                    print(state.id);
-
-                    var id = state.id;
-                    // print(id);
+                      var id = state.id;
+                     //print('-------------'+id);
                     return getPage(id);
                   }),
                 )
@@ -393,21 +384,20 @@ class TabMenuWithEvent extends StatelessWidget {
                         // }
 
                         // deleteController(menuitem.id);
-                        var menuid=menuitem.id;
+                        var menuid = menuitem.id;
                         context
                             .read<MenuItemBloc>()
                             .add(ItemMenuDelete(menuitem: menuitem));
 
-                        context1.read<CurrentIDBloc>().add(SetCurrentId(
-                             
-                            id: NextIndex(itemList, index)));
+                        context1
+                            .read<CurrentIDBloc>()
+                            .add(SetCurrentId(id: NextIndex(itemList, index)));
 
                         // Future.delayed(const Duration(milliseconds: 3000));
 
                         Future.delayed(const Duration(microseconds: 100), () {
-                        deleteController(menuid);
+                          deleteController(menuid);
                         });
-
                       },
                       color: state1.id.trim() != menuitem.id.trim()
                           ? kSecondaryColor
@@ -588,7 +578,6 @@ abstract class CurrenIdEvent {
 }
 
 class SetCurrentId extends CurrenIdEvent {
- 
   SetCurrentId({required super.id});
 }
 

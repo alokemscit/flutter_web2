@@ -67,7 +67,7 @@ final Color fillColor;
         child: DropdownButtonFormField(
            style: GoogleFonts.roboto(
             fontSize: 13, fontWeight: FontWeight.w500, color: fontColor),
-          value: id,
+          value: id==''?null:id,
           items: list,
           onChanged: onTap,
           dropdownColor: dropdownColor,

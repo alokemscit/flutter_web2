@@ -11,7 +11,7 @@ import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
 import 'component/settings/notifers/auth_provider.dart';
 import 'pages/authentication/login_page2.dart';
 import 'pages/home_page/parent_page.dart';
- 
+ import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 
@@ -52,6 +52,15 @@ class MyApp extends StatelessWidget {
         child: Consumer2<AuthProvider, AppTheme>(builder:
             (context, AuthProvider authNotifier, AppTheme appThemes, child) {
           return GetMaterialApp(
+
+   localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'GB'), // Define the supported locale
+      ],
+
             scrollBehavior: kIsWeb? CustomScrollBehavior():null,
             debugShowCheckedModeBanner: false,
             theme: ThemeData.light().copyWith(

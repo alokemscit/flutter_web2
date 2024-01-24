@@ -44,9 +44,13 @@ Widget getPage( String id) {
       return const OperationType();
     case "87":
       return const DoctorCategorySetup();
+      case "":
+      return const SizedBox(
+        //child: Text("Under Construction!"),
+      );
     default:
       return const Center(
-        child: Text("Under Construction!"),
+        child: Text("Under Construction!",style: TextStyle(fontSize: 30,color: Colors.blue),),
       );
   }
 }
