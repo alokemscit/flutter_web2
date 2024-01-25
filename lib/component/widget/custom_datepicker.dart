@@ -24,6 +24,7 @@ class CustomDatePicker extends StatefulWidget {
   final Color enabledBorderColor;
   final double enabledBorderwidth;
   final bool isInputMode;
+   final FocusNode? focusNode;
   const CustomDatePicker({
     super.key,
     // ignore: non_constant_identifier_names
@@ -44,7 +45,8 @@ class CustomDatePicker extends StatefulWidget {
     this.focusedBorderWidth = 0.3,
     this.enabledBorderColor = Colors.grey,
     this.enabledBorderwidth = 0.4,
-    this.isInputMode=false
+    this.isInputMode=false,
+    this.focusNode
   });
 
   @override
@@ -73,6 +75,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
         child: TextFormField(
+          focusNode: widget.focusNode,
           onTap: () {
             getDates();
           },

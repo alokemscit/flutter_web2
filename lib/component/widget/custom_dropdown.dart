@@ -25,7 +25,7 @@ class CustomDropDown extends StatelessWidget {
        this.enabledBorderwidth= 0.4, 
        this.hintTextColor= Colors.black,
         this.labelTextColor= Colors.black,
-      
+       this.focusNode
       });
 
    
@@ -33,7 +33,7 @@ class CustomDropDown extends StatelessWidget {
               
 
 
-
+ final FocusNode? focusNode;
   final double? height;
   final double? width;
   final String? id;
@@ -65,6 +65,7 @@ final Color fillColor;
         width: width,
         height: height,
         child: DropdownButtonFormField(
+          focusNode: focusNode,
            style: GoogleFonts.roboto(
             fontSize: 13, fontWeight: FontWeight.w500, color: fontColor),
           value: id==''?null:id,

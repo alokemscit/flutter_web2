@@ -32,6 +32,8 @@ class CustomTextBox extends StatelessWidget {
   final double enabledBorderwidth;
   final Color surfixIconColor;
   final void Function(String) onSubmitted;
+  final void Function() onEditingComplete;
+  final FocusNode? focusNode;
 
   CustomTextBox(
       {super.key,
@@ -53,19 +55,16 @@ class CustomTextBox extends StatelessWidget {
       this.isDisable = false,
       this.hintTextColor = Colors.black,
       this.labelTextColor = Colors.black,
-      this.focusedBorderColor =  Colors.black,
+      this.focusedBorderColor = Colors.black,
       this.focusedBorderWidth = 0.3,
-      this.enabledBorderColor =  Colors.grey,
+      this.enabledBorderColor = Colors.grey,
       this.enabledBorderwidth = 0.4,
       this.surfixIconColor = kWebHeaderColor,
-      void Function(String)? onSubmitted})
-      : onSubmitted = onSubmitted ?? ((String v) {});
-
-
- 
-                   
-
-
+      void Function(String)? onSubmitted,
+      void Function()? onEditingComplete,
+      this.focusNode})
+      : onSubmitted = onSubmitted ?? ((String v) {}),
+        onEditingComplete = onEditingComplete ?? (() {});
 
   @override
   Widget build(BuildContext context) {
@@ -88,13 +87,18 @@ class CustomTextBox extends StatelessWidget {
                 isObsText = state.isShow;
               }
               return TextField(
+                focusNode: focusNode,
                 enabled: !isDisable,
                 readOnly: isReadonly,
                 onChanged: (value) => onChange(value),
                 onSubmitted: (v) {
                   onSubmitted(v);
                 },
-
+                
+                onEditingComplete: () {
+                  print("12121");
+                  onEditingComplete();
+                },
                 keyboardType: textInputType,
                 obscureText: !isObsText ? isPassword : false,
                 inputFormatters: textInputType == TextInputType.multiline
@@ -120,8 +124,10 @@ class CustomTextBox extends StatelessWidget {
 
                 textAlign: textAlign!,
                 decoration: InputDecoration(
-                    fillColor: !isDisable? Colors
-                        .white:Colors.white70, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
+                    fillColor: !isDisable
+                        ? Colors.white
+                        : Colors
+                            .white70, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
                     filled: isFilled,
                     labelText: caption,
                     labelStyle: TextStyle(
@@ -131,10 +137,11 @@ class CustomTextBox extends StatelessWidget {
                     hintStyle: TextStyle(
                         color: hintTextColor, fontWeight: FontWeight.w300),
                     counterText: '',
-                    disabledBorder:  OutlineInputBorder(
+                    disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(borderRadious),
                       borderSide: BorderSide(
-                          color: enabledBorderColor.withOpacity(0.8), width: enabledBorderwidth),
+                          color: enabledBorderColor.withOpacity(0.8),
+                          width: enabledBorderwidth),
                     ),
                     border: OutlineInputBorder(
                         borderRadius:

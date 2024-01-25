@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:web_2/component/settings/config.dart';
@@ -40,6 +41,7 @@ class EmployeeMaster extends StatelessWidget {
     //  Get.delete<EmployeeController>();
     // Get.delete<EmployeeController>();
     final EmployeeController econtroller = Get.put(EmployeeController());
+    econtroller.context = context;
 
     print("Call Widget employee");
 
@@ -516,7 +518,6 @@ _Reporting_supervisor() {
 
 _leftPart(EmployeeController econtroller) {
   // print("Call Again");
-   
 
   return Container(
     // decoration:customBoxDecoration.copyWith(color: kWebBackgroundDeepColor),
@@ -548,6 +549,7 @@ _leftPart(EmployeeController econtroller) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Obx(() => CustomTextBox(
+                    focusNode: econtroller.f_emp_id,
                     labelTextColor: Colors.black54,
                     isDisable: econtroller.isDisableID.value, // true,
                     isReadonly: econtroller.isDisableID.value,
@@ -564,14 +566,14 @@ _leftPart(EmployeeController econtroller) {
                   )),
               InkWell(
                 onTap: () {
-                  econtroller.setEnableDisableID();
+                  econtroller.EditEmployee();
                 },
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                       border: Border.all(color: kWebBackgroundDeepColor)),
                   child: Obx(() => Icon(
-                        econtroller.isDisableID.value ? Icons.edit : Icons.undo,
+                        econtroller.isDisableID.value ? Icons.edit : Icons.undo_sharp,
                         size: 18,
                         color: kGrayColor,
                       )),
@@ -637,6 +639,7 @@ _leftPart(EmployeeController econtroller) {
                   child: CustomDatePicker(
                     labelTextColor: Colors.black54,
                     date_controller: econtroller.txt_emp_dob,
+                    isInputMode: true,
                     isFilled: true,
                     label: "Date of Birth",
                     borderRadious: 2,
@@ -668,14 +671,31 @@ _leftPart(EmployeeController econtroller) {
           ),
           CustomTextBox(
               labelTextColor: Colors.black54,
+              focusNode: econtroller.f_emp_father,
               caption: "Father's Name",
               width: double.infinity,
               height: 28,
               maxlength: 100,
               isFilled: true,
               controller: econtroller.txt_emp_father,
-              onChange: (v) {}),
+              onEditingComplete: () {
+                print("on onEditingComplete");
+                //print('object');
+                FocusScope.of(Get.context!)
+                    .requestFocus(econtroller.f_emp_mother);
+                //FocusScopeNode currentFocusScope = FocusScope.of(Get.context!);
+                //currentFocusScope.requestFocus(econtroller.f_emp_mother);
+              },
+              onSubmitted: (p0) {
+                print("on submir");
+                FocusScope.of(Get.context!)
+                    .requestFocus(econtroller.f_emp_mother);
+              },
+              onChange: (v) {
+                print("on change");
+              }),
           CustomTextBox(
+              focusNode: econtroller.f_emp_mother,
               labelTextColor: Colors.black54,
               caption: "Mother's name",
               width: double.infinity,
@@ -842,6 +862,7 @@ _leftPart(EmployeeController econtroller) {
               Expanded(
                 flex: 5,
                 child: CustomTextBox(
+                    // onEditingComplete: () => FocusScope.of(Get.context!).requestFocus(econtroller.cmb_designation!),
                     labelTextColor: Colors.black54,
                     caption: "Identity Number",
                     width: double.infinity,
@@ -936,7 +957,9 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                           height: 28,
                           labeltext: "Designation",
                           list: _getDropdownItem(econtroller, "designation"),
-                          onTap: (v) {},
+                          onTap: (v) {
+                            econtroller.cmb_designation.value = v.toString();
+                          },
                           width: 100),
                     ),
                     const Icon(
@@ -959,11 +982,13 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: null,
+                          id: econtroller.cmb_grade.value,
                           height: 28,
                           labeltext: "Grade",
                           list: _getDropdownItem(econtroller, "grade"),
-                          onTap: (v) {},
+                          onTap: (v) {
+                            econtroller.cmb_grade.value = v.toString();
+                          },
                           width: 100),
                     ),
                     const Icon(
@@ -989,11 +1014,13 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: dpId,
+                          id: econtroller.cmb_department.value,
                           height: 28,
                           labeltext: "Department",
                           list: _getDropdownItem(econtroller, "department"),
-                          onTap: (v) {},
+                          onTap: (v) {
+                            econtroller.cmb_department.value = v.toString();
+                          },
                           width: 100),
                     ),
                     const Icon(
@@ -1016,11 +1043,13 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: null,
+                          id: econtroller.cmb_section.value,
                           height: 28,
                           labeltext: "Unit/Section",
                           list: _getDropdownItem(econtroller, "section"),
-                          onTap: (v) {},
+                          onTap: (v) {
+                            econtroller.cmb_section.value = v.toString();
+                          },
                           width: 100),
                     ),
                     const Icon(
@@ -1046,12 +1075,14 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: null,
+                          id: econtroller.cmb_emptype.value,
                           height: 28,
                           labeltext: "Type of Employeement",
                           list:
                               _getDropdownItem(econtroller, "employementtype"),
-                          onTap: (v) {},
+                          onTap: (v) {
+                            econtroller.cmb_emptype.value = v.toString();
+                          },
                           width: 100),
                     ),
                     const Icon(
@@ -1074,11 +1105,13 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: null,
+                          id: econtroller.cmb_jobstatus.value,
                           height: 28,
                           labeltext: "Current Job Staus",
                           list: _getDropdownItem(econtroller, "jobstatus"),
-                          onTap: (v) {},
+                          onTap: (v) {
+                            econtroller.cmb_jobstatus.value = v.toString();
+                          },
                           width: 100),
                     ),
                     const Icon(
@@ -1104,7 +1137,7 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDatePicker(
                         labelTextColor: Colors.black54,
-                        date_controller: TextEditingController(),
+                        date_controller: econtroller.txt_emp_doj,
                         isFilled: true,
                         label: "Date of Join",
                         bgColor: Colors.white,
@@ -1127,11 +1160,13 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
                     Expanded(
                       child: CustomDropDown(
                           labelTextColor: Colors.black54,
-                          id: null,
+                          id: econtroller.cmb_jobcategory.value,
                           height: 28,
-                          labeltext: "Current Job Status",
-                          list: const [],
-                          onTap: (v) {},
+                          labeltext: "Job Category",
+                          list: _getDropdownItem(econtroller, "jobcategory"),
+                          onTap: (v) {
+                            econtroller.cmb_jobcategory.value = v.toString();
+                          },
                           width: 100),
                     ),
                     InkWell(
@@ -1156,16 +1191,33 @@ _middlePart(BuildContext context, EmployeeController econtroller) {
               maxLine: 3,
               // maxlength: 250,
               height: 70,
-              controller: TextEditingController(),
+              controller: econtroller.txt_emp_note,
               onChange: (v) {}),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomElevatedButton(
-                child: Text("Save"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.withOpacity(0.5),
+                    foregroundColor: Colors.white),
+                child: const Text("Undo"),
                 onTap: () {
-                  print(econtroller.companyName.value);
+                  //  print(econtroller.companyName.value);
+
+                  econtroller.Undo();
+                },
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              CustomElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: kWebHeaderColor,
+                    foregroundColor: Colors.white),
+                child: const Text("Save"),
+                onTap: () {
+                  //  print(econtroller.companyName.value);
                   econtroller.SaveData();
                 },
               ),

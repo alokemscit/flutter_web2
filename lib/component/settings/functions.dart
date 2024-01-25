@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../model/model_status.dart';
 import '../awesom_dialog/awesome_dialog.dart';
- 
 
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
@@ -104,7 +104,7 @@ void capertinoAlertDialog(BuildContext context) {
 }
 
 void customAwesamDialodOk(BuildContext context, DialogType dialogType,
-        String title, String message,  Function() onOk) =>
+        String title, String message, Function() onOk) =>
     AwesomeDialog(
       width: 400,
       context: context,
@@ -141,17 +141,121 @@ void CupertinioAlertDialog(BuildContext context, String msg) {
   );
 }
 
+// ignore: non_constant_identifier_names
+// CustomCupertinoAlertWithYesNo(BuildContext context, Widget title,
+//     Widget content, void Function() no, void Function() yes,
+//     [String? noButtonCap, String? yesButtonCap]) {
+//   showCupertinoDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return CupertinoAlertDialog(
+//         title: title,
+//         content: content,
+//         actions: [
+//           CupertinoDialogAction(
+//             child: Text(noButtonCap ?? 'No'),
+//             onPressed: () {
+//               // Navigator.of(context).pop(false); // Returning false when No is pressed
+//               no();
+//             },
+//           ),
+//           CupertinoDialogAction(
+//             child: Text(yesButtonCap ?? 'Yes'),
+//             onPressed: () {
+//               yes();
+//               // Returning true when Yes is pressed
+//             },
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
 
-Future<Uint8List?> proxyImageRequest(String imageUrl) async {
-  try {
-    final response = await http.get(Uri.parse('https://your-proxy-server.com/proxy?url=$imageUrl'));
+// ignore: non_constant_identifier_names
+CustomCupertinoAlertWithYesNo(
+  BuildContext context,
+  Widget title,
+  Widget content,
+  void Function() no,
+  void Function() yes,
+  [String? noButtonCap,
+  String? yesButtonCap]
+) {
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: title,
+        content: Container(
+          // Wrap content in a container to allow for better layout adjustments
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: content,
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(noButtonCap ?? 'No'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              no();
+            },
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true, // Emphasize the primary action
+            child: Text(yesButtonCap ?? 'Yes'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              yes();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
-    if (response.statusCode == 200) {
-      return response.bodyBytes;
-    }
-  } catch (e) {
-    print('Error: $e');
+// ignore: non_constant_identifier_names
+CustomModalBusyLoader() {
+  Get.dialog(
+    transitionCurve: Curves.easeInOutBack,
+    transitionDuration: const Duration(microseconds: 200),
+    barrierColor: Colors.black.withOpacity(0.2),
+    Center(
+      child: CupertinoPopupSurface(
+        child: Container(
+          color: Colors.black,
+          child: const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoActivityIndicator(
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+    barrierDismissible: false,
+  );
+}
+
+// ignore: non_constant_identifier_names
+ bool GetStatusMessage(BuildContext context, List<dynamic> x) {
+  ModelStatus st = x.map((e) => ModelStatus.fromJson(e)).first;
+  if (st==null) {
+    customAwesamDialodOk(
+        context, DialogType.error, "Error!", "Error to save data!", () {});
+    return false;
   }
-
-  return null;
+  if (st.status != "1") {
+    customAwesamDialodOk(
+        context, DialogType.error, "Error!", st.msg!, () {});
+    return false;
+  }
+  customAwesamDialodOk(
+      context, DialogType.success, "Success!", st.msg!, () {});
+  return true;
 }
