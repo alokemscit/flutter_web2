@@ -16,7 +16,7 @@ import 'pages/home_page/parent_page.dart';
 
 
 void main() async {
-
+ 
   WidgetsFlutterBinding.ensureInitialized();
   final userProvider = AuthProvider();
 // if (kIsWeb) {

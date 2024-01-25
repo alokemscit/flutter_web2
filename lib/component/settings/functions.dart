@@ -189,7 +189,7 @@ CustomCupertinoAlertWithYesNo(
         title: title,
         content: Container(
           // Wrap content in a container to allow for better layout adjustments
-          padding: EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: content,
         ),
         actions: [

@@ -109,7 +109,7 @@ class EmployeeController extends GetxController {
         Undo();
         isDisableID.value = false;
         //  FocusScope.of(context).requestFocus(f_emp_id);
-       // Navigator.pop(context);
+        // Navigator.pop(context);
 
         //print("Yes");
       },
@@ -247,7 +247,8 @@ class EmployeeController extends GetxController {
 // @note nvarchar(250),
 // @xml text
 
-      CustomModalBusyLoader();
+      // CustomModalBusyLoader();
+      isLoading.value = true;
 
       var x = await api.createLead([
         {
@@ -263,15 +264,17 @@ class EmployeeController extends GetxController {
           "xml": s
         }
       ]);
-      Get.back();
+      // Get.back();
       //print(x);
       // ignore: use_build_context_synchronously
+      isLoading.value = false;
       bool b = GetStatusMessage(context, x);
       if (b) {
         Undo();
       }
     } catch (e) {
-      Get.back();
+      isLoading.value = true;
+      //Get.back();
       //errorMessage(e.toString());
       // ignore: use_build_context_synchronously
       customAwesamDialodOk(
@@ -347,7 +350,7 @@ class EmployeeController extends GetxController {
     cmb_jobcategory.close();
     txt_emp_note.dispose();
     elist.close();
-    
+
     super.dispose();
     print("super call dispose");
     super.onClose();
