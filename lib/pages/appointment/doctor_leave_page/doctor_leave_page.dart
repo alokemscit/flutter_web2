@@ -1,11 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
- import '../../../data/data_api.dart';
+import '../../../data/data_api.dart';
 import 'bloc/doctor_leave_bloc.dart';
 import 'data/data_doctor_leave.dart';
 import 'widget/doctor_leave_widget.dart';
- 
 
 // ignore: must_be_immutable
 class DoctorLeave extends StatelessWidget {
@@ -13,7 +12,6 @@ class DoctorLeave extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     
     return Scaffold(
       body: RepositoryProvider(
         create: (context) => data_api(),
@@ -36,7 +34,7 @@ class DoctorLeave extends StatelessWidget {
             builder: (context, state) {
               if (state is DoctorDataLoaded) {
                 //dList = state.list;
-               // dlistMain = state.list;
+                // dlistMain = state.list;
                 Data_doctor_leave.dList = state.list;
 
                 return Row(
@@ -47,31 +45,24 @@ class DoctorLeave extends StatelessWidget {
                       flex: 2,
                       child: Stack(
                         children: [
-                         
                           searchPanel(),
                           doctorSelectionPanel(),
-                         
                           doctorLeaveEntry(),
-                         
                           listGenerator(),
                           closeButtonPanel(),
-                        
                         ],
                       ),
                     ),
-                      Expanded(
+                    Expanded(
                       flex: 6,
-                      child: SingleChildScrollView(
-                          child: expandedPanel()
-                          
-                        //  DoctorLeaveExpandedPanel()
-                          
+                      child: SingleChildScrollView(child: expandedPanel()
+
+                          //  DoctorLeaveExpandedPanel()
+
                           ),
                     ),
                   ],
                 );
-
-               
               } else {
                 return const Center(
                     child: Padding(
@@ -79,7 +70,6 @@ class DoctorLeave extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 ));
               }
-             
             },
           ),
         ),

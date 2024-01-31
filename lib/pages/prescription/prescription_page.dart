@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../block/tab_block/tabblock_bloc.dart';
 import '../../component/settings/config.dart';
-import '../../component/widget/appbar_with_button.dart';
+//import '../../component/widget/appbar_with_button.dart';
 import '../../component/widget/vitalsign.dart';
 
 // ignore: camel_case_types, must_be_immutable
@@ -17,12 +17,7 @@ class prescription_page extends StatelessWidget {
     return BlocProvider(
       create: (context) => TabblockBloc(),
       child: Scaffold(
-        appBar: PreferredSize(
-          //  backgroundColor:Colors.transparent,
-          preferredSize: const Size(double.infinity, 280),
-          //  backgroundColor:Colors.transparent,
-          child: AppBarWithButton(),
-        ),
+        
         body: SingleChildScrollView(
           child: Column(
             children: [

@@ -3,17 +3,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/menubutton.dart';
 import 'package:web_2/component/widget/sidemenu.dart';
-import 'package:web_2/pages/appointment/doctor_appointment.dart';
-import 'package:web_2/pages/appointment/doctor_leave_page/doctor_leave_page.dart';
-
+import 'package:web_2/pages/authentication/login_page.dart';
 import '../../component/settings/config.dart';
-import '../../model/main_app_menu.dart';
-import '../admin/module_page/module_page.dart';
-import '../appointment/time_slot_page/time_slot_page.dart';
+import '../../component/settings/notifers/auth_provider.dart';
+import '../../component/settings/router.dart';
+import '../admin/module_page/model/module_model.dart';
+import '../authentication/login_page2.dart';
+import 'parent_page_widget/login_user_image_and_details.dart';
 import 'parent_page_widget/parent_background_widget.dart';
 
 // ignore: must_be_immutable
@@ -27,25 +29,37 @@ NextIndex(List<ItemModel> list, int index) {
   return '';
 }
 
-List<dynamic> textControllerListGenerator(int length) {
-  return List.generate(length, (index) => TextEditingController());
-}
+List<SingleChildWidget> _provider(BuildContext context) => [
+      BlocProvider(
+        create: (context) => MenuItemBloc(),
+      ),
+      BlocProvider(
+        create: (context) => CurrentIDBloc(),
+      ),
+      BlocProvider(create: (constext) => MenubuttonCloseBlocBloc()),
+      BlocProvider(
+          create: (context) =>
+              LoginBloc(Provider.of<AuthProvider>(context, listen: false))),
+    ];
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
-  final main_app_menu module;
+  final ModuleMenuList module;
   const HomePage({super.key, required this.module});
-
   @override
   Widget build(BuildContext context) {
-    // ignore: non_constant_identifier_names
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: Stack(
-        children: [
-          const ParentPageBackground(imageOpacity: 0.03),
-          HomePagebodyWidget(module: module),
-        ],
+    final List<SingleChildWidget> providers = _provider(context);
+
+    return MultiProvider(
+      providers: providers,
+      child: Scaffold(
+        backgroundColor: kWebBackgroundDeepColor,
+        body: Stack(
+          children: [
+            const ParentPageBackground(imageOpacity: 0.03),
+            HomePagebodyWidget(module: module),
+          ],
+        ),
       ),
     );
   }
@@ -57,35 +71,197 @@ class HomePagebodyWidget extends StatelessWidget {
     super.key,
     required this.module,
   });
-
-  final main_app_menu module;
-
-  final List<SingleChildWidget> providers = [
-    BlocProvider(
-      create: (context) => MenuItemBloc(),
-    ),
-    BlocProvider(
-      create: (context) => CurrentIDBloc(),
-    ),
-    BlocProvider(create: (constext) => MenubuttonCloseBlocBloc()),
-  ];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
     var sidemenu = SideMenu(
       module: module,
       userDetailsForDrawer: UserDetailsForDrawer(module: module),
-      generateMenuItems: GenerateMenuItems(mid: module.id.toString()),
-    );
-    return MultiBlocProvider(
-      providers: providers,
-      child: Responsive(
-        mobile: Container(
-          color: const Color.fromARGB(255, 235, 233, 230),
-        ),
-        tablet: DesktopWidget(module: module, sidemenu: sidemenu),
-        desktop: DesktopWidget(module: module, sidemenu: sidemenu),
+      generateMenuItems: GenerateMenuItems(
+        mid: module.id.toString(),
+        fkey: _scaffoldKey,
       ),
+      fkey: _scaffoldKey,
+    );
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state is LoginOutSate) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage2()),
+          );
+        }
+      },
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+         return Responsive(
+            mobile:  _mobile(_scaffoldKey, sidemenu, module),
+            tablet:  constraints.maxWidth>750? DesktopWidget(module: module, sidemenu: sidemenu):_mobile(_scaffoldKey, sidemenu, module),
+            desktop: DesktopWidget(module: module, sidemenu: sidemenu),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// _tablet(
+//   ModuleMenuList module,
+//   SideMenu sidemenu,
+// ) {
+   
+//   return LayoutBuilder(
+//     builder: (context, constraints) {
+//      // print(constraints.maxWidth);
+//       return constraints.maxWidth > 750
+//           ? Row(
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 //Drawer Menu Item
+
+//                 // DrawerWithBackArrow(module: module),
+
+//                 BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
+//                   builder: (context, state) {
+//                     bool b = false;
+//                     if (state is MenubuttonCloseBlocInitial) {
+//                       b = state.isClose;
+//                     }
+
+//                     double ss = b == true ? 0 : 220;
+//                     //print(ss);
+//                     return AnimatedSize(
+//                       curve: Curves.easeIn,
+//                       //  vsync: this,
+//                       duration: const Duration(milliseconds: 150),
+//                       child: ConstrainedBox(
+//                         constraints: BoxConstraints(maxWidth: ss),
+//                         //      //  // child:
+//                         child: Stack(
+//                           children: [
+//                             sidemenu,
+//                             const ArrowBackPositioned(),
+//                           ],
+//                         ),
+//                       ),
+//                     );
+//                   },
+//                 ),
+
+//                 TabAndBodyWidget(
+//                   module: module,
+//                 ),
+//               ],
+//             )
+//           : SizedBox();
+//    },
+//  );
+
+// Scaffold(
+//     key: scaffoldKey,
+//     drawer: MyDrawer(
+//       sidemenu: sidemenu,
+//     ),
+//     appBar: PreferredSize(
+//       preferredSize:
+//           const Size.fromHeight(65), //const Size.fromHeight(kToolbarHeight),
+//       child: Padding(
+//         padding: const EdgeInsets.all(0),
+//         child: AppBarMobile(fkey: scaffoldKey),
+//       ),
+//     ),
+
+//     body: TabAndBodyWidget(
+//       module: module,
+//     ),
+//     //     body: TabAndBodyWidget(
+//     //   module: module,
+//     // ),
+//   )
+//}
+
+Widget _mobile(
+  GlobalKey<ScaffoldState> scaffoldKey,
+  SideMenu sidemenu,
+  ModuleMenuList module,
+) {
+  return Scaffold(
+    key: scaffoldKey,
+    drawer: MyDrawer(
+      sidemenu: sidemenu,
+    ),
+    appBar: PreferredSize(
+      preferredSize:
+          const Size.fromHeight(65), //const Size.fromHeight(kToolbarHeight),
+      child: Padding(
+        padding: const EdgeInsets.all(0),
+        child: AppBarMobile(fkey: scaffoldKey),
+      ),
+    ),
+
+    body: TabAndBodyWidget(
+      module: module,
+    ),
+    //     body: TabAndBodyWidget(
+    //   module: module,
+    // ),
+  );
+}
+
+class MyDrawer extends StatelessWidget {
+  const MyDrawer({super.key, required this.sidemenu});
+  final SideMenu sidemenu;
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: sidemenu,
+    );
+  }
+}
+
+class AppBarMobile extends StatelessWidget {
+  final GlobalKey<ScaffoldState> fkey;
+
+  const AppBarMobile({super.key, required this.fkey});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      // bottom:
+      backgroundColor: kWebBackgroundDeepColor,
+      leading: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            // print("object");
+            fkey.currentState?.openDrawer();
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.circular(12),
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.menu,
+                color: kWebHeaderColor,
+              ),
+            ),
+          )),
+      actions: const [
+        Padding(
+          padding: EdgeInsets.only(right: 8, bottom: 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(child: LoginUsersImageAndDetails()),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -97,32 +273,32 @@ class DesktopWidget extends StatelessWidget {
     required this.sidemenu,
   });
   final SideMenu sidemenu;
-  final main_app_menu module;
+  final ModuleMenuList module;
 
   @override
   Widget build(BuildContext context) {
-    print('Secon-----------  widget');
+    // print('Secon-----------  widget');
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //Drawer Menu Item
-
-        // DrawerWithBackArrow(module: module),
-
+    
+       // DrawerWithBackArrow(module: module),
+    
         BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
           builder: (context, state) {
             bool b = false;
             if (state is MenubuttonCloseBlocInitial) {
               b = state.isClose;
             }
-
+    
             double ss = b == true ? 0 : 220;
             //print(ss);
             return AnimatedSize(
               curve: Curves.easeIn,
               //  vsync: this,
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 150),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: ss),
                 //      //  // child:
@@ -136,70 +312,72 @@ class DesktopWidget extends StatelessWidget {
             );
           },
         ),
-
-        const TabAndBodyWidget(),
+    
+        TabAndBodyWidget(
+          module: module,
+        ),
       ],
     );
   }
 }
 
+// void _disposePage(int pageIndex) {
+//     // Do any cleanup or resource disposal related to the page at the given index
+//     // For example, if your page has a StatefulWidget, you can call its dispose method
+//     // You may need to maintain a list of your pages' states to call their dispose methods
+
+//     // For demonstration purposes, assuming MyPage is a StatefulWidget
+//     final GlobalKey<_MyPageState> key = _pageKeys[pageIndex];
+//     key.currentState?.dispose();
+//   }
+
 class TabAndBodyWidget extends StatelessWidget {
   const TabAndBodyWidget({
     super.key,
+    required this.module,
   });
-
+  final ModuleMenuList module;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     //print('Render Main Body ..........main00000000');
     // Size size = MediaQuery.of(context).size;
-    return Expanded(
-      // flex: 10,
-      //flex:  _size.width > 1340 ? 11 : 9,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const DrawerBackIconWithTabEvent(),
-          Expanded(
-            child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
-                builder: (context, state) {
-              var id = state.id;
-              print(id);
-              //   return //TabPageMain(id: state.id);
-              //  print('Render Main Body ..........111');
-              return (() {
-                switch (id) {
-                  case "1":
-                    {
-                      return const TimeSlotPage();
-                    }
-                  case "2":
-                    {
-                      return const DoctorAppointment();
-                    }
-                  case "3":
-                    {
-                      return const DoctorLeave();
-                    }
+    return Responsive.isMobile(context)
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const DrawerBackIconWithTabEvent(),
+              Expanded(
+                child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
+                    builder: (context, state) {
+                  var id = state.id;
 
-                  case "4":
-                    {
-                      return Text("4");
-                    }
-                    case "56":{
-                      return const ModulePage();
-                    }
-
-                  default:
-                    return SizedBox();
-                }
-              })();
-            }),
+                  Get.reset();
+                  Get.deleteAll();
+                  // print(id);
+                  //Get.to(getPage(module, id));
+                  return getPage(id);
+                }),
+              )
+            ],
           )
-        ],
-      ),
-    );
+        : Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const DrawerBackIconWithTabEvent(),
+                Expanded(
+                  child: BlocBuilder<CurrentIDBloc, CurrentIdState>(
+                      builder: (context, state) {
+                    var id = state.id;
+                    print('-------------' + id);
+                    return getPage(id);
+                  }),
+                )
+              ],
+            ),
+          );
   }
 }
 
@@ -210,8 +388,10 @@ class DrawerBackIconWithTabEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool b = Responsive.isMobile(context);
     return Container(
-      color: kBgLightColor,
+      //margin: EdgeInsets.only(top: 100),
+      color: b ? Colors.transparent : kWebBackgroundDeepColor,
       width: double.infinity,
       height: 28,
       child: Row(
@@ -220,7 +400,9 @@ class DrawerBackIconWithTabEvent extends StatelessWidget {
         children: [
           const DrawerMenueIcon(),
           SizedBox(
-            width: MediaQuery.of(context).size.width - 252,
+            width: b
+                ? MediaQuery.of(context).size.width
+                : MediaQuery.of(context).size.width - 252,
             child: const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: TabMenuWithEvent(),
@@ -244,7 +426,7 @@ class TabMenuWithEvent extends StatelessWidget {
           return BlocBuilder<CurrentIDBloc, CurrentIdState>(
             builder: (context1, state1) {
               return ListView.builder(
-                  padding: const EdgeInsets.only(left: 4),
+                  padding: const EdgeInsets.only(left: 2),
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   scrollDirection: Axis.horizontal,
@@ -265,12 +447,37 @@ class TabMenuWithEvent extends StatelessWidget {
                         //print(menuitem.id);
                       },
                       crossButtonClick: () {
+                        // Get.reset();
+                        // Get.deleteAll();
+
+                        // try {
+
+                        //   var x = getPage(menuitem.id);
+                        //   var methods = getMethods(x);
+                        //   methods.forEach((method) {
+                        //     method();
+                        //   });
+
+                        //  // print(t);
+                        // } catch (e) {
+                        //   print(e.toString());
+                        // }
+
+                        // deleteController(menuitem.id);
+                        var menuid = menuitem.id;
                         context
                             .read<MenuItemBloc>()
                             .add(ItemMenuDelete(menuitem: menuitem));
+
                         context1
                             .read<CurrentIDBloc>()
                             .add(SetCurrentId(id: NextIndex(itemList, index)));
+
+                        // Future.delayed(const Duration(milliseconds: 3000));
+
+                        Future.delayed(const Duration(microseconds: 100), () {
+                          deleteController(menuid);
+                        });
                       },
                       color: state1.id.trim() != menuitem.id.trim()
                           ? kSecondaryColor
@@ -288,6 +495,24 @@ class TabMenuWithEvent extends StatelessWidget {
       },
     );
   }
+}
+
+void deleteController(String id) {
+  try {
+    var x = getPage(id);
+    var methods = getMethods(x);
+    methods.forEach((method) {
+      method();
+    });
+
+    // print(t);
+  } catch (e) {
+    print(e.toString());
+  }
+}
+
+List<Function> getMethods(x) {
+  return [x.disposeController];
 }
 
 class DrawerMenueIcon extends StatelessWidget {
@@ -329,7 +554,7 @@ class ArrowBackPositioned extends StatelessWidget {
   Widget build(BuildContext context) {
     //final MenuCloseController yourController = Get.put(MenuCloseController());
     return Positioned(
-        top: 0,
+        top: 1,
         right: 1,
         child: BlocBuilder<MenubuttonCloseBlocBloc, MenubuttonCloseBlocState>(
           builder: (context, state) {
@@ -369,7 +594,8 @@ class ItemMenuInit extends ItemMenuState {
 }
 
 class ItemMenuAdded extends ItemMenuState {
-  ItemMenuAdded({required List<ItemModel> menuitem})
+  final String currentID;
+  ItemMenuAdded({required List<ItemModel> menuitem, required this.currentID})
       : super(menuitem: menuitem);
 }
 
@@ -396,13 +622,13 @@ class MenuItemBloc extends Bloc<ItemMenuEvent, ItemMenuState> {
     // List<ItemModel> lst = [];
     //lst.add(event.menuitem);
 
-    emit(ItemMenuAdded(menuitem: state.menuitem));
+    emit(ItemMenuAdded(menuitem: state.menuitem, currentID: event.menuitem.id));
   }
 
   FutureOr<void> _deleteItem(
       ItemMenuDelete event, Emitter<ItemMenuState> emit) {
     state.menuitem.remove(event.menuitem);
-    emit(ItemMenuAdded(menuitem: state.menuitem));
+    emit(ItemMenuAdded(menuitem: state.menuitem, currentID: event.menuitem.id));
   }
 }
 
@@ -416,7 +642,13 @@ class CurrentIDInit extends CurrentIdState {
 }
 
 class CurrentIDSet extends CurrentIdState {
-  CurrentIDSet({required super.id});
+  final String currentId;
+  CurrentIDSet({required super.id, required this.currentId});
+}
+
+class CurrentIdDeleteState extends CurrentIdState {
+  final String delid;
+  CurrentIdDeleteState({required this.delid, required super.id});
 }
 
 abstract class CurrenIdEvent {
@@ -433,7 +665,10 @@ class CurrentIDBloc extends Bloc<CurrenIdEvent, CurrentIdState> {
   CurrentIDBloc() : super(CurrentIDInit(id: "")) {
     on<CurrenIdEvent>((event, emit) {
       if (event is SetCurrentId) {
-        emit(CurrentIDSet(id: event.id));
+        //emit(CurrentIdDeleteState(delid: event.delid,id: event.id));
+
+        emit(CurrentIDSet(id: event.id, currentId: event.id));
+        //
       }
     });
   }
