@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class data_api {
@@ -85,22 +83,58 @@ class data_api2 {
   }
 }
 
-Future<void> uploadImage(File imageFile) async {
-  final String apiEndpoint = "https://erphub.top/img.ashx";
-  try {
-    var request = http.MultipartRequest('POST', Uri.parse(apiEndpoint));
-    request.fields['pid'] = "img";
-    request.files
-        .add(await http.MultipartFile.fromPath('file', imageFile.path));
+//Future<void> uploadImage(File imageFile) async {
+// final String apiUrl = 'https://erphub.top/img.ashx';
+// try {
+//   var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+//   request.fields["pid"] = "img";
+//   request.files
+//       .add(await http.MultipartFile.fromPath('file', imageFile.path));
 
-    var response = await request.send();
+//   var response = await request.send();
 
-    if (response.statusCode == 200) {
-      print('Image uploaded successfully');
-    } else {
-      print('Failed to upload image. Status code: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('Error uploading image: $e');
-  }
-}
+//   if (response.statusCode == 200) {
+//     print('Image uploaded successfully');
+//     // Handle success
+//   } else {
+//     print('Failed to upload image. Status code: ${response.statusCode}');
+//     // Handle error
+//   }
+// } catch (e) {
+//   print('Error uploading image: $e');
+// }
+
+// Future<String> convertFileToBase64(File file) async {
+//   try {
+//     List<int> imageBytes = await file.readAsBytes();
+//     String base64Image = base64Encode(imageBytes);
+//     return base64Image;
+//   } catch (e) {
+//     print(e);
+//     return '';
+//   }
+// }
+
+// Future<void> uploadImage(File imageFile) async {
+//   var x = await convertFileToBase64(imageFile);
+//   print(x);
+
+//   // final String apiUrl = 'https://erphub.top/img.ashx';
+//   // try {
+//   //   var request = http.MultipartRequest('POST', Uri.parse(apiUrl))
+//   //     ..files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+//   //   //request.fields["pid"] = "img";
+//   //   print("before call");
+//   //   var response = await request.send();
+//   //   print(response.reasonPhrase);
+
+//   //   if (response.statusCode == 200) {
+//   //     print('Image uploaded successfully');
+//   //   } else {
+//   //     print('Failed to upload image. Status code: ${response.statusCode}');
+//   //   }
+//   // } catch (e) {
+//   //   print('Error uploading image: $e');
+//   // }
+// }
+// //}

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_2/component/settings/functions.dart';
 
 import '../../../../component/settings/config.dart';
 import '../../../../data/data_api.dart';
@@ -50,7 +51,7 @@ class PatRegController extends GetxController {
   var errorMessage = "".obs;
   var companyName = "".obs;
   var uid = 0.obs;
-  var imgPath = ''.obs;
+
   var isNewBorn = false.obs;
 
   var cmb_prefix = ''.obs;
@@ -85,7 +86,12 @@ class PatRegController extends GetxController {
   late BuildContext context;
 
   Future<void> ImageUpload() async {
-   await uploadImage(imageFile.value);
+    data_api2 api = data_api2();
+    var img = await imageFileToBase64(imageFile.value.path);
+    var x = await api.createLead([
+      {"path": "img", "img": img}
+    ], "save_image");
+    print(x);
   }
 
   Future<void> setPermanentPresentSame(bool b) async {
@@ -100,8 +106,10 @@ class PatRegController extends GetxController {
       districtList_permanent = districtList_Present;
       //
       cmb_permanent_district.value = cmb_present_district.value;
+      txt_permanent_address.text = txt_present_address.text;
     } else {
       cmb_permanent_country.value = '';
+      txt_permanent_address.text = '';
       stateList_permanent.clear();
       districtList_permanent.clear();
     }
@@ -273,5 +281,128 @@ class PatRegController extends GetxController {
       errorMessage(e.toString());
     }
     super.onInit();
+  }
+
+  void SetUndo() {
+    imageFile.value = File('');
+    txt_mother_hcn.text = '';
+    txt_name.text = '';
+    txt_dob.text = '';
+    txt_father_name.text = '';
+    txt_mother_name.text = '';
+    txt_spouse_name.text = '';
+    txt_guardian_name.text = '';
+    txt_identity_number.text = '';
+    txt_cell_phone.text = '';
+    txt_home_phone.text = '';
+    txt_email.text = '';
+    txt_emergency_number.text = '';
+    txt_empid.text = '';
+    txt_emergency_address.text = '';
+    txt_permanent_address.text = '';
+    stateList_emergency.clear();
+    districtList_emergency.clear();
+    cmb_emergency_district.value = '';
+    stateList_Present.clear();
+    districtList_Present.clear();
+    cmb_present_district.value = '';
+    stateList_permanent.clear();
+    districtList_permanent.clear();
+    cmb_permanent_district.value = '';
+    isLoading.value = false;
+    isSameAsPresentAddress.value = false;
+    isError.value = false;
+    errorMessage.value = '';
+
+    uid.value = 0;
+
+    isNewBorn.value = false;
+    cmb_prefix.value = '';
+    cmb_nationality.value = '';
+    cmb_gender.value = '';
+    cmb_religion.value = '';
+    cmb_maritalstatus.value = '';
+    cmb_bloodgroup.value = '';
+    cmb_identitytype.value = '';
+    cmb_designation.value = '';
+    cmb_grade.value = '';
+    cmb_department.value = '';
+    cmb_section.value = '';
+    cmb_emptype.value = '';
+    cmb_jobstatus.value = '';
+    cmb_jobcategory.value = '';
+    cmb_present_country.value = '';
+    cmb_emergency_country.value = '';
+    cmb_emergency_state.value = '';
+    cmb_present_state.value = '';
+    cmb_permanent_state.value = '';
+    cmb_permanent_country.value = '';
+    cmb_pat_education.value = '';
+    cmb_pat_occupation.value = '';
+    cmb_pat_income_level.value = '';
+    cmb_corporate_company.value = '';
+    cmb_pat_type.value = '';
+  }
+
+  @override
+  void onClose() {
+    imageFile.close();
+    txt_mother_hcn.dispose();
+    txt_name.dispose();
+    txt_dob.dispose();
+    txt_father_name.dispose();
+    txt_mother_name.dispose();
+    txt_spouse_name.dispose();
+    txt_guardian_name.dispose();
+    txt_identity_number.dispose();
+    txt_cell_phone.dispose();
+    txt_home_phone.dispose();
+    txt_email.dispose();
+    txt_emergency_number.dispose();
+    txt_empid.dispose();
+    txt_emergency_address.dispose();
+    txt_permanent_address.dispose();
+    stateList_emergency.close();
+    districtList_emergency.close();
+    cmb_emergency_district.close();
+    stateList_Present.close();
+    districtList_Present.close();
+    cmb_present_district.close();
+    stateList_permanent.close();
+    districtList_permanent.close();
+    cmb_permanent_district.close();
+    isLoading.close();
+    isSameAsPresentAddress.close();
+    isError.close();
+    errorMessage.close();
+    companyName.close();
+    uid.close();
+    isNewBorn.close();
+    cmb_prefix.close();
+    cmb_nationality.close();
+    cmb_gender.close();
+    cmb_religion.close();
+    cmb_maritalstatus.close();
+    cmb_bloodgroup.close();
+    cmb_identitytype.close();
+    cmb_designation.close();
+    cmb_grade.close();
+    cmb_department.close();
+    cmb_section.close();
+    cmb_emptype.close();
+    cmb_jobstatus.close();
+    cmb_jobcategory.close();
+    cmb_present_country.close();
+    cmb_emergency_country.close();
+    cmb_emergency_state.close();
+    cmb_present_state.close();
+    cmb_permanent_state.close();
+    cmb_permanent_country.close();
+    cmb_pat_education.close();
+    cmb_pat_occupation.close();
+    cmb_pat_income_level.close();
+    cmb_corporate_company.close();
+    cmb_pat_type.close();
+    super.onClose();
   }
 }

@@ -1,4 +1,3 @@
- 
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -6,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:get/get.dart';
+import 'package:web_2/component/settings/notifers/fun2.dart';
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/custom_elevated_button.dart';
+import 'package:web_2/data/data_api.dart';
 
 import 'package:web_2/pages/patient_registration/new_registration/controller/patient_registration_controller.dart';
 
@@ -132,7 +133,7 @@ _desktop(PatRegController econtroller) {
 
 _leftPart(PatRegController econtroller) {
   // print("Call Again");
- // File? image;
+  // File? image;
   bool isNewBorn = false;
   bool isSearch = false;
   return Container(
@@ -297,7 +298,6 @@ _leftPart(PatRegController econtroller) {
                   Flexible(
                     child: BlocBuilder<PatRegBloc, PatRegState>(
                       builder: (context, state) {
-                        
                         return Container(
                           margin: const EdgeInsets.only(bottom: 6),
                           // padding:const EdgeInsets.symmetric(horizontal: 2) ,
@@ -325,12 +325,15 @@ _leftPart(PatRegController econtroller) {
                                       // ignore: unrelated_type_equality_checks
 
                                       child: Obx(() {
-                                        return econtroller.imageFile.value.path  != ''
+                                        return econtroller
+                                                    .imageFile.value.path !=
+                                                ''
                                             ? ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 child: Image.network(
-                                                  econtroller.imageFile.value.path,
+                                                  econtroller
+                                                      .imageFile.value.path,
                                                   width:
                                                       100.0, // Adjust width as needed
                                                   height: 100.0,
@@ -375,7 +378,13 @@ _leftPart(PatRegController econtroller) {
                                             if (file != null) {
                                               // ignore: use_build_context_synchronously
 
-                                              econtroller.imageFile.value = file;
+                                              econtroller.imageFile.value =
+                                                  file;
+
+                                              // var abcx = await fileToBase64(
+                                              //   file.path,
+                                              // );
+                                              // print(abcx);
 
                                               // context.read<PatRegBloc>().add(
                                               //     PatRegSetImageEvent(
@@ -386,22 +395,22 @@ _leftPart(PatRegController econtroller) {
                                             }
                                           },
                                           child: _iconButton(
-                                            Icons.upload, Colors.grey),
-                                          ),
-                                          
-                                           
+                                              Icons.upload, Colors.grey),
+                                        ),
                                         const SizedBox(
                                           width: 24,
                                         ),
-
                                         InkWell(
-                                            onTap: () async {
-                                              await econtroller.ImageUpload();
-                                            },
-                                            child:  _iconButton(Icons.save,
-                                            kWebHeaderColor.withOpacity(0.4)),
-                                          )
-                                       
+                                          onTap: () async {
+                                            final File imageFile = File(
+                                                econtroller
+                                                    .imageFile.value.path);
+
+                                            await econtroller.ImageUpload();
+                                          },
+                                          child: _iconButton(Icons.save,
+                                              kWebHeaderColor.withOpacity(0.4)),
+                                        )
                                       ],
                                     ),
                                   ))
@@ -1395,7 +1404,9 @@ _rightPart(PatRegController econtroller) {
                 children: [
                   CustomElevatedButton(
                     child: const Text("Undo"),
-                    onTap: () {},
+                    onTap: () {
+                      econtroller.SetUndo();
+                    },
                   ),
                   const SizedBox(
                     width: 12,
