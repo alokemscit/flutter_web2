@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:web_2/component/awesom_dialog/awesome_dialog.dart';
+import 'package:web_2/component/settings/const_string.dart';
 import 'package:web_2/component/settings/functions.dart';
+import 'package:web_2/model/model_status.dart';
 
 import '../../../../component/settings/config.dart';
 import '../../../../data/data_api.dart';
@@ -10,6 +13,7 @@ import '../../../../model/model_user.dart';
 import '../../../hrm/employee_master_page/model/model_emp_load_master_table.dart';
 
 class PatRegController extends GetxController {
+  late data_api2 api;
   final Rx<File> imageFile = File('').obs;
   final TextEditingController txt_hcn = TextEditingController();
 
@@ -44,15 +48,19 @@ class PatRegController extends GetxController {
   var stateList_permanent = <ModelMasterEmpTable>[].obs;
   var districtList_permanent = <ModelMasterEmpTable>[].obs;
   var cmb_permanent_district = ''.obs;
-  var isLoading = false.obs;
+  
   var isSameAsPresentAddress = false.obs;
-
+var isLoading = false.obs;
   var isError = false.obs;
   var errorMessage = "".obs;
   var companyName = "".obs;
   var uid = 0.obs;
+  var hid = 0.obs;
+  var staffID = ''.obs;
 
   var isNewBorn = false.obs;
+  var isSearch = false.obs;
+  var isImageUpdate = false.obs;
 
   var cmb_prefix = ''.obs;
   var cmb_nationality = ''.obs;
@@ -85,8 +93,208 @@ class PatRegController extends GetxController {
 
   late BuildContext context;
 
+  // ignore: non_constant_identifier_names
+
+
+
+
+
+
+void LoadEmployee(String v) {
+ 
+
+}
+
+
+
+
+
+
+  Future<void> Save() async {
+    String img_path = '';
+
+    if (validation()) {
+      return;
+    }
+    
+    if (isImageUpdate.value) {
+      if (imageFile.value.path != '') {
+        var img = await imageFileToBase64(imageFile.value.path);
+        var x = await api.createLead([
+          {"path": "img", "img": img}
+        ], "save_image");
+        ModelStatus s = x.map((e) => ModelStatus.fromJson(e)).first;
+        if (s.status.toString() == "1") {
+          img_path = s.msg!;
+        }
+      }
+    }
+    String a = '''$CustomXmlFormat<r><a><pxid>${cmb_prefix.value}</pxid>
+        <mhcn>${txt_mother_hcn.text}</mhcn><dob>${txt_dob.text}</dob><conid>${cmb_nationality.value}</conid><sex>${cmb_gender.value}</sex>
+        <reli>${cmb_religion.value}</reli><mat>${cmb_maritalstatus.value}</mat><bg>${cmb_bloodgroup.value}</bg><idt>${cmb_identitytype.value}</idt>
+        <idno>${txt_identity_number.text}</idno><mob>${txt_cell_phone.text}</mob><hmob>${txt_home_phone.text}</hmob>
+        <email>${txt_email.text}</email><eno>${txt_emergency_number.text}</eno><ptype>${cmb_pat_type.value}</ptype>
+        <corpid>${cmb_corporate_company.value}</corpid><staff>${staffID.value}</staff><eduid>${cmb_pat_education.value}</eduid>
+        <occid>${cmb_pat_occupation.value}</occid><incid>${cmb_pat_income_level.value}</incid>
+        <ecid>${cmb_emergency_country.value}</ecid><esid>${cmb_emergency_state.value}</esid><edid>${cmb_emergency_district.value}</edid>
+        <pscid>${cmb_present_country.value}</pscid><pssid>${cmb_present_state.value}</pssid><psdid>${cmb_present_district.value}</psdid>
+        <prcid>${cmb_permanent_country.value}</prcid><prsid>${cmb_permanent_state.value}</prsid><prdid>${cmb_permanent_district.value}</prdid>
+        </a></r>''';
+    var x = await api.createLead([
+      {
+        "tag": "19",
+        "hid": hid.value.toString(),
+        "eid": user.value.uid,
+        "cid": user.value.cid,
+        "name": txt_name.text,
+        "fname": txt_father_name.text,
+        "mname": txt_mother_name.text,
+        "sname": txt_spouse_name.text,
+        "gname": txt_guardian_name.text,
+        "emr_add": txt_emergency_address.text,
+        "pre_add": txt_present_address.text,
+        "per_add": txt_permanent_address.text,
+        "img_path": img_path,
+        "xml": a
+      }
+    ]);
+
+    ModelStatus s = x.map((e) => ModelStatus.fromJson(e)).first;
+    if (s.status.toString() != "1") {
+      // ignore: use_build_context_synchronously
+      customAwesamDialodOk(
+          context,
+          DialogType.error,
+          "Warning!",
+          hid.value == 0
+              ? "Error for new registration"
+              : "Error to update patient information",
+          () {});
+      return;
+    }
+    isImageUpdate.value = false;
+    isSearch.value = true;
+    hid.value = int.parse(s.id.toString());
+    txt_hcn.text = s.msg!;
+
+    //  print(x);
+
+    //print(a);
+  }
+
+  bool validation() {
+    if (user.value == null) {
+      isError(true);
+      errorMessage('You have to re login!');
+      return true;
+    }
+    if (isNewBorn.value) {
+      if (txt_mother_hcn.text == '') {
+        customAwesamDialodOk(context, DialogType.warning, "Warning!",
+            "Please enter valid mother HCN", () {});
+        return true;
+      }
+    }
+    if (cmb_prefix.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select prefix", () {});
+      return true;
+    }
+
+    if (txt_name.text == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select prefix", () {});
+      return true;
+    }
+    if (txt_dob.text == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Date of birth required!", () {});
+      return true;
+    }
+    if (cmb_nationality.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select country/nationality", () {});
+      return true;
+    }
+
+    if (txt_father_name.text == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please enter father's name", () {});
+      return true;
+    }
+    if (cmb_gender.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select gender", () {});
+      return true;
+    }
+    if (cmb_religion.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select religion", () {});
+      return true;
+    }
+    if (cmb_maritalstatus.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select marital status", () {});
+      return true;
+    }
+    if (cmb_identitytype.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select identity type", () {});
+      return true;
+    }
+    if (cmb_nationality.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select identity number", () {});
+      return true;
+    }
+    if (txt_cell_phone.text == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Cell phone/ mobile number required", () {});
+      return true;
+    }
+    if (txt_emergency_number.text == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Emergency contact number required!", () {});
+      return true;
+    }
+    if (cmb_pat_type.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select patient type", () {});
+      return true;
+    }
+    if (cmb_corporate_company.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Please select corporate type", () {});
+      return true;
+    }
+    if (cmb_emergency_country.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "Country required for emergency address", () {});
+      return true;
+    }
+    if (cmb_emergency_state.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "State required for emergency address", () {});
+      return true;
+    }
+    if (cmb_emergency_district.value == '') {
+      customAwesamDialodOk(context, DialogType.warning, "Warning!",
+          "District required for emergency address", () {});
+      return true;
+    }
+    if (cmb_pat_type.value == '2') {
+      if (txt_empid.text == '') {
+        customAwesamDialodOk(context, DialogType.warning, "Warning!",
+            "Please enter valid staff employee id", () {});
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   Future<void> ImageUpload() async {
-    data_api2 api = data_api2();
+    
     var img = await imageFileToBase64(imageFile.value.path);
     var x = await api.createLead([
       {"path": "img", "img": img}
@@ -170,7 +378,7 @@ class PatRegController extends GetxController {
 
   Future<void> getDistrict(String countryID, String stateID, String tp) async {
     //  isLoading(true);
-    data_api2 api = data_api2();
+   
     if (user.value == null) {
       //isLoading(false);
       isError(true);
@@ -208,7 +416,7 @@ class PatRegController extends GetxController {
 
   Future<void> getSate(String countryID, String tp) async {
     //  isLoading(true);
-    data_api2 api = data_api2();
+   
     if (user.value == null) {
       //isLoading(false);
       isError(true);
@@ -241,8 +449,9 @@ class PatRegController extends GetxController {
 
   @override
   void onInit() async {
+    api= data_api2();
     isLoading(true);
-    data_api2 api = data_api2();
+   
     try {
       user.value = await getUserInfo();
       // print(user.cid);
@@ -284,7 +493,10 @@ class PatRegController extends GetxController {
   }
 
   void SetUndo() {
+    isImageUpdate.value = false;
+    isSearch.value = false;
     imageFile.value = File('');
+    txt_hcn.text = '';
     txt_mother_hcn.text = '';
     txt_name.text = '';
     txt_dob.text = '';
@@ -346,6 +558,7 @@ class PatRegController extends GetxController {
 
   @override
   void onClose() {
+    
     imageFile.close();
     txt_mother_hcn.dispose();
     txt_name.dispose();
@@ -405,4 +618,6 @@ class PatRegController extends GetxController {
     cmb_pat_type.close();
     super.onClose();
   }
+
+  
 }

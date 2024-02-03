@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -161,6 +162,7 @@ return  BoxDecorationTopRounded.copyWith(
       );
 }
 
+// ignore: non_constant_identifier_names
 CustomCaptionForContainer(String text,[Color backgroundColor=kWebHeaderColor,boxShadoColor=Colors.black38] ) => Container(
       decoration: BoxDecoration(
         color: backgroundColor.withOpacity(0.13),
@@ -323,6 +325,12 @@ Future<File> getImage() async {
 
 Future<String> imageFileToBase64(String fileUrl) async {
   // Fetch the file content using an HTTP request
+  if(!kIsWeb){
+    File inputFile = File(fileUrl);
+    List<int> fileBytes = inputFile.readAsBytesSync();
+   String base64String = base64Encode(fileBytes);
+   return base64String;
+  }
   var response = await http.get(Uri.parse(fileUrl));
 
   if (response.statusCode == 200) {

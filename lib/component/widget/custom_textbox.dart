@@ -34,6 +34,7 @@ class CustomTextBox extends StatelessWidget {
   final void Function(String) onSubmitted;
   final void Function() onEditingComplete;
   final FocusNode? focusNode;
+  final bool isCapitalization;
 
   CustomTextBox(
       {super.key,
@@ -62,7 +63,9 @@ class CustomTextBox extends StatelessWidget {
       this.surfixIconColor = kWebHeaderColor,
       void Function(String)? onSubmitted,
       void Function()? onEditingComplete,
-      this.focusNode})
+      this.focusNode,
+      this.isCapitalization=false
+      })
       : onSubmitted = onSubmitted ?? ((String v) {}),
         onEditingComplete = onEditingComplete ?? (() {});
 
@@ -76,16 +79,11 @@ class CustomTextBox extends StatelessWidget {
         child: Container(
           //padding: EdgeInsets.zero,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadious),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 0,
-                spreadRadius: 0.01,
-                color: borderColor
-              )
-            ]
-          ),
+              borderRadius: BorderRadius.circular(borderRadious),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(blurRadius: 0, spreadRadius: 0.01, color: borderColor)
+              ]),
           //  padding: const EdgeInsets.only(top: 4),
           // color: Colors.amber,
           width: width,
@@ -99,6 +97,7 @@ class CustomTextBox extends StatelessWidget {
                 isObsText = state.isShow;
               }
               return TextField(
+                textCapitalization: isCapitalization==true? TextCapitalization.characters:TextCapitalization.none,
                 focusNode: focusNode,
                 enabled: !isDisable,
                 readOnly: isReadonly,
@@ -106,23 +105,25 @@ class CustomTextBox extends StatelessWidget {
                 onSubmitted: (v) {
                   onSubmitted(v);
                 },
-                
+
                 onEditingComplete: () {
                   print("12121");
                   onEditingComplete();
                 },
                 keyboardType: textInputType,
                 obscureText: !isObsText ? isPassword : false,
-                inputFormatters: textInputType == TextInputType.multiline
+                inputFormatters: isCapitalization?[UpperCaseTextFormatter()]: textInputType == TextInputType.multiline
                     ? []
-                    : textInputType == TextInputType.text
+                    : textInputType == TextInputType.emailAddress
                         ? []
-                        : [
-                            textInputType == TextInputType.number
-                                ? FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+\.?\d*'))
-                                : FilteringTextInputFormatter.digitsOnly
-                          ],
+                        : textInputType == TextInputType.text
+                            ? []
+                            : [
+                                textInputType == TextInputType.number
+                                    ? FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d+\.?\d*'))
+                                    : FilteringTextInputFormatter.digitsOnly
+                              ],
                 maxLength: maxlength,
                 // canRequestFocus : false,
                 maxLines: maxLine,
@@ -158,8 +159,7 @@ class CustomTextBox extends StatelessWidget {
                     border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.all(Radius.circular(borderRadious)),
-                        borderSide: const BorderSide(color: Colors.white)
-                        ),
+                        borderSide: const BorderSide(color: Colors.white)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(borderRadious),
                       borderSide: BorderSide(
@@ -196,6 +196,20 @@ class CustomTextBox extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
     );
   }
 }

@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:get/get.dart';
-import 'package:web_2/component/settings/notifers/fun2.dart';
+
 import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/custom_elevated_button.dart';
-import 'package:web_2/data/data_api.dart';
 
 import 'package:web_2/pages/patient_registration/new_registration/controller/patient_registration_controller.dart';
 
@@ -32,27 +30,24 @@ class PatientRegistration extends StatelessWidget {
   Widget build(BuildContext context) {
     PatRegController rController = Get.put(PatRegController());
     rController.context = context;
-    return BlocProvider(
-      create: (context) => PatRegBloc(),
-      child: Scaffold(
-        body: Obx(
-          () {
-            if (rController.isLoading.value) {
-              return const Center(child: CupertinoActivityIndicator());
-            }
-            if (rController.isError.value) {
-              return Text(
-                rController.errorMessage.value.toString(),
-                style: const TextStyle(color: Colors.red),
-              );
-            }
-            return Responsive(
-              mobile: _tablet(rController),
-              tablet: _tablet(rController),
-              desktop: _desktop(rController),
+    return Scaffold(
+      body: Obx(
+        () {
+          if (rController.isLoading.value) {
+            return const Center(child: CupertinoActivityIndicator());
+          }
+          if (rController.isError.value) {
+            return Text(
+              rController.errorMessage.value.toString(),
+              style: const TextStyle(color: Colors.red),
             );
-          },
-        ),
+          }
+          return Responsive(
+            mobile: _tablet(rController),
+            tablet: _tablet(rController),
+            desktop: _desktop(rController),
+          );
+        },
       ),
     );
   }
@@ -134,8 +129,7 @@ _desktop(PatRegController econtroller) {
 _leftPart(PatRegController econtroller) {
   // print("Call Again");
   // File? image;
-  bool isNewBorn = false;
-  bool isSearch = false;
+
   return Container(
     //decoration:customBoxDecoration.copyWith(color: kWebBackgroundDeepColor),
     decoration: CustomCaptionDecoration(),
@@ -164,85 +158,115 @@ _leftPart(PatRegController econtroller) {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BlocBuilder<PatRegBloc, PatRegState>(
-                        builder: (context, state) {
-                          if (state is PatRegSetIsSearchState) {
-                            isSearch = state.isSearch;
-                          }
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              isSearch
-                                  ? CustomTextBox(
-                                      //focusNode: econtroller.f_emp_id,
-                                      labelTextColor: Colors.black54,
-                                      // isDisable: econtroller.isDisableID.value, // true,
-                                      // isReadonly: econtroller.isDisableID.value,
-                                      caption: "HCN",
-                                      width: 150,
-                                      maxlength: 11,
-                                      height: 28,
-                                      isFilled: true,
-                                      controller: econtroller
-                                          .txt_hcn, //econtroller.txt_emp_id,
-                                      onChange: (v) {},
-                                      onSubmitted: (p0) {
-                                        //print("p0.characters");
-                                      },
-                                    )
-                                  : const SizedBox(),
-                              InkWell(
-                                onTap: () {
-                                  // econtroller.EditEmployee();
-                                  context.read<PatRegBloc>().add(
-                                      PatRegSetIsSearchEvent(
-                                          isSearch: !isSearch));
-                                },
-                                child: Container(
+                      Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            econtroller.isSearch.value
+                                ? CustomTextBox(
+                                    //focusNode: econtroller.f_emp_id,
+                                    labelTextColor: Colors.black54,
+                                    // isDisable: econtroller.isDisableID.value, // true,
+                                    // isReadonly: econtroller.isDisableID.value,
+                                    caption: "HCN",
+                                    isCapitalization: true,
+                                    width: 150,
+                                    maxlength: 11,
+                                    height: 28,
+                                    isFilled: true,
+                                    controller: econtroller
+                                        .txt_hcn, //econtroller.txt_emp_id,
+                                    onChange: (v) {
+                                      
+                                      if (v.length == 11) {
+
+                                      econtroller.LoadEmployee(v);
+
+                                      }
+                                    },
+                                    onSubmitted: (p0) {
+                                      //print("p0.characters");
+                                    },
+                                  )
+                                : const SizedBox(),
+                            InkWell(
+                              onTap: () {
+                                // econtroller.EditEmployee();
+                                if (econtroller.isSearch.value) {
+                                  econtroller.hid.value = 0;
+                                  econtroller.SetUndo();
+                                  return;
+                                }
+                                econtroller.isSearch.value =
+                                    !econtroller.isSearch.value;
+                                // context.read<PatRegBloc>().add(
+                                //     PatRegSetIsSearchEvent(
+                                //         isSearch: !isSearch));
+                              },
+                              child: Container(
+                                  margin: const EdgeInsets.only(left: 4),
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: kWebBackgroundDeepColor)),
+                                  child: Icon(
+                                    econtroller.isSearch.value
+                                        ? Icons.undo_sharp
+                                        : Icons.search,
+                                    size: 18,
+                                    color: kGrayColor,
+                                  )),
+                            ),
+
+                               
+                                econtroller.isSearch.value?InkWell(
+                                  onTap: () {
+                                    
+                                  },
+                                  child: Container(
                                     margin: const EdgeInsets.only(left: 4),
                                     padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             color: kWebBackgroundDeepColor)),
-                                    child: Icon(
-                                      isSearch
-                                          ? Icons.undo_sharp
-                                          : Icons.search,
+                                    child: const Icon(
+                                      
+                                          Icons.print_sharp,
+                                          
                                       size: 18,
                                       color: kGrayColor,
                                     )),
-                              ),
-                              isSearch
-                                  ? InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        margin: const EdgeInsets.only(left: 4),
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  spreadRadius: 2,
-                                                  blurRadius: 1,
-                                                  color: Colors.grey
-                                                      .withOpacity(0.1))
-                                            ],
-                                            border: Border.all(
-                                                color:
-                                                    kWebBackgroundDeepColor)),
-                                        child: Text(
-                                          "Advance Search",
-                                          style: customTextStyle.copyWith(
-                                              fontSize: 11),
-                                        ),
+                                ):SizedBox(),
+
+                            econtroller.isSearch.value
+                                ? InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                      margin: const EdgeInsets.only(left: 4),
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                spreadRadius: 2,
+                                                blurRadius: 1,
+                                                color: Colors.grey
+                                                    .withOpacity(0.1))
+                                          ],
+                                          border: Border.all(
+                                              color: kWebBackgroundDeepColor)),
+                                      child: Text(
+                                        "Advance Search",
+                                        style: customTextStyle.copyWith(
+                                            fontSize: 11),
                                       ),
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          );
-                        },
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,6 +277,10 @@ _leftPart(PatRegController econtroller) {
                               Obx(() => Checkbox(
                                   value: econtroller.isNewBorn.value,
                                   onChanged: (onChanged) {
+                                    onChanged == true
+                                        ? econtroller.txt_mother_hcn.text =
+                                            econtroller.txt_mother_hcn.text
+                                        : econtroller.txt_mother_hcn.text = '';
                                     econtroller.isNewBorn.value = onChanged!;
                                     // context.read<PatRegBloc>().add(
                                     //     PatRegSetIsNebornEvent(
@@ -276,13 +304,15 @@ _leftPart(PatRegController econtroller) {
                                 labelTextColor: Colors.black54,
 
                                 caption: "Mother's HCN",
-                                width: 150,
+                                width: 120,
                                 maxlength: 11,
                                 height: 28,
                                 isFilled: true,
                                 controller: econtroller
                                     .txt_mother_hcn, //econtroller.txt_emp_id,
-                                onChange: (v) {},
+                                onChange: (v) {
+                                  if (v.length == 11) {}
+                                },
                                 onSubmitted: (p0) {
                                   //print("p0.characters");
                                 },
@@ -296,128 +326,117 @@ _leftPart(PatRegController econtroller) {
                     ],
                   ),
                   Flexible(
-                    child: BlocBuilder<PatRegBloc, PatRegState>(
-                      builder: (context, state) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 6),
-                          // padding:const EdgeInsets.symmetric(horizontal: 2) ,
-                          height: 120,
-                          width: 100,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                  top: 0,
-                                  child: Container(
-                                      height: 120,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          color: kWebBackgroundDeepColor,
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(8)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.2),
-                                                spreadRadius: 1,
-                                                blurRadius: 1)
-                                          ]),
-                                      // ignore: unrelated_type_equality_checks
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 6),
+                      // padding:const EdgeInsets.symmetric(horizontal: 2) ,
+                      height: 120,
+                      width: 100,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              top: 0,
+                              child: Container(
+                                  height: 120,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: kWebBackgroundDeepColor,
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(8),
+                                          topRight: Radius.circular(8)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey.withOpacity(0.2),
+                                            spreadRadius: 1,
+                                            blurRadius: 1)
+                                      ]),
+                                  // ignore: unrelated_type_equality_checks
 
-                                      child: Obx(() {
-                                        return econtroller
-                                                    .imageFile.value.path !=
-                                                ''
-                                            ? ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.network(
-                                                  econtroller
-                                                      .imageFile.value.path,
-                                                  width:
-                                                      100.0, // Adjust width as needed
-                                                  height: 100.0,
-                                                  fit: BoxFit
-                                                      .cover, // Adjust height as needed
-                                                ),
-                                              )
-                                            : const Icon(
-                                                Icons.people_alt_sharp,
-                                                size: 52,
-                                                color: Colors.grey,
-                                              );
-                                      }))),
-                              Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: kWebBackgroundColor
-                                            .withOpacity(0.03),
-                                        borderRadius: const BorderRadius.only(
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8)),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.13),
-                                              spreadRadius: 0.5,
-                                              blurRadius: 1)
-                                        ]),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          onTap: () async {
-                                            var file = await getImage();
+                                  child: Obx(() {
+                                    return econtroller.imageFile.value.path !=
+                                            ''
+                                        ? ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: Image.network(
+                                              econtroller.imageFile.value.path,
+                                              width:
+                                                  100.0, // Adjust width as needed
+                                              height: 100.0,
+                                              fit: BoxFit
+                                                  .cover, // Adjust height as needed
+                                            ),
+                                          )
+                                        : const Icon(
+                                            Icons.people_alt_sharp,
+                                            size: 52,
+                                            color: Colors.grey,
+                                          );
+                                  }))),
+                          Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color:
+                                        kWebBackgroundColor.withOpacity(0.03),
+                                    borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(8)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.13),
+                                          spreadRadius: 0.5,
+                                          blurRadius: 1)
+                                    ]),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        var file = await getImage();
 
-                                            if (file != null) {
-                                              // ignore: use_build_context_synchronously
+                                        if (file != null) {
+                                          // ignore: use_build_context_synchronously
 
-                                              econtroller.imageFile.value =
-                                                  file;
+                                          econtroller.imageFile.value = file;
+                                          econtroller.isImageUpdate.value =
+                                              true;
+                                          // var abcx = await fileToBase64(
+                                          //   file.path,
+                                          // );
+                                          // print(abcx);
 
-                                              // var abcx = await fileToBase64(
-                                              //   file.path,
-                                              // );
-                                              // print(abcx);
-
-                                              // context.read<PatRegBloc>().add(
-                                              //     PatRegSetImageEvent(
-                                              //         image: file));
-                                              //print(file.path);
-                                              // econtroller.imgPath.value =
-                                              //     file.path;
-                                            }
-                                          },
-                                          child: _iconButton(
-                                              Icons.upload, Colors.grey),
-                                        ),
-                                        const SizedBox(
-                                          width: 24,
-                                        ),
-                                        InkWell(
-                                          onTap: () async {
-                                            final File imageFile = File(
-                                                econtroller
-                                                    .imageFile.value.path);
-
-                                            await econtroller.ImageUpload();
-                                          },
-                                          child: _iconButton(Icons.save,
-                                              kWebHeaderColor.withOpacity(0.4)),
-                                        )
-                                      ],
+                                          // context.read<PatRegBloc>().add(
+                                          //     PatRegSetImageEvent(
+                                          //         image: file));
+                                          //print(file.path);
+                                          // econtroller.imgPath.value =
+                                          //     file.path;
+                                        }
+                                      },
+                                      child: _iconButton(
+                                          Icons.upload, Colors.grey),
                                     ),
-                                  ))
-                            ],
-                          ),
-                        );
-                      },
+                                    const SizedBox(
+                                      width: 24,
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        final File imageFile = File(
+                                            econtroller.imageFile.value.path);
+
+                                        await econtroller.ImageUpload();
+                                      },
+                                      child: _iconButton(Icons.save,
+                                          kWebHeaderColor.withOpacity(0.4)),
+                                    )
+                                  ],
+                                ),
+                              ))
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -745,7 +764,7 @@ _leftPart(PatRegController econtroller) {
                               caption: "Identity Number",
                               width: double.infinity,
                               height: 28,
-                              maxlength: 100,
+                              maxlength: 25,
                               isFilled: true,
                               controller: econtroller
                                   .txt_identity_number, //econtroller.txt_emp_identityname,
@@ -1145,7 +1164,7 @@ _rightPart(PatRegController econtroller) {
                                 focusedBorderColor: Colors.black,
                                 enabledBorderwidth: 0.4,
                                 focusedBorderWidth: 0.3,
-                                maxlength: 150,
+                                maxlength: 250,
                                 height: 70,
                                 controller: econtroller.txt_emergency_address,
                                 onChange: (v) {}),
@@ -1381,6 +1400,7 @@ _rightPart(PatRegController econtroller) {
                                 isFilled: true,
                                 maxLine: 4,
                                 borderRadious: 2,
+                                maxlength: 250,
                                 enabledBorderColor: Colors.grey,
                                 focusedBorderColor: Colors.black,
                                 enabledBorderwidth: 0.4,
@@ -1414,7 +1434,9 @@ _rightPart(PatRegController econtroller) {
                   CustomElevatedButton(
                     style: customButtonStyle,
                     child: const Text("Save"),
-                    onTap: () {},
+                    onTap: () {
+                      econtroller.Save();
+                    },
                   ),
                 ],
               )
@@ -1465,52 +1487,53 @@ _iconButton(IconData icon, Color color) => Container(
       ),
     ));
 
-abstract class PatRegState {}
 
-class PatRegInitialState extends PatRegState {}
+// abstract class PatRegState {}
 
-class PatRegGetImageState extends PatRegState {
-  final File image;
-  PatRegGetImageState({required this.image});
-}
+// class PatRegInitialState extends PatRegState {}
 
-class PatRegIsNebornState extends PatRegState {
-  final bool isNewBorn;
-  PatRegIsNebornState({required this.isNewBorn});
-}
+// class PatRegGetImageState extends PatRegState {
+//   final File image;
+//   PatRegGetImageState({required this.image});
+// }
 
-class PatRegSetIsSearchState extends PatRegState {
-  final bool isSearch;
-  PatRegSetIsSearchState({required this.isSearch});
-}
+// class PatRegIsNebornState extends PatRegState {
+//   final bool isNewBorn;
+//   PatRegIsNebornState({required this.isNewBorn});
+// }
 
-abstract class PatRegEvent {}
+// class PatRegSetIsSearchState extends PatRegState {
+//   final bool isSearch;
+//   PatRegSetIsSearchState({required this.isSearch});
+// }
 
-class PatRegSetImageEvent extends PatRegEvent {
-  final File image;
-  PatRegSetImageEvent({required this.image});
-}
+// abstract class PatRegEvent {}
 
-class PatRegSetIsNebornEvent extends PatRegEvent {
-  final bool isNewBorn;
-  PatRegSetIsNebornEvent({required this.isNewBorn});
-}
+// class PatRegSetImageEvent extends PatRegEvent {
+//   final File image;
+//   PatRegSetImageEvent({required this.image});
+// }
 
-class PatRegSetIsSearchEvent extends PatRegEvent {
-  final bool isSearch;
-  PatRegSetIsSearchEvent({required this.isSearch});
-}
+// class PatRegSetIsNebornEvent extends PatRegEvent {
+//   final bool isNewBorn;
+//   PatRegSetIsNebornEvent({required this.isNewBorn});
+// }
 
-class PatRegBloc extends Bloc<PatRegEvent, PatRegState> {
-  PatRegBloc() : super(PatRegInitialState()) {
-    on<PatRegSetImageEvent>((event, emit) {
-      emit(PatRegGetImageState(image: event.image));
-    });
-    on<PatRegSetIsNebornEvent>((event, emit) {
-      emit(PatRegIsNebornState(isNewBorn: event.isNewBorn));
-    });
-    on<PatRegSetIsSearchEvent>((event, emit) {
-      emit(PatRegSetIsSearchState(isSearch: event.isSearch));
-    });
-  }
-}
+// class PatRegSetIsSearchEvent extends PatRegEvent {
+//   final bool isSearch;
+//   PatRegSetIsSearchEvent({required this.isSearch});
+// }
+
+// class PatRegBloc extends Bloc<PatRegEvent, PatRegState> {
+//   PatRegBloc() : super(PatRegInitialState()) {
+//     on<PatRegSetImageEvent>((event, emit) {
+//       emit(PatRegGetImageState(image: event.image));
+//     });
+//     on<PatRegSetIsNebornEvent>((event, emit) {
+//       emit(PatRegIsNebornState(isNewBorn: event.isNewBorn));
+//     });
+//     on<PatRegSetIsSearchEvent>((event, emit) {
+//       emit(PatRegSetIsSearchState(isSearch: event.isSearch));
+//     });
+//   }
+// }
