@@ -163,7 +163,7 @@ return  BoxDecorationTopRounded.copyWith(
 }
 
 // ignore: non_constant_identifier_names
-CustomCaptionForContainer(String text,[Color backgroundColor=kWebHeaderColor,boxShadoColor=Colors.black38] ) => Container(
+CustomCaptionForContainer(String text,[Color backgroundColor=kWebHeaderColor,boxShadoColor=Colors.black38,Color textColor= Colors.black] ) => Container(
       decoration: BoxDecoration(
         color: backgroundColor.withOpacity(0.13),
         borderRadius: const BorderRadius.only(
@@ -189,12 +189,12 @@ CustomCaptionForContainer(String text,[Color backgroundColor=kWebHeaderColor,box
         padding: const EdgeInsets.only(left: 6, bottom: 8, top: 2),
         child: Text(
           text,
-          style: customTextStyle.copyWith(
+          style:  customTextStyle.copyWith(
               fontSize: 13,
               fontStyle: FontStyle.italic,
               decoration: TextDecoration.underline,
-              decorationColor: Colors.black,
-              color: Colors.black),
+              decorationColor: textColor,
+              color:textColor),
         ),
       ),
     );

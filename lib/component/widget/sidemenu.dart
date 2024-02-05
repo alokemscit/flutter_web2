@@ -298,6 +298,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
     return Container(
       color: widget.backgroundColor,
       child: ExpansionTile(
+         maintainState: true,
+        shape: const Border(),
+                               
         onExpansionChanged: (bool isExpanded) {
           setState(() {
             _isExpanded = isExpanded;

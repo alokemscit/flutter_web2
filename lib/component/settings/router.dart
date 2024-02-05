@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_2/pages/admin/module_page/model/module_model.dart';
+import 'package:web_2/pages/hrm/department_setup/department_setup_page.dart';
 import 'package:web_2/pages/hrm/employee_master_page/employee_master.dart';
 import 'package:web_2/pages/opd/doctor_setup/doctor_opd_setup_page.dart';
 import 'package:web_2/pages/ot/ot_page/doctor_category_setup.dart';
@@ -52,6 +53,8 @@ Widget getPage( String id) {
       return const DoctorCategorySetup();
       case "102":
       return const DoctorOPDSetuo();
+       case "103":
+      return const DepartmentSetup();
       case "":
       return const SizedBox(
         //child: Text("Under Construction!"),

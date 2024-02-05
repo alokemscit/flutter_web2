@@ -7,7 +7,7 @@ import 'package:web_2/component/settings/responsive.dart';
 import 'package:web_2/component/widget/custom_dropdown.dart';
 import 'package:web_2/component/widget/custom_search_box.dart';
 import 'package:web_2/component/widget/custom_textbox.dart';
-import 'package:web_2/pages/opd/doctor_setup/doctor_opd_setup_controller.dart';
+import 'package:web_2/pages/opd/doctor_setup/controller/doctor_opd_setup_controller.dart';
 
 class DoctorOPDSetuo extends StatelessWidget {
   const DoctorOPDSetuo({super.key});
@@ -64,118 +64,163 @@ _leftPart(DoctorOPDsetupController econtroller) {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            
-            Row(
-              children: [
-                Expanded(child: CustomSearchBox(
-                   borderRadious: 2,
+              Row(
+                children: [
+                  Expanded(
+                      child: CustomSearchBox(
+                          borderRadious: 2,
+                          enabledBorderColor: Colors.grey,
+                          focusedBorderColor: Colors.black,
+                          enabledBorderwidth: 0.4,
+                          focusedBorderWidth: 0.3,
+                          caption: "Search Doctor",
+                          maxlength: 100,
+                          controller: TextEditingController(),
+                          onChange: (onChange) {
+                            if (onChange.isNotEmpty) {
+                              econtroller.isSearch.value = true;
+                            } else {
+                              econtroller.isSearch.value = false;
+                            }
+                          })),
+                ],
+              ),
+              Stack(
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Obx(() => CustomDropDown(
+                                        labeltext: "Job Category",
+                                        labelTextColor: Colors.black54,
+                                        id: econtroller.cmb_job_catID.value,
+                                        height: 28,
+                                        borderRadious: 2,
+                                        enabledBorderColor: Colors.grey,
+                                        focusedBorderColor: Colors.black,
+                                        enabledBorderwidth: 0.4,
+                                        focusedBorderWidth: 0.3,
+                                        list: _getDropdownItem(
+                                            econtroller, "jobcategory"),
+                                        onTap: (value) {
+                                          econtroller.cmb_job_catID.value =
+                                              value.toString();
+                                        },
+                                        width: 150,
+                                      )),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                    child: Obx(() => CustomDropDown(
+                                  labeltext: "Department",
+                                  labelTextColor: Colors.black54,
+                                  id: econtroller.cmb_deptID.value,
+                                  height: 28,
+                                  borderRadious: 2,
+                                  enabledBorderColor: Colors.grey,
+                                  focusedBorderColor: Colors.black,
+                                  enabledBorderwidth: 0.4,
+                                  focusedBorderWidth: 0.3,
+                                  list: _getDropdownItem(
+                                      econtroller, "department"),
+                                  onTap: (value) {
+                                    econtroller.cmb_deptID.value =
+                                        value.toString();
+                                  },
+                                  width: 150,
+                                ),),),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Obx(() => CustomDropDown(
+                                    labeltext: "Section",
+                                    labelTextColor: Colors.black54,
+                                    id: econtroller.cmb_section_ID.value,
+                                    height: 28,
+                                    borderRadious: 2,
                                     enabledBorderColor: Colors.grey,
                                     focusedBorderColor: Colors.black,
                                     enabledBorderwidth: 0.4,
                                     focusedBorderWidth: 0.3,
-                  
-                  caption: "Search Doctor", maxlength: 100, controller: TextEditingController(), onChange: (onChange){})),
-              ],
-            ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CustomDropDown(
-                            labeltext: "Job Category",
-                            labelTextColor: Colors.black54,
-                            id: null, // econtroller.cmb_pat_type.value,
-                            height: 28,
-                            borderRadious: 2,
-                            enabledBorderColor: Colors.grey,
-                            focusedBorderColor: Colors.black,
-                            enabledBorderwidth: 0.4,
-                            focusedBorderWidth: 0.3,
-                            list: [],
-                            //_getDropdownItemPat(econtroller, "patienttype"),
-                            onTap: (value) {}, width: 150,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                            child: CustomDropDown(
-                          labeltext: "Department",
-                          labelTextColor: Colors.black54,
-                          id: null, // econtroller.cmb_pat_type.value,
-                          height: 28,
-                          borderRadious: 2,
-                          enabledBorderColor: Colors.grey,
-                          focusedBorderColor: Colors.black,
-                          enabledBorderwidth: 0.4,
-                          focusedBorderWidth: 0.3,
-                          list: [],
-                          //_getDropdownItemPat(econtroller, "patienttype"),
-                          onTap: (value) {}, width: 150,
-                        ))
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CustomDropDown(
-                            labeltext: "Section",
-                            labelTextColor: Colors.black54,
-                            id: null, // econtroller.cmb_pat_type.value,
-                            height: 28,
-                            borderRadious: 2,
-                            enabledBorderColor: Colors.grey,
-                            focusedBorderColor: Colors.black,
-                            enabledBorderwidth: 0.4,
-                            focusedBorderWidth: 0.3,
-                            list: [],
-                            //_getDropdownItemPat(econtroller, "patienttype"),
-                            onTap: (value) {}, width: 150,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                            child: CustomDropDown(
-                          labeltext: "Doctor Name",
-                          labelTextColor: Colors.black54,
-                          id: null, // econtroller.cmb_pat_type.value,
-                          height: 28,
-                          borderRadious: 2,
-                          enabledBorderColor: Colors.grey,
-                          focusedBorderColor: Colors.black,
-                          enabledBorderwidth: 0.4,
-                          focusedBorderWidth: 0.3,
-                          list: [],
-                          //_getDropdownItemPat(econtroller, "patienttype"),
-                          onTap: (value) {}, width: 150,
-                        ))
-                      ],
-                    ),
-                  )
+                                    list: _getDropdownItem(
+                                        econtroller, "section"),
+                                    onTap: (value) {
+                                      econtroller.cmb_section_ID.value =
+                                          value.toString();
+                                    },
+                                    width: 150,
+                                  )),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                    child: Obx(() => CustomDropDown(
+                                  labeltext: "Doctor Name",
+                                  labelTextColor: Colors.black54,
+                                  id: econtroller.cmb_doc_ID.value,
+                                  height: 28,
+                                  borderRadious: 2,
+                                  enabledBorderColor: Colors.grey,
+                                  focusedBorderColor: Colors.black,
+                                  enabledBorderwidth: 0.4,
+                                  focusedBorderWidth: 0.3,
+                                  list: econtroller.dList.map((element) => DropdownMenuItem<String>(
+                                    value: element.uid,
+                                    child: Text('${element.eno!} ${element.dname!}') ) ).toList() ,
+                                  //_getDropdownItemPat(econtroller, "patienttype"),
+                                  onTap: (value) {
+                                    econtroller.cmb_doc_ID.value =
+                                        value.toString();
+                                  },
+                                  width: 150,
+                                ),))
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Obx(
+                    () => econtroller.isSearch.value
+                        ? Container(
+                            width: double.infinity,
+                            color: Colors.amber,
+                            height: 150,
+                          )
+                        : const SizedBox(),
+                  ),
                 ],
               ),
             ],
           ),
+        ),
+        const SizedBox(
+          height: 24,
         ),
       ],
     ),
@@ -203,9 +248,7 @@ _rightPart(DoctorOPDsetupController econtroller) {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
-
-             Container(
+              Container(
                 padding: EdgeInsets.zero,
                 //width: double.infinity,
                 decoration: CustomCaptionDecoration(
@@ -246,7 +289,7 @@ _rightPart(DoctorOPDsetupController econtroller) {
                                 ),
                                 Expanded(
                                   child: CustomTextBox(
-                                  
+                                    labelTextColor: Colors.black54,
                                     caption: 'Avg Time/Patient',
                                     controller: TextEditingController(),
                                     onChange: (String value) {},
@@ -275,13 +318,10 @@ _rightPart(DoctorOPDsetupController econtroller) {
                         ],
                       ),
                     ),
-                 
-                 
                   ],
                 ),
               ),
-
-             Container(
+              Container(
                 padding: EdgeInsets.zero,
                 //width: double.infinity,
                 decoration: CustomCaptionDecoration(
@@ -357,13 +397,10 @@ _rightPart(DoctorOPDsetupController econtroller) {
                         ],
                       ),
                     ),
-                 
-                 
                   ],
                 ),
               ),
-
-             Container(
+              Container(
                 padding: EdgeInsets.zero,
                 //width: double.infinity,
                 decoration: CustomCaptionDecoration(
@@ -439,13 +476,9 @@ _rightPart(DoctorOPDsetupController econtroller) {
                         ],
                       ),
                     ),
-                 
-                 
                   ],
                 ),
               ),
-
-
             ],
           ),
         ),
@@ -526,3 +559,11 @@ _desktop(DoctorOPDsetupController econtroller) {
     ),
   );
 }
+
+_getDropdownItem(DoctorOPDsetupController econtroller, String tag) =>
+    econtroller.elist.where((p0) => p0.tp == tag && p0.status == '1').map((e) {
+      return DropdownMenuItem<String>(
+        value: e.id,
+        child: Text(e.name!),
+      );
+    }).toList();

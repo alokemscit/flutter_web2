@@ -209,3 +209,7 @@ Widget headerCloseButton() => const Column(
         CustomAppBarCloseButton(),
       ],
     );
+// ignore: non_constant_identifier_names
+TableBorder CustomTableBorder()=>TableBorder.all(
+                        width: 0.3,
+                        color: const Color.fromARGB(255, 89, 92, 92));
