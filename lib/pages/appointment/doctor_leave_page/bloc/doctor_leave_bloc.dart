@@ -185,7 +185,7 @@ class DoctorSearchBloc extends Bloc<DoctorSearchEvent, DoctorSearchState> {
             emit(DoctorListLeaviveDoadedState(lList: lst1, isChecked: false));
           } else {
             // print(lst.length);
-            emit(DoctorListLeaviveDoadedState(lList: lst, isChecked: true));
+            emit(DoctorListLeaviveDoadedState(lList: lst, isChecked: event.isSChecked));
           }
         } on Error {
           // print('Error');

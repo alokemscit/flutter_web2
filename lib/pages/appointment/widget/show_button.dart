@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+ 
 class ShowButton extends StatelessWidget {
   final VoidCallback onTab;
   const ShowButton({
@@ -9,13 +10,15 @@ class ShowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 75,
-      height: 35,
+      width: 85,
+      height: 32,
       child: ElevatedButton(
+      
         onPressed: onTab,
         style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 119, 118, 118)),
           backgroundColor:
-              MaterialStateProperty.all<Color>(Colors.grey.shade700),
+              MaterialStateProperty.all<Color>(Color.fromARGB(255, 224, 223, 223)),
         ),
         child: const Text("Show"),
       ),
