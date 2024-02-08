@@ -211,5 +211,5 @@ Widget headerCloseButton() => const Column(
     );
 // ignore: non_constant_identifier_names
 TableBorder CustomTableBorder()=>TableBorder.all(
-                        width: 0.3,
+                        width: 0.5,
                         color: const Color.fromARGB(255, 89, 92, 92));

@@ -326,7 +326,9 @@ _leftPart(PatRegController econtroller) {
                     ],
                   ),
                   Flexible(
-                    child: Container(
+                    child: 
+                    
+                    Container(
                       margin: const EdgeInsets.only(bottom: 6),
                       // padding:const EdgeInsets.symmetric(horizontal: 2) ,
                       height: 120,
@@ -438,6 +440,8 @@ _leftPart(PatRegController econtroller) {
                         ],
                       ),
                     ),
+                 
+                 
                   )
                 ],
               ),

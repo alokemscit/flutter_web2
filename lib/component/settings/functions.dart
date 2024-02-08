@@ -268,31 +268,59 @@ CustomCupertinoAlertWithYesNo(BuildContext context, Widget title,
 
 // ignore: non_constant_identifier_names
 CustomModalBusyLoader() {
-  Get.dialog(
-    transitionCurve: Curves.easeInOutBack,
-    transitionDuration: const Duration(microseconds: 200),
-    barrierColor: Colors.black.withOpacity(0.2),
-    Center(
-      child: CupertinoPopupSurface(
-        child: Container(
-          color: Colors.black,
-          child: const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CupertinoActivityIndicator(
-                  color: Colors.white,
-                ),
-              ],
+ Get.dialog(
+  Center(
+    child:  CupertinoPopupSurface(
+          child: Container(
+            height: 50,
+            width: 50,
+            color: Colors.black,
+            child: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+              ),
             ),
           ),
         ),
-      ),
-    ),
+  ),
+  transitionCurve: Curves.easeInOutBack,
+  transitionDuration: const Duration(milliseconds: 200),
+  barrierColor: Colors.black.withOpacity(0.2),
+  barrierDismissible: false,
+);
+}
+
+// ignore: non_constant_identifier_names
+Future<void> customBusyDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierColor: Colors.black.withOpacity(0.2),
     barrierDismissible: false,
+    builder: (BuildContext context) {
+      // Return your custom dialog content
+      return Center(
+        child: CupertinoPopupSurface(
+          child: Container(
+            height: 50,
+            width: 50,
+            color: Colors.black,
+            child: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      );
+    },
   );
 }
+
+
+
+
 
 // ignore: non_constant_identifier_names
 bool GetStatusMessage(BuildContext context, List<dynamic> x) {

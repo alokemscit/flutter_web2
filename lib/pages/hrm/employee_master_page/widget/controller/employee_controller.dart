@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +17,8 @@ import 'package:web_2/pages/hrm/employee_master_page/model/model_emp_load_master
 import '../../../../../component/settings/config.dart';
 
 class EmployeeController extends GetxController {
+  final Rx<File> imageFile = File('').obs;
+  var isImageUpdate = false.obs;
   var isDisableID = true.obs;
   var elist = <ModelMasterEmpTable>[].obs;
   //var elist_prifix = <ModelMasterEmpTable>[].obs;
@@ -57,6 +61,19 @@ class EmployeeController extends GetxController {
   var cmb_jobstatus = ''.obs;
   var cmb_jobcategory = ''.obs;
   final TextEditingController txt_emp_doj = TextEditingController();
+
+
+
+  Future<void> ImageUpload() async {
+    data_api2 api = data_api2();
+    var img = await imageFileToBase64(imageFile.value.path);
+    var x = await api.createLead([
+      {"path": "img", "img": img}
+    ], "save_image");
+    print(x);
+  }
+
+
 
   Undo() {
     txt_emp_id.text = '';

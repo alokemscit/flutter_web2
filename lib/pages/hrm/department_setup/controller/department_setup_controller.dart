@@ -6,7 +6,7 @@ import 'package:web_2/component/settings/functions.dart';
 import 'package:web_2/data/data_api.dart';
 import 'package:web_2/model/model_status.dart';
 import 'package:web_2/model/model_user.dart';
- 
+
 import 'package:web_2/pages/hrm/department_setup/model/model_department.dart';
 import 'package:web_2/pages/hrm/department_setup/model/model_department_category.dart';
 import 'package:web_2/pages/hrm/department_setup/model/model_section_unit.dart';
@@ -15,6 +15,7 @@ import 'package:web_2/pages/hrm/department_setup/model/model_status_master.dart'
 class DepartmentSetupController extends GetxController {
   late data_api2 api;
   var user = ModelUser().obs;
+
   //var elist = <ModuleCatDeptSection>[].obs;
   final TextEditingController txt_category = TextEditingController();
   final TextEditingController txt_department = TextEditingController();
@@ -69,7 +70,8 @@ class DepartmentSetupController extends GetxController {
       return;
     }
     try {
-      isSectionLoading.value = true;
+      // isSectionLoading.value = true;
+      customBusyDialog(context);
 
       var x = await api.createLead([
         {
@@ -81,8 +83,10 @@ class DepartmentSetupController extends GetxController {
           "status": cmb_section_statusID.value
         }
       ]);
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
       var m = x.map((e) => ModelStatus.fromJson(e)).first;
-      isSectionLoading.value = false;
+      //isSectionLoading.value = false;
       if (m == null) {
         // ignore: use_build_context_synchronously
         customAwesamDialodOk(context, DialogType.error, "Error!",
@@ -108,16 +112,19 @@ class DepartmentSetupController extends GetxController {
           id: m.id,
           name: txt_section.text,
           status: cmb_section_statusID.value));
+      cmb_section_statusID.value = '1';
+      txt_section.text = '';
+      editSectionID.value = '';
       // ignore: use_build_context_synchronously
       customAwesamDialodOk(
           context, DialogType.success, "Success!", m.msg!, () {});
       //cmb_catID2.value = '';
       //cmb_DeptID.value = '';
-      cmb_section_statusID.value = '1';
-      txt_section.text = '';
-      editSectionID.value = '';
+     
     } catch (e) {
-      isSectionLoading.value = false;
+       // ignore: use_build_context_synchronously
+       Navigator.pop(context);
+     // isSectionLoading.value = false;
       // ignore: use_build_context_synchronously
       customAwesamDialodOk(
           context, DialogType.error, "Error!", e.toString(), () {});
@@ -137,7 +144,8 @@ class DepartmentSetupController extends GetxController {
       return;
     }
     try {
-      isDepartmentLoading.value = true;
+      customBusyDialog(context);
+      // isDepartmentLoading.value = true;
       var x = await api.createLead([
         {
           "tag": "26",
@@ -148,8 +156,10 @@ class DepartmentSetupController extends GetxController {
           "status": cmb_department_statusID.value
         }
       ]);
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
       var m = x.map((e) => ModelStatus.fromJson(e)).first;
-      isDepartmentLoading.value = false;
+      //isDepartmentLoading.value = false;
       if (m == null) {
         // ignore: use_build_context_synchronously
         customAwesamDialodOk(context, DialogType.error, "Error!",
@@ -177,16 +187,19 @@ class DepartmentSetupController extends GetxController {
               .first
               .name!));
       // ignore: use_build_context_synchronously
-      customAwesamDialodOk(
-          context, DialogType.success, "Success!", m.msg!, () {});
       txt_department.text = '';
-     // cmb_catID.value = '';
+      // cmb_catID.value = '';
       cmb_department_statusID.value = "1";
       editDepartmentID.value = '';
+      // ignore: use_build_context_synchronously
+      customAwesamDialodOk(
+          context, DialogType.success, "Success!", m.msg!, () {});
 
       // ignore: use_build_context
     } catch (e) {
-      isDepartmentLoading.value = false;
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      //isDepartmentLoading.value = false;
       // ignore: use_build_context_synchronously
       customAwesamDialodOk(
           context, DialogType.error, "Error!", e.toString(), () {});
@@ -194,15 +207,22 @@ class DepartmentSetupController extends GetxController {
     }
   }
 
-  void saveUpdateCategory() async {
+  Future saveUpdateCategory() async {
     if (txt_category.text == '') {
       customAwesamDialodOk(context, DialogType.warning, "Warning!",
           "Please eneter valid category name!", () {});
       return;
     }
-
+    if (txt_category.text == '') {
+      return;
+    }
+    //customBusyDialog(context);
+    //customBusyDialog(context)
+    customBusyDialog(context);
+    //return;
+    // Future.delayed(Duration(seconds: 10));
     try {
-      isCategoryLoading.value = true;
+      // isCategoryLoading.value = true;
       var x = await api.createLead([
         {
           "tag": "25",
@@ -213,7 +233,7 @@ class DepartmentSetupController extends GetxController {
         }
       ]);
       var m = x.map((e) => ModelStatus.fromJson(e)).first;
-      isCategoryLoading.value = false;
+      // isCategoryLoading.value = false;
       if (m == null) {
         // ignore: use_build_context_synchronously
         customAwesamDialodOk(context, DialogType.error, "Error!",
@@ -227,20 +247,32 @@ class DepartmentSetupController extends GetxController {
             context, DialogType.error, "Error!", m.msg!, () {});
         return;
       }
+
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+
+      if (txt_category.text == '') {
+        return;
+      }
+
+      // ignore: use_build_context_synchronously
+      customAwesamDialodOk(
+          context, DialogType.success, "Success!", m.msg!, () {});
       category_list
           .removeWhere((element) => element.id == editCategoryID.value);
       category_list.add(ModelDepartmentCategory(
           id: m.id!,
           name: txt_category.text,
           status: cmb_category_statusID.value));
-      // ignore: use_build_context_synchronously
-      customAwesamDialodOk(
-          context, DialogType.success, "Success!", m.msg!, () {});
       txt_category.text = '';
-     // editCategoryID.value = '';
+      editCategoryID.value = '';
+      // ignore: use_build_context_synchronously
+
       cmb_category_statusID.value = "1";
     } catch (e) {
       isCategoryLoading.value = false;
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
       // ignore: use_build_context_synchronously
       customAwesamDialodOk(
           context, DialogType.error, "Error!", e.toString(), () {});
