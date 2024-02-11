@@ -10,12 +10,11 @@ final double imageOpacity;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.maxFinite,
-      width: double.maxFinite,
+       
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 58, 56, 56).withOpacity(backOpacity),
         image:  DecorationImage(
-            image: ExactAssetImage(assetImagePath),
+            image: const ExactAssetImage("assets/Backgrounds/Spline.png"),
             fit: BoxFit.cover,
             opacity: imageOpacity,
             colorFilter: const ColorFilter.srgbToLinearGamma()),

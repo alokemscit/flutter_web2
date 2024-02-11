@@ -12,15 +12,18 @@ class MenuButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final bool isSelected;
+  final double borderRadius;
   const MenuButton({
-    Key? key,
+    super.key,
     required this.isCrossButton,
     required this.text,
     required this.buttonClick,
     required this.crossButtonClick,
     this.color = const Color.fromARGB(255, 248, 248, 248),
-     this.isSelected=false,  this.textColor=const Color.fromARGB(255, 58, 56, 56),
-  }) : super(key: key);
+    this.isSelected = false,
+    this.textColor = const Color.fromARGB(255, 58, 56, 56),
+    this.borderRadius=4,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +40,20 @@ class MenuButton extends StatelessWidget {
                 margin: const EdgeInsets.all(0),
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: isSelected?kSecondaryColor:color,
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.black38, width: 0.1),
-                  //  boxShadow: const [
-                  //   BoxShadow(
-                  //       blurRadius: 0.0, spreadRadius: 0.1, offset: Offset(0, 0))
-                  // ]
-                ),
+                    color: isSelected ? kSecondaryColor : color,
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    border: Border.all(color: Colors.black38, width: 0.1),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black38.withOpacity(0.3),
+                          blurRadius: 0.05,
+                          spreadRadius: 0.1)
+                    ]
+                    //  boxShadow: const [
+                    //   BoxShadow(
+                    //       blurRadius: 0.0, spreadRadius: 0.1, offset: Offset(0, 0))
+                    // ]
+                    ),
                 child: Row(
                   children: [
                     InkWell(
@@ -52,13 +61,12 @@ class MenuButton extends StatelessWidget {
                       child: Text(
                         text,
                         style: TextStyle(
-                          
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
-                            color:   state.isHover == true
+                            color: state.isHover == true
                                 ? const Color.fromARGB(255, 100, 130, 143)
-                                :textColor,
-                            backgroundColor:  Colors.transparent),
+                                : textColor,
+                            backgroundColor: Colors.transparent),
                       ),
                     ),
                     isCrossButton

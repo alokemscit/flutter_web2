@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
 import '../../model/app_time.dart';
+import '../../pages/appointment/widget/appoint_diaglog_title.dart';
+import '../../pages/appointment/widget/appoint_dialog_body.dart';
 import '../settings/config.dart';
-import '../settings/functions.dart';
+ 
 
 
 class DoctorPanel extends StatelessWidget {
@@ -283,4 +283,47 @@ Color GetColor(String tp) {
     default:
       return Colors.white;
   }
+}
+
+
+
+Future<void> DoctorDialog(BuildContext context, AppTime? data) {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12.0))),
+        contentPadding: const EdgeInsets.only(top: 10.0),
+        // elevation: 0,
+        title: AppointDialogTitle(
+          data: data,
+        ),
+        titlePadding: EdgeInsets.zero,
+        // contentPadding: const EdgeInsets.all(8),
+        content: AppointmentDialogBody(),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('Close'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('Save'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

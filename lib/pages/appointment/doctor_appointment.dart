@@ -33,11 +33,7 @@ class DoctorAppointment extends StatelessWidget {
             BlocProvider<DropdownBloc>(
               create: (BuildContext context) => DropdownBloc(),
             ),
-            BlocProvider<DoctorShowBloc>(
-              create: (BuildContext context) => DoctorShowBloc(
-                RepositoryProvider.of<data_api>(context),
-              ),
-            ),
+           
           ],
 
           child: BlocBuilder<DepartmentBloc, DepartmentState>(
