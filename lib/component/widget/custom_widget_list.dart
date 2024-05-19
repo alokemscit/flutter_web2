@@ -1,8 +1,11 @@
  
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
  
 import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/functions.dart';
+import 'package:web_2/component/settings/responsive.dart';
+ 
  
 
 height([double height = 8]) => SizedBox(
@@ -51,7 +54,7 @@ customFixedHeightContainer(String headerName, List<Widget> children,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomCaptionForContainer(headerName),
+           CustomCaptionForContainer( headerName,),
         
         height>0?  Container(
               decoration: CustomCaptionDecoration().copyWith(
@@ -112,7 +115,24 @@ customChildrenContainer(String headerName, List<Widget> children) =>
 
 
 
-
+// ignore: non_constant_identifier_names
+CustomCommonBody(bool isLoading, bool isError, String errorMessage, Widget mobile,
+    Widget tablet, Widget desktop) {
+  if (isLoading) {
+    return const Center(child: CupertinoActivityIndicator());
+  }
+  if (isError) {
+    return Text(
+      errorMessage,
+      style: const TextStyle(color: Colors.red),
+    );
+  }
+  return Responsive(
+    mobile: mobile,
+    tablet: tablet,
+    desktop: desktop,
+  );
+}
 
 
 

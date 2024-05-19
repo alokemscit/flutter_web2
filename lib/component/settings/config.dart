@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_2/model/model_user.dart';
-import 'package:web_2/model/user_model.dart';
+ 
 
 import '../widget/custom_app_bar_close_button.dart';
 
@@ -102,16 +102,16 @@ Future<ModelUser> getUserInfo() async {
 
   final cid = await prefs.getString('cid');
   final depId = await prefs.getString('depId');
-  final desigId =await prefs.getString('desigId');
-  final name =await prefs.getString('name');
-  final img =await prefs.getString('img');
-  final code =await prefs.getString('code');
-  final cname =await prefs.getString('cname');
-  final dpname =await prefs.getString('dpname');
-  final dgname =await prefs.getString('dgname');
-  final face1 =await prefs.getString('face1');
-  final face2 =await prefs.getString('face2');
-  final mob =await prefs.getString('mob');
+  final desigId = await prefs.getString('desigId');
+  final name = await prefs.getString('name');
+  final img = await prefs.getString('img');
+  final code = await prefs.getString('code');
+  final cname = await prefs.getString('cname');
+  final dpname = await prefs.getString('dpname');
+  final dgname = await prefs.getString('dgname');
+  final face1 = await prefs.getString('face1');
+  final face2 = await prefs.getString('face2');
+  final mob = await prefs.getString('mob');
 //_user = null;
   // print('aaaaaaa'+id.toString());
   if (uid != null && name != null) {
@@ -210,12 +210,30 @@ Widget headerCloseButton() => const Column(
       ],
     );
 // ignore: non_constant_identifier_names
-TableBorder CustomTableBorder()=>TableBorder.all(
-                        width: 0.5,
-                        color: const Color.fromARGB(255, 89, 92, 92));
+TableBorder CustomTableBorder() =>
+    TableBorder.all(width: 0.5, color: const Color.fromARGB(255, 89, 92, 92));
 
-                        // ignore: non_constant_identifier_names
-   CustomTableCell(String text, [TextStyle  style=  const TextStyle(fontSize: 12,fontWeight: FontWeight.w400)])=> Padding(
-     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-     child: Text(text,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w400),),
-  );
+// ignore: non_constant_identifier_names
+CustomTableCell(String text,
+        [TextStyle style =
+            const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)]) =>
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+      ),
+    );
+
+// ignore: non_constant_identifier_names
+Decoration CustomTableHeaderRowDecoration() => BoxDecoration(
+        color: kBgDarkColor,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(8),
+        ),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 3)
+        ]);

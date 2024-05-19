@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../model/app_time.dart';
-import '../../pages/appointment/widget/appoint_diaglog_title.dart';
-import '../../pages/appointment/widget/appoint_dialog_body.dart';
+import '../../modules/appointment/widget/appoint_diaglog_title.dart';
+import '../../modules/appointment/widget/appoint_dialog_body.dart';
 import '../settings/config.dart';
  
 

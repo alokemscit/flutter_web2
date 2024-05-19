@@ -10,10 +10,10 @@ import 'package:web_2/model/main_app_menu.dart';
 import 'package:web_2/model/menu_data_model.dart';
 import 'package:web_2/model/model_user.dart';
 
-import 'package:web_2/pages/authentication/login_page.dart';
-import 'package:web_2/pages/home_page/home_page.dart';
+import 'package:web_2/modules/authentication/login_page.dart';
+import 'package:web_2/modules/home_page/home_page.dart';
 
-import '../../pages/admin/module_page/model/module_model.dart';
+import '../../modules/admin/module_page/model/model_module.dart';
 
 import '../settings/config.dart';
 

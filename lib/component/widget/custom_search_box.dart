@@ -41,7 +41,7 @@ class CustomSearchBox extends StatelessWidget {
       {super.key,
       required this.caption,
       this.width = 65,
-      this.maxlength = 6,
+      this.maxlength = 100,
       required this.controller,
       this.textInputType = TextInputType.text,
       this.maxLine = 1,
@@ -81,7 +81,7 @@ class CustomSearchBox extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadious),
-            color: Colors.white,
+            color:   Colors.white,
             boxShadow: [
               BoxShadow(blurRadius: 0, spreadRadius: 0.01, color: borderColor)
             ]),

@@ -11,7 +11,7 @@ class CustomDropDown extends StatelessWidget {
       required this.list,
       required this.onTap,
       this.height = 28,
-      required this.width,
+       this.width=100,
       this.borderColor = Colors.black38,
       this.labeltext = 'Select',
       this.borderRadious = 2,

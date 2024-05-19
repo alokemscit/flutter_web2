@@ -77,6 +77,7 @@ class data_api2 {
 
       return apiData1;
     } else {
+      print(response.body);
       return [];
     }
     //return apiData1;

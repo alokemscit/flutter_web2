@@ -13,7 +13,7 @@ import 'package:web_2/component/settings/config.dart';
 import '../../model/model_status.dart';
 import '../awesom_dialog/awesome_dialog.dart';
 
-import 'dart:typed_data';
+ 
 import 'package:http/http.dart' as http;
 
 // ignore: non_constant_identifier_names
@@ -199,6 +199,58 @@ CustomCaptionForContainer(String text,[Color backgroundColor=kWebHeaderColor,box
       ),
     );
 
+
+
+
+
+// ignore: non_constant_identifier_names
+CustomCaptionForContainerForAccordian(String text,[Color backgroundColor=kWebHeaderColor,boxShadoColor=Colors.black38,Color textColor= Colors.black] ) => Container(
+      decoration: BoxDecoration(
+        color: backgroundColor.withOpacity(0.13),
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        //border: Border.all(color: Colors.black38, width: 0.1),
+        boxShadow: [
+          BoxShadow(
+              color: boxShadoColor.withOpacity(0.3),
+              blurRadius: 1.05,
+              spreadRadius: 0.1)
+        ],
+ 
+      ),
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 6, bottom: 8, top: 2),
+            child: Text(
+              text,
+              style:  customTextStyle.copyWith(
+                  fontSize: 13,
+                  fontStyle: FontStyle.italic,
+                  decoration: TextDecoration.underline,
+                  decorationColor: textColor,
+                  color:textColor),
+            ),
+          ),
+           Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Icon(Icons.keyboard_arrow_up_sharp,color: textColor,size: 24,),
+          )
+        ],
+      ),
+    );
+
+
+
+
+
+
+
+
+
+
 // ignore: non_constant_identifier_names
 // CustomCupertinoAlertWithYesNo(BuildContext context, Widget title,
 //     Widget content, void Function() no, void Function() yes,
@@ -298,8 +350,7 @@ Future<void> customBusyDialog(BuildContext context) async {
     barrierColor: Colors.black.withOpacity(0.2),
     barrierDismissible: false,
     builder: (BuildContext context) {
-      // Return your custom dialog content
-      return Center(
+     return Center(
         child: CupertinoPopupSurface(
           child: Container(
             height: 50,

@@ -7,11 +7,11 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:web_2/component/settings/config.dart';
 import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
-import 'package:web_2/pages/patient_registration/new_registration/patient_registration.dart';
+import 'package:web_2/modules/patient_registration/new_registration/patient_registration.dart';
 
 import 'component/settings/notifers/auth_provider.dart';
-import 'pages/authentication/login_page2.dart';
-import 'pages/home_page/parent_page.dart';
+import 'modules/authentication/login_page2.dart';
+import 'modules/home_page/parent_page.dart';
  import 'package:flutter_localizations/flutter_localizations.dart';
 
 
