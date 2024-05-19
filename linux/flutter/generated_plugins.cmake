@@ -3,7 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  url_launcher_linux
+  file_selector_linux
+  irondash_engine_context
+  printing
+  rive_common
+  super_native_extensions
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

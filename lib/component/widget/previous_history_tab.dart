@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
-import '../settings/config.dart';
+ 
+import '../../core/config/const.dart';
 
 
 class PreviousHistoryTab extends StatefulWidget {
