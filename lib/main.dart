@@ -1,22 +1,22 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
-import 'package:flutter/material.dart';
+import 'package:agmc/core/config/const.dart';
+import 'package:agmc/moduls/admin/pagges/login_page/login_page.dart';
+import 'package:agmc/moduls/admin/pagges/login_page/notifires/aughtprovider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+ 
 import 'package:provider/provider.dart';
-import 'package:web_2/component/settings/config.dart';
-import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
 
-import 'component/settings/notifers/auth_provider.dart';
-//import 'pages/appointment/doctor_leave_page/doctor_leave.dart';
-import 'pages/authentication/login_page.dart';
-
-import 'pages/home_page/parent_page.dart';
+import 'moduls/admin/pagges/home_page/parent_page.dart';
+import 'moduls/admin/pagges/login_page/controller/connection_controller.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final userProvider = AuthProvider();
 
-  //await appTheame.darkTheme;
+
+  
+  WidgetsFlutterBinding.ensureInitialized();
+   Get.reset();
+   Get.deleteAll();
+  final userProvider = AuthProvider();
   await userProvider.loadUser();
   runApp(MyApp(
     userProvider: userProvider,
@@ -24,9 +24,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final AuthProvider userProvider; // = AuthProvider();
-  final appTheame = AppTheme();
+  final AuthProvider userProvider;
   MyApp({super.key, required this.userProvider});
+  final ConnectivityService connectivityService =
+      Get.put(ConnectivityService());
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -39,61 +40,42 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<AuthProvider>(
             create: (context) => userProvider,
           ),
-          ChangeNotifierProvider<AppTheme>(
-            create: (context) => appTheame,
-          ),
         ],
-        child: Consumer2<AuthProvider, AppTheme>(builder:
-            (context, AuthProvider authNotifier, AppTheme appThemes, child) {
-          return MaterialApp(
-            scrollBehavior: CustomScrollBehavior(),
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              brightness:
-                  appThemes.darkTheme ? Brightness.dark : Brightness.light,
-              //appThemes.darkTheme==true?Brightness.dark:Brightness.light
-            ),
-            home: userProvider.user != null
+        child: Consumer<AuthProvider>(
+            builder: (context, AuthProvider authNotifier, child) {
+              
+              return  GetMaterialApp(
+      //           ocalizationsDelegates: const [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      // ],
+      supportedLocales: const [
+        Locale('en', 'GB'), // Define the supported locale
+      ],
+
+            scrollBehavior: kIsWeb? CustomScrollBehavior():null,
+        debugShowCheckedModeBanner: false,
+        title: appName,
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
+          scaffoldBackgroundColor: kBgLightColor,
+          //colorScheme: ColorScheme.fromSeed(seedColor: appColorPista),
+          colorScheme: const ColorScheme.light(primary: kWebHeaderColor),
+          buttonTheme:
+          const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          primaryColor: kWebHeaderColor,
+          useMaterial3: true,
+          ),
+             home: 
+               userProvider.user != null
                 ? const ParentPage()
-                //DoctorLeave()
-                : Login(),
-          );
-        }));
+                 
+                : const LoginPage(),
+             
+             );
+                 
+          }));
+
+   
   }
 }
-
-
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   final prefs = await SharedPreferences.getInstance();
-//   final String? eMPID = prefs.getString('eMPID');
-
-//   runApp(
-//     MultiProvider(
-//       providers: [
-//         ChangeNotifierProvider(create: (context) => AuthProvider()),
-//       ],
-//       child: MyApp(eMPID: eMPID),
-//     ),
-//   );
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key, required this.eMPID});
-//   final String? eMPID;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     //print(eMPID);
-//     return MaterialApp(
-//         scrollBehavior: CustomScrollBehavior(),
-//         debugShowCheckedModeBanner: false,
-//         home: eMPID==null?Login():Test5(),
-//         //const Test5(), //
-//         // Test2(),
-//         //const DoctorAppointment(),
-//         );
-//   }
-// }
