@@ -2,8 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
- 
- 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -16,10 +15,7 @@ import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_2/core/config/const.dart';
 
- 
-
 import '../entity/entity_age.dart';
- 
 
 Future<Age> AgeCalculator(DateTime birthDate) async {
   final now = DateTime.now();
@@ -238,7 +234,7 @@ CustomTableEditCell(Function() onTap, [IconData icon = Icons.edit]) =>
         child: Center(
             child: InkWell(
           onTap: () {
-           // print('object');
+            // print('object');
             onTap();
           },
           child: Icon(
@@ -274,15 +270,14 @@ CustomTableCell2(String? text,
       ),
     );
 
-
 Widget CustomTableCellTableBody(String text,
     [double fontSize = 13,
     FontWeight fontWeight = FontWeight.bold,
     AlignmentGeometry? alignment = Alignment.centerLeft,
     EdgeInsets? padding = const EdgeInsets.all(8)]) {
   return Container(
-   // decoration: BoxDecoration(
-        //border: Border.all(color:Colors.black, width: 0.5)),
+    // decoration: BoxDecoration(
+    //border: Border.all(color:Colors.black, width: 0.5)),
     alignment: alignment,
     padding: padding,
     child: Text(
@@ -291,8 +286,6 @@ Widget CustomTableCellTableBody(String text,
     ),
   );
 }
-
-
 
 String generateUniqueId() {
   var uuid = const Uuid();
@@ -331,9 +324,6 @@ bool isValidDateRange(String fdate, String tdate) {
   return true;
 }
 
-
- 
-
 bool checkJson(List<dynamic> x) {
   if (x == []) {
     return false;
@@ -347,6 +337,22 @@ bool checkJson(List<dynamic> x) {
   }
   return true;
 }
+
+
+bool checkJsonForSaveUpdate(List<dynamic> x) {
+  if (x == []) {
+    return false;
+  }
+  var y = x.map((e) => ModelStatus.fromJson(e));
+  if (y.isEmpty) {
+    return false;
+  }
+  // if (y.first.status == '3') {
+  //   return false;
+  // }
+  return true;
+}
+
 Future<ModelStatus> getStatusWithDialog(
   List<dynamic> jsonData,
   CustomAwesomeDialog dialog,
@@ -384,53 +390,50 @@ Future<ModelStatus> getStatusWithDialog(
   return list;
 }
 
-
-  List<ModelCommonMaster> getStatusMaster() {
+List<ModelCommonMaster> getStatusMaster() {
   List<ModelCommonMaster> ml = [];
   ml.add(ModelCommonMaster(id: "1", name: "Active"));
   ml.add(ModelCommonMaster(id: "0", name: "Inactive"));
   return ml;
 }
 
-Future<ModelStatus> commonSaveUpdate(data_api2 api,CustomBusyLoader loader,
-      CustomAwesomeDialog dialog, List<dynamic> parameter) async {
-    loader.show();
-    try {
-      
-      var x = await api.createLead(parameter);
-      loader.close();
-      if (checkJson(x)) {
-        return await getStatusWithDialog(x, dialog);
-      } else {
-        dialog
-          ..dialogType = DialogType.error
-          ..message = 'Faillure to save/update operation!'
-          ..show();
-        return ModelStatus(
-            id: '',
-            status: '3',
-            msg: 'Faillure to save/update operation!',
-            extra: '');
-      }
-    } catch (e) {
-      loader.close();
+Future<ModelStatus> commonSaveUpdate(data_api2 api, CustomBusyLoader loader,
+    CustomAwesomeDialog dialog, List<dynamic> parameter) async {
+  loader.show();
+  try {
+    var x = await api.createLead(parameter);
+    print(x);
+    loader.close();
+    if (checkJsonForSaveUpdate(x)) {
+      return await getStatusWithDialog(x, dialog);
+    } else {
       dialog
         ..dialogType = DialogType.error
-        ..message = e.toString()
+        ..message = 'Faillure to save/update operation!'
         ..show();
-      return ModelStatus(id: '', status: '3', msg: e.toString(), extra: '');
+      return ModelStatus(
+          id: '',
+          status: '3',
+          msg: 'Faillure to save/update operation!',
+          extra: '');
     }
+  } catch (e) {
+    loader.close();
+    dialog
+      ..dialogType = DialogType.error
+      ..message = e.toString()
+      ..show();
+    return ModelStatus(id: '', status: '3', msg: e.toString(), extra: '');
   }
+}
 
-
- 
-  bool isCheckCondition(bool b, CustomAwesomeDialog dialog, String msg) {
-    if (b) {
-      dialog
-        ..dialogType = DialogType.warning
-        ..message = msg
-        ..show();
-      return true;
-    }
-    return false;
+bool isCheckCondition(bool b, CustomAwesomeDialog dialog, String msg) {
+  if (b) {
+    dialog
+      ..dialogType = DialogType.warning
+      ..message = msg
+      ..show();
+    return true;
   }
+  return false;
+}

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:web_2/core/config/colors.dart';
+import 'package:web_2/core/config/const.dart';
  
  
 
@@ -25,7 +27,7 @@ class CustomDropDown extends StatelessWidget {
       this.enabledBorderColor=Colors.grey,
        this.enabledBorderwidth= 0.4, 
        this.hintTextColor= Colors.black,
-        this.labelTextColor= Colors.black87,
+        this.labelTextColor= appColorGrayDark,
        this.focusNode
       });
 
@@ -80,8 +82,8 @@ final Color fillColor;
       child: DropdownButtonFormField(
         padding: EdgeInsets.zero,
         focusNode: focusNode,
-         style:TextStyle( fontFamily: "Muli",
-          fontSize: 13, fontWeight: FontWeight.w500, color: fontColor),
+         style:customTextStyle.copyWith(
+          fontSize: 12, fontWeight: FontWeight.w500, color: fontColor),
         value: id==''?null:id,
         items: list,
         onChanged: onTap,
@@ -92,12 +94,11 @@ final Color fillColor;
             fillColor,
           focusColor: Colors.white,
           labelText: labeltext,
-            labelStyle:  TextStyle(
-                    color: labelTextColor,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 13),
-                hintStyle:  TextStyle(
-                    color:hintTextColor, fontWeight: FontWeight.w300),
+            labelStyle:  customTextStyle.copyWith(
+                    color: labelTextColor.withOpacity(0.8) ,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 12),
+                hintStyle:   customTextStyle.copyWith(color:hintTextColor, fontWeight: FontWeight.normal),
           //labelStyle: const TextStyle(fontSize: 14),
           //border: const OutlineInputBorder(),
     

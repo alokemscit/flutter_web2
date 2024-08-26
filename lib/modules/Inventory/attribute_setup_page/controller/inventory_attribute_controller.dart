@@ -192,6 +192,9 @@ class InvmsAttributeController extends GetxController with MixInController {
               .where((e) => e.id == cmb_StoreTypeId5.value)
               .first
               .name));
+      list_company_temp.clear();
+      list_company_temp.addAll(list_company_master
+          .where((e) => e.stypeId == cmb_StoreTypeId5.value));
       editCompanyID.value = '';
       txt_company_name.text = '';
       txt_company_address.text = '';

@@ -61,7 +61,7 @@ class CustomTextBox extends StatelessWidget {
       this.isReadonly = false,
       this.isDisable = false,
       this.hintTextColor = Colors.black,
-      this.labelTextColor = Colors.black87,
+      this.labelTextColor =appColorGrayDark,
       this.focusedBorderColor = Colors.black,
       this.focusedBorderWidth = 0.3,
       this.enabledBorderColor = Colors.grey,
@@ -146,9 +146,8 @@ class CustomTextBox extends StatelessWidget {
               maxLines: maxLine,
               //   textCapitalization : TextCapitalization.none,
               // keyboardType: TextInputType.number,
-              style: TextStyle(
-                  fontFamily: "Muli",
-                  fontSize: 13,
+              style: customTextStyle.copyWith( 
+                  fontSize: 12,
                   fontWeight: fontWeight,
                   color: fontColor),
               textAlignVertical: TextAlignVertical.center,
@@ -161,10 +160,10 @@ class CustomTextBox extends StatelessWidget {
                           .white70, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
                   filled: isFilled,
                   labelText: caption,
-                  labelStyle: TextStyle(
-                      color: labelTextColor,
-                      fontWeight: FontWeight.w300,
-                      fontSize: 13),
+                  labelStyle: customTextStyle.copyWith(
+                      color: labelTextColor.withOpacity(0.8),
+                      fontWeight: FontWeight.normal,
+                      fontSize: 12),
                   hintText: hintText,
                   hintStyle: TextStyle(
                       color: hintTextColor.withOpacity(0.3),

@@ -325,7 +325,7 @@ class CustomDatePickerDropDown extends StatefulWidget {
     this.isFilled = false,
     this.fontColor = Colors.black,
     this.textAlign = TextAlign.start,
-    this.labelTextColor = Colors.black87,
+    this.labelTextColor = appColorGrayDark,
     this.hintTextColor = Colors.black,
     this.borderRadious = 0,
     this.focusedBorderColor = Colors.black,
@@ -336,7 +336,7 @@ class CustomDatePickerDropDown extends StatefulWidget {
     this.focusNode,
     this.isShowCurrentDate = false,
     this.textfontWeight = FontWeight.w500,
-    this.textfontSize = 13,
+    this.textfontSize = 12,
     this.isOnleClickDate = false,
     this.isFutureDateDisplay = true,   
   });
@@ -458,8 +458,7 @@ class _CustomDatePickerDropDownState extends State<CustomDatePickerDropDown> {
         focusNode: widget.focusNode,
 
         controller: widget.date_controller,
-        style: TextStyle(
-            fontFamily: "Muli",
+        style: customTextStyle.copyWith( 
             fontSize: widget.textfontSize,
             fontWeight: widget.textfontWeight,
             color: widget.fontColor),
@@ -470,12 +469,11 @@ class _CustomDatePickerDropDownState extends State<CustomDatePickerDropDown> {
               .white, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
           filled: widget.isFilled,
           labelText: widget.label,
-          labelStyle: TextStyle(
-              color: widget.labelTextColor,
-              fontWeight: FontWeight.w300,
-              fontSize: 13),
+          labelStyle: customTextStyle.copyWith(color: widget.labelTextColor,
+              fontWeight: FontWeight.normal,
+              fontSize: 12),
           hintStyle: TextStyle(
-              color: widget.hintTextColor, fontWeight: FontWeight.w300),
+              color: widget.hintTextColor, fontWeight: FontWeight.normal),
           counterText: '',
           border: OutlineInputBorder(
               borderRadius:

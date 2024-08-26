@@ -59,7 +59,7 @@ class CustomSearchBox extends StatelessWidget {
       this.isReadonly = false,
       this.isDisable = false,
       this.hintTextColor = Colors.black,
-      this.labelTextColor = Colors.black87,
+      this.labelTextColor = appColorGrayDark,
       this.focusedBorderColor = Colors.black,
       this.focusedBorderWidth = 0.3,
       this.enabledBorderColor = Colors.grey,
@@ -132,8 +132,7 @@ class CustomSearchBox extends StatelessWidget {
         maxLines: maxLine,
         //   textCapitalization : TextCapitalization.none,
         // keyboardType: TextInputType.number,
-        style: TextStyle( fontFamily: "Muli",
-          fontSize: 13, fontWeight: FontWeight.w500, color: fontColor),
+        style: customTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w500, color: fontColor),
         textAlignVertical: TextAlignVertical.center,
     
         textAlign: textAlign!,
@@ -144,10 +143,9 @@ class CustomSearchBox extends StatelessWidget {
                   .white70, // Color.fromARGB(255, 253, 253, 255), //Colors.white,
           filled: isFilled,
           labelText: caption,
-          labelStyle: TextStyle(
-              color: labelTextColor, fontWeight: FontWeight.w300, fontSize: 13),
+          labelStyle: customTextStyle.copyWith( color: labelTextColor.withOpacity(0.8), fontWeight: FontWeight.normal, fontSize: 12),
           hintStyle:
-              TextStyle(color: hintTextColor, fontWeight: FontWeight.w300),
+              TextStyle(color: hintTextColor, fontWeight: FontWeight.normal),
           counterText: '',
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadious),
