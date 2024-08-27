@@ -1,21 +1,30 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:web_2/component/settings/config.dart';
-import 'package:web_2/component/settings/notifers/apptheame_provider.dart';
+import 'package:flutter/foundation.dart';
+ 
+ 
+ 
+import 'package:web_2/core/config/const.dart';
+import 'package:web_2/core/config/notifers/apptheame_provider.dart';
+ 
+ 
 
-import 'component/settings/notifers/auth_provider.dart';
-//import 'pages/appointment/doctor_leave_page/doctor_leave.dart';
-import 'pages/authentication/login_page.dart';
+import 'core/config/notifers/auth_provider.dart';
+ 
+import 'modules/authentication/login_page2.dart';
+import 'modules/home_page/parent_page.dart';
+ 
+ 
 
-import 'pages/home_page/parent_page.dart';
+
 
 void main() async {
+ 
   WidgetsFlutterBinding.ensureInitialized();
   final userProvider = AuthProvider();
-
+// if (kIsWeb) {
+// setPathUrlStrategy();
+// }
   //await appTheame.darkTheme;
   await userProvider.loadUser();
   runApp(MyApp(
@@ -45,55 +54,47 @@ class MyApp extends StatelessWidget {
         ],
         child: Consumer2<AuthProvider, AppTheme>(builder:
             (context, AuthProvider authNotifier, AppTheme appThemes, child) {
-          return MaterialApp(
-            scrollBehavior: CustomScrollBehavior(),
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              brightness:
-                  appThemes.darkTheme ? Brightness.dark : Brightness.light,
-              //appThemes.darkTheme==true?Brightness.dark:Brightness.light
-            ),
-            home: userProvider.user != null
-                ? const ParentPage()
-                //DoctorLeave()
-                : Login(),
+          return GetMaterialApp(
+
+  //  localizationsDelegates: const [
+  //       GlobalMaterialLocalizations.delegate,
+  //       GlobalWidgetsLocalizations.delegate,
+  //     ],
+  //     supportedLocales: const [
+  //       Locale('en', 'GB'), // Define the supported locale
+  //     ],
+
+        scrollBehavior: kIsWeb? CustomScrollBehavior():null,
+        debugShowCheckedModeBanner: false,
+       // title: appName,
+         supportedLocales: const [
+        Locale('en', 'GB'), // Define the supported locale
+      ],
+
+            
+       
+        title: appName,
+        theme: ThemeData(
+          fontFamily: 'OpenSans',
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
+          scaffoldBackgroundColor: kBgLightColor,
+          //colorScheme: ColorScheme.fromSeed(seedColor: appColorPista),
+          colorScheme: const ColorScheme.light(primary: kWebHeaderColor),
+          buttonTheme:
+          const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          primaryColor: kWebHeaderColor,
+          useMaterial3: true,
+          ),
+            home: //const Testing6(),
+
+            userProvider.user != null
+                ?  const Material(child: ParentPage())
+                 
+                : const LoginPage2(),
+
           );
         }));
   }
 }
 
 
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   final prefs = await SharedPreferences.getInstance();
-//   final String? eMPID = prefs.getString('eMPID');
-
-//   runApp(
-//     MultiProvider(
-//       providers: [
-//         ChangeNotifierProvider(create: (context) => AuthProvider()),
-//       ],
-//       child: MyApp(eMPID: eMPID),
-//     ),
-//   );
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key, required this.eMPID});
-//   final String? eMPID;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     //print(eMPID);
-//     return MaterialApp(
-//         scrollBehavior: CustomScrollBehavior(),
-//         debugShowCheckedModeBanner: false,
-//         home: eMPID==null?Login():Test5(),
-//         //const Test5(), //
-//         // Test2(),
-//         //const DoctorAppointment(),
-//         );
-//   }
-// }
