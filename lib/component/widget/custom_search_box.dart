@@ -63,7 +63,7 @@ class CustomSearchBox extends StatelessWidget {
       this.focusedBorderColor = Colors.black,
       this.focusedBorderWidth = 0.3,
       this.enabledBorderColor = Colors.grey,
-      this.enabledBorderwidth = 0.4,
+      this.enabledBorderwidth = 0.5,
       this.surfixIconColor = appColorLogo,
       void Function(String)? onSubmitted,
       void Function()? onEditingComplete,

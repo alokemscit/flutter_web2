@@ -22,7 +22,7 @@ class CustomDropDown2 extends StatelessWidget {
       this.focusedBorderColor=Colors.black, 
       this.focusedBorderWidth=0.3, 
       this.enabledBorderColor=Colors.grey,
-       this.enabledBorderwidth= 0.4, 
+       this.enabledBorderwidth= 0.5, 
        this.hintTextColor= Colors.black,
         this.labelTextColor= appColorGrayDark,
        this.focusNode

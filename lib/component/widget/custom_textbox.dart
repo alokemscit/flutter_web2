@@ -65,7 +65,7 @@ class CustomTextBox extends StatelessWidget {
       this.focusedBorderColor = Colors.black,
       this.focusedBorderWidth = 0.3,
       this.enabledBorderColor = Colors.grey,
-      this.enabledBorderwidth = 0.4,
+      this.enabledBorderwidth = 0.5,
       this.disableBackColor = appColorGrayLight,
       this.surfixIconColor = appColorLogo,
       void Function(String)? onSubmitted,

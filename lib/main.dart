@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
        
         title: appName,
         theme: ThemeData(
-          fontFamily: 'OpenSans',
+          fontFamily: appFontOpenSans,
           appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
           scaffoldBackgroundColor: kBgLightColor,
           //colorScheme: ColorScheme.fromSeed(seedColor: appColorPista),

@@ -331,7 +331,7 @@ class CustomDatePickerDropDown extends StatefulWidget {
     this.focusedBorderColor = Colors.black,
     this.focusedBorderWidth = 0.3,
     this.enabledBorderColor = Colors.grey,
-    this.enabledBorderwidth = 0.4,
+    this.enabledBorderwidth = 0.5,
     this.isInputMode = false,
     this.focusNode,
     this.isShowCurrentDate = false,

@@ -227,7 +227,7 @@ CustomTableRowWithWidget(
   );
 }
 
-CustomTableEditCell(Function() onTap, [IconData icon = Icons.edit]) =>
+CustomTableEditCell(Function() onTap, [IconData icon = Icons.edit, double iconSize=12]) =>
     TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
       child: Padding(
@@ -241,7 +241,7 @@ CustomTableEditCell(Function() onTap, [IconData icon = Icons.edit]) =>
           child: Icon(
             icon,
             color: kWebHeaderColor,
-            size: 12,
+            size: iconSize,
           ),
         )),
       ),
