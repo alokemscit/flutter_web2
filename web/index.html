@@ -17,29 +17,72 @@
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
+  
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Web2">
 
   <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="web_2">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="apple-mobile-web-app-title" content="agmc">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  
+
+  <link rel="apple-touch-icon" href="icons/logo_agh.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="icons/logo_agh.png"/>
 
-  <title>web_2</title>
+  <title>Web2</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
+    const serviceWorkerVersion = '{{flutter_service_worker_version}}';
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+
+  <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+  <script src="bootstrap/jquery.min.js"></script>
+  
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+
+  <link href="bootstrap/style.css" rel="stylesheet">
+
+
+
+
 </head>
-<body>
+<body id="app-container">
+  
+   
+
+
+  <a id="triggerPdfViewer"  data-toggle="modal" data-target="#myModal"></a>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade modal-fullscreen" style="height: 100%; width: 100%;" role="dialog">
+  <div class="modal-dialog" style="height: 100%; width: 100%;">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="report-title" class="modal-title">Modal Title</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body" id="pdf-container">
+         
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -54,6 +97,16 @@
         }
       });
     });
+
+
+    // FlutterLoader.load({
+    //   entrypoint: "main.dart.js",
+    //   serviceWorker: "flutter_service_worker.js",
+    //   serviceWorkerVersion: '{{flutter_service_worker_version}}',
+    // });
+
   </script>
+
+  
 </body>
 </html>
