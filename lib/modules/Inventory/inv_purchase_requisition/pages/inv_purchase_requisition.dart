@@ -136,7 +136,9 @@ class InvPurchaseRequisition extends StatelessWidget {
                                                   CustomTableCellTableBody(
                                                       f.code!),
                                                   CustomTableCellTableBody(
-                                                      f.name!,12,FontWeight.w600),
+                                                      f.name!,
+                                                      12,
+                                                      FontWeight.w600),
                                                   CustomTableCellTableBody(
                                                       f.unitName!),
                                                   CustomTableCellTableBody(
@@ -174,7 +176,7 @@ class InvPurchaseRequisition extends StatelessWidget {
               controller.isShowSearch.value
                   ? _searchPanel(controller)
                   : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
                           onTap: () {
@@ -195,25 +197,35 @@ class InvPurchaseRequisition extends StatelessWidget {
                             ],
                           ),
                         ),
-                       controller.list_temp.isEmpty?const SizedBox():  Padding(
-                         padding: const EdgeInsets.only(right: 4),
-                         child: InkWell(
-                          onTap: () {
-                            
-                          },
-                          onHover: (value) {
-                            if(value){
-
-                            }
-                          },
-                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                             children: [
-                               const Icon(Icons.print_sharp,color: appColorBlue,size: 18,),Text('Print Priview',style: customTextStyle.copyWith(fontSize: 9,fontWeight: FontWeight.w500, color: appColorMint, ),),
-                             ],
-                           ),
-                         ),
-                       )
+                        controller.list_temp.isEmpty
+                            ? const SizedBox()
+                            : Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: InkWell(
+                                  onTap: () {},
+                                  onHover: (value) {
+                                    if (value) {}
+                                  },
+                                  child: Row(
+                                    // crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      const Icon(
+                                        Icons.print_sharp,
+                                        color: appColorBlue,
+                                        size: 18,
+                                      ),
+                                      Text(
+                                        'Print Priview',
+                                        style: customTextStyle.copyWith(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                          color: appColorMint,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
                       ],
                     ),
               6.heightBox,
@@ -255,8 +267,11 @@ class InvPurchaseRequisition extends StatelessWidget {
                       childrenTableRowList: controller.list_temp
                           .map((f) => TableRow(children: [
                                 CustomTableCellTableBody(f.code!),
-                                CustomTableCellTableBody(f.name!, 12,
-                                    FontWeight.bold,),
+                                CustomTableCellTableBody(
+                                  f.name!,
+                                  12,
+                                  FontWeight.bold,
+                                ),
                                 CustomTableCellTableBody(f.unit!),
                                 CustomTableCellTableBody(f.group!),
                                 CustomTableCellTableBody(f.subgroup!),
@@ -351,6 +366,9 @@ class InvPurchaseRequisition extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
+                      CustomButton(Icons.search, 'Show', () {
+                        controller.rptPrint();
+                      }),
                       Row(
                         children: [
                           Flexible(

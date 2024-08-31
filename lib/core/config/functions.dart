@@ -3,21 +3,23 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:encrypt/encrypt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:pdf/pdf.dart';
 import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_2/core/config/const.dart';
 
 import '../entity/entity_age.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 Future<Age> AgeCalculator(DateTime birthDate) async {
   final now = DateTime.now();
@@ -60,7 +62,7 @@ Future<void> savePdf(BuildContext context, String url) async {
     loader.close();
     await Share.shareFiles(['${file.path}'], text: 'Inv Report');
     ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('PDF saved')));
+        .showSnackBar(SnackBar(content: Text('PDF saved')));
   } catch (e) {
     loader.close();
     print(e.toString());
@@ -408,7 +410,7 @@ Future<ModelStatus> commonSaveUpdate(data_api2 api, CustomBusyLoader loader,
   loader.show();
   try {
     var x = await api.createLead(parameter);
-    print(x);
+    //print(x);
     loader.close();
     if (checkJsonForSaveUpdate(x)) {
       return await getStatusWithDialog(x, dialog);
@@ -455,32 +457,35 @@ List<DropdownMenuItem<String>> CustomGenerateDropdownList(List<dynamic> list) =>
         .toList();
 
 String encription(String jsonString) {
-  
-  const keyString = '12345678901234567890123456789AAA'; // 32 characters for AES-256
+  const keyString =
+      '12345678901234567890123456789AAA'; // 32 characters for AES-256
   const ivString = '1234567890123456'; // 16 characters for AES-128
 
   final key = encrypt.Key.fromUtf8(keyString);
   final iv = encrypt.IV.fromUtf8(ivString);
   final encrypter = encrypt.Encrypter(encrypt.AES(key));
-  final  encrypted = encrypter.encrypt(jsonString, iv: iv);
+  final encrypted = encrypter.encrypt(jsonString, iv: iv);
   return encrypted.base64;
 }
 
 String decription(String string) {
-const keyString = '12345678901234567890123456789AAA'; // 32 characters for AES-256
+  const keyString =
+      '12345678901234567890123456789AAA'; // 32 characters for AES-256
   const ivString = '1234567890123456'; // 16 characters for AES-128
 
   final key = encrypt.Key.fromUtf8(keyString);
   final iv = encrypt.IV.fromUtf8(ivString);
   final encrypter = encrypt.Encrypter(encrypt.AES(key));
- 
+
   final decrypted = encrypter.decrypt64(string, iv: iv);
   return decrypted;
- 
 }
 
-String encryptText(String plainText,) {
-  final key = encrypt.Key.fromUtf8('12345678901234567890123456789AAA'.padRight(32, ' ')); // Ensure the key is 32 bytes long
+String encryptText(
+  String plainText,
+) {
+  final key = encrypt.Key.fromUtf8('12345678901234567890123456789AAA'
+      .padRight(32, ' ')); // Ensure the key is 32 bytes long
   final iv = encrypt.IV.fromLength(16); // Generate a random 16-byte IV
 
   final encrypter = encrypt.Encrypter(encrypt.AES(key));
@@ -489,3 +494,46 @@ String encryptText(String plainText,) {
 
   return '${encrypted.base64}:${iv.base64}'; // Include IV with encrypted text for decryption
 }
+
+Future<pw.Font> CustomLoadFont(String path) async {
+    final data = await rootBundle.load(path);
+    return pw.Font.ttf(data);
+  }
+pw.Widget pwTableColumnHeader(String name,pw.Font? font,[pw.Alignment aligment=pw.Alignment.centerLeft,double fontSize=12,pw.FontWeight fontWeight=pw.FontWeight.bold]) => 
+pw.Padding(padding: const pw.EdgeInsets.symmetric(horizontal: 4,vertical: 2),child: pw.Align(alignment: aligment,child: pw.Text(name,
+    style: pw.TextStyle( fontSize: fontSize, fontWeight: fontWeight,font: font))));
+
+pw.Widget pwTableCell(String name,pw.Font? font,[pw.Alignment aligment=pw.Alignment.centerLeft,double fontSize=9,pw.FontWeight fontWeight=pw.FontWeight.bold]) => pw.Padding(
+      padding: const pw.EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      child: pw.Align(alignment: aligment,child: pw.Text(name, style: pw.TextStyle(fontSize: fontSize,font: font )))); 
+
+pw.Widget  pwTextCaption(String name,pw.Font? font,[double fontSize=9,pw.FontWeight fontWeight=pw.FontWeight.bold,
+PdfColor color=PdfColors.black,
+pw.Alignment aligment=pw.Alignment.centerLeft,]) =>
+ pw.Align(alignment: aligment,child: pw.Text(name,
+      style: pw.TextStyle(fontSize: fontSize,font: font, color: color, fontWeight: fontWeight)));        
+
+
+Map<int, pw.TableColumnWidth> pwTableColumnWidthGenerator(List<int> columnWidth) {
+  final Map<int, pw.TableColumnWidth> columnWidthMap = {};
+
+  for (int i = 0; i < columnWidth.length; i++) {
+    columnWidthMap[i] = pw.FlexColumnWidth(columnWidth[i].toDouble());
+  }
+  return columnWidthMap;
+}
+
+pw.Widget pwGenerateTable(List<int> columnWidth ,List<pw.Widget> headerRow,List<pw.TableRow> bodyChildren ) => pw.Table(
+            
+            border: pw.TableBorder.all(color: PdfColors.black),
+            columnWidths: pwTableColumnWidthGenerator(columnWidth),
+            children: [
+              pw.TableRow(
+                decoration: const pw.BoxDecoration(color: PdfColors.grey100),
+                children: headerRow
+              ),
+             ...bodyChildren
+            ],
+          );
+
+          

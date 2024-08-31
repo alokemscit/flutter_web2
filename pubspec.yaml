@@ -80,6 +80,9 @@ flutter:
    - assets/Backgrounds/
    - assets/
    - assets/fonts/muli/
+   - assets/fonts/roboto/
+   - assets/fonts/openSans/
+   - assets/fonts/lato/
 
 fonts:
   - family: Muli
@@ -94,4 +97,16 @@ fonts:
       - asset: assets/fonts/openSans/OpenSans-Regular.ttf
       - asset: assets/fonts/openSans/OpenSans-Bold.ttf
       - asset: assets/fonts/openSans/OpenSans-Italic.ttf
-      - asset: assets/fonts/openSans/OpenSans-BoldItalic.ttf      
+      - asset: assets/fonts/openSans/OpenSans-BoldItalic.ttf  
+  - family: Roboto
+    fonts:
+      - asset: assets/fonts/roboto/Roboto-Regular.ttf
+      - asset: assets/fonts/roboto/Roboto-Bold.ttf
+      - asset: assets/fonts/roboto/Roboto-Italic.ttf
+      - asset: assets/fonts/roboto/Roboto-BoldItalic.ttf       
+  - family: Lato
+    fonts:
+      - asset: assets/fonts/lato/Lato-Regular.ttf
+      - asset: assets/fonts/lato/Lato-Bold.ttf
+      - asset: assets/fonts/lato/Lato-Italic.ttf
+      - asset: assets/fonts/lato/Lato-BoldItalic.ttf  

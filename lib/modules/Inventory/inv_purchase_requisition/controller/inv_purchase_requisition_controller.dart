@@ -1,10 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_element, deprecated_member_use, library_private_types_in_public_api, curly_braces_in_flow_control_structures
 
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
+
+import 'package:pdf/widgets.dart';
 import 'package:web_2/component/widget/custom_snakbar.dart';
 import 'package:web_2/core/config/const.dart';
 
+ 
+import '../../../../component/custom_pdf_report_generator.dart';
 import '../../inv_item_master/model/inv_model_item_master.dart';
+import '../model/inv_model_pr_master.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class InvPurchaseRequisitionController extends GetxController
     with MixInController {
@@ -18,6 +26,7 @@ class InvPurchaseRequisitionController extends GetxController
   final FocusNode focusnode_qty = FocusNode();
   final FocusNode focusnode_note = FocusNode();
   var selectedIndex = ''.obs;
+  late Font? font;
 
   var list_storeTypeList = <ModelCommonMaster>[].obs;
   var cmb_storetypeID = ''.obs;
@@ -29,8 +38,11 @@ class InvPurchaseRequisitionController extends GetxController
   var isShowSearch = false.obs;
   var selectedItem = ModelItemMaster().obs;
 
-  void save() {
+  var list_pr = <ModelPReqMaster>[].obs;
+
+  void save() async {
     dialog = CustomAwesomeDialog(context: context);
+    loader = CustomBusyLoader(context: context);
 
     if (isCheckCondition(
         list_temp.isEmpty, dialog, 'No Item listed for save Requisition'))
@@ -38,6 +50,45 @@ class InvPurchaseRequisitionController extends GetxController
 
     if (isCheckCondition(
         cmb_priorityID.value == '', dialog, 'Please Select Priority!')) return;
+    List<Map<String, dynamic>> list = [];
+    list_temp.forEach((v) {
+      list.add({"id": v.id.toString(), "qty": v.qty, "rem": v.rem});
+    });
+    // print(jsonEncode(list));
+
+    //@cid int,@eid int,@str_type_id int,@str text,@rem nvarchar(250),@priority_id
+    ModelStatus s = await commonSaveUpdate(api, loader, dialog, [
+      {
+        "tag": "65",
+        "cid": user.value.cid,
+        "eid": user.value.uid,
+        "str_type_id": cmb_storetypeID.value,
+        "str": jsonEncode(list),
+        "rem": txt_note.text,
+        "priority_id": cmb_priorityID.value,
+        "prdate": txt_date.text
+      }
+    ]);
+    if (s.status == '1') {
+      dialog
+        ..dialogType = DialogType.success
+        ..message = s.msg!
+        ..show()
+        ..onTap = () async {
+          list_pr.clear();
+          loader.show();
+          var x = await api.createLead([
+            {"tag": "66", "prid": s.id}
+          ]);
+
+          if (checkJson(x)) {
+            list_pr.addAll(x.map((e) => ModelPReqMaster.fromJson(e)));
+           
+          } else {
+            loader.close();
+          }
+        };
+    }
   }
 
   void minus(_item e) {
@@ -282,6 +333,7 @@ class InvPurchaseRequisitionController extends GetxController
   void onInit() async {
     api = data_api2();
     isLoading.value = true;
+    font = await CustomLoadFont('assets/fonts/roboto/Roboto-Regular.ttf');
     user.value = await getUserInfo();
     if (user.value.uid == null) {
       isLoading.value = false;
@@ -322,6 +374,54 @@ class InvPurchaseRequisitionController extends GetxController
     }
     super.onInit();
   }
+
+  void rptPrint() async {
+    loader = CustomBusyLoader(context: context);
+    loader.show();
+    var x = await api.createLead([
+      {"tag": "66", "prid": "1"}
+    ]);
+    // print(x);
+    if (checkJson(x)) {
+      list_pr.addAll(x.map((e) => ModelPReqMaster.fromJson(e)));
+
+       CustomPDFGenerator(
+                font: font,
+                user: user.value,
+                loader: loader,
+                header: [
+                 
+                ],
+                body: [
+                  pwGenerateTable(
+            [30, 100, 40, 60, 60, 60, 40],
+             [
+                pwTableColumnHeader('Code', font),
+                pwTableColumnHeader('Item Name', font),
+                pwTableColumnHeader('Unit', font),
+                pwTableColumnHeader('Generic', font),
+                pwTableColumnHeader('Sub Group', font),
+                pwTableColumnHeader('Remarks', font),
+                pwTableColumnHeader('Rq. Qty', font, pw.Alignment.center),
+              ],
+            
+            list_pr
+                .map((f) => pw.TableRow(children: [
+                      pwTableCell(f.code ?? '', font),
+                      pwTableCell(f.name ?? '', font),
+                      pwTableCell(f.unitName ?? '', font),
+                      pwTableCell(f.genName ?? '', font),
+                      pwTableCell(f.sgrpName ?? '', font),
+                      pwTableCell(f.rem ?? '', font),
+                      pwTableCell(f.reqQty ?? '', font, pw.Alignment.center),
+                    ]))
+                .toList()),
+                ],
+                footer: []).ShowReport();
+    } else {
+      loader.close();
+    }
+  }
 }
 
 class _item {
@@ -348,3 +448,5 @@ class _item {
     this.rem,
   });
 }
+
+

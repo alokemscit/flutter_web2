@@ -89,7 +89,7 @@ static Future<File> saveDocument({
   }
 
  static  showPDFformWidget(List<pw.Widget> body, pw.Widget header,pw.Widget footer,
-      [  Function()? fun, String reportName='Report', pw.EdgeInsetsGeometry margin =const pw.EdgeInsets.all(6) ]) async {
+      [  Function()? fun, String reportName='Report', pw.EdgeInsetsGeometry margin =const pw.EdgeInsets.symmetric(vertical: 4,horizontal: 6) ]) async {
     // var body = k1;
 
     final pdf = pw.Document();
