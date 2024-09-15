@@ -310,7 +310,9 @@ class CustomGroupBox extends StatelessWidget {
       this.bgColor = kWebBackgroundColor,
       this.borderRadius = 6,
       this.ShadowColor = appColorGray200,
-      this.padingvertical = 8});
+      this.padingvertical = 8,
+      this.pading=const EdgeInsets.only(bottom: 6)
+      });
   final String groupHeaderText;
   final Color textColor;
   final Color ShadowColor;
@@ -319,6 +321,7 @@ class CustomGroupBox extends StatelessWidget {
   final Color bgColor;
   final double borderRadius;
   final double padingvertical;
+  final EdgeInsets pading;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -347,7 +350,7 @@ class CustomGroupBox extends StatelessWidget {
                         BorderRadiusDirectional.circular(borderRadius),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: padingvertical),
+                    padding: pading,
                     child: child,
                   ),
                 ),
@@ -403,7 +406,8 @@ class CustomTextHeaderWithCaptinAndValue extends StatelessWidget {
       this.capWidth = 0,
       this.capTextFontSize = 13.5,
       this.capTextColor = Colors.black,
-      this.capTextfontweight = FontWeight.bold,  this.isSelectable=false});
+      this.capTextfontweight = FontWeight.bold,
+      this.isSelectable = false});
 
   final String caption;
   final String text;
@@ -479,21 +483,23 @@ class CustomTextHeaderWithCaptinAndValue extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
             ),
-            child: isSelectable?SelectableText(
-              text,
-              style: customTextStyle.copyWith(
-                  fontFamily: appFontLato,
-                  fontWeight: fontweight,
-                  fontSize: textSize,
-                  color: textColor),
-            ):Text(
-              text,
-              style: customTextStyle.copyWith(
-                  fontFamily: appFontLato,
-                  fontWeight: fontweight,
-                  fontSize: textSize,
-                  color: textColor),
-            ),
+            child: isSelectable
+                ? SelectableText(
+                    text,
+                    style: customTextStyle.copyWith(
+                        fontFamily: appFontLato,
+                        fontWeight: fontweight,
+                        fontSize: textSize,
+                        color: textColor),
+                  )
+                : Text(
+                    text,
+                    style: customTextStyle.copyWith(
+                        fontFamily: appFontLato,
+                        fontWeight: fontweight,
+                        fontSize: textSize,
+                        color: textColor),
+                  ),
           ),
         ],
       ),
@@ -801,8 +807,6 @@ Widget CustomSaveUpdateButtonWithUndo(bool isUpdate,
       ],
     );
 
-
-
 // ignore: must_be_immutable
 class CustomTableCellx extends StatelessWidget {
   final String text;
@@ -847,14 +851,16 @@ class CustomTableCellx extends StatelessWidget {
             onExit!();
           }
         },
-        child:onTap==null?_buildContent(): InkWell(
-          onTap: () {
-            if (onTap != null) {
-              onTap!();
-            }
-          },
-          child: _buildContent(),
-        ),
+        child: onTap == null
+            ? _buildContent()
+            : InkWell(
+                onTap: () {
+                  if (onTap != null) {
+                    onTap!();
+                  }
+                },
+                child: _buildContent(),
+              ),
       ),
     );
   }
@@ -885,8 +891,6 @@ class CustomTableCellx extends StatelessWidget {
         ),
       ]);
 }
-
-
 
 class mCustomSearchWithRightSideIconButton extends StatelessWidget {
   final TextEditingController controller;
@@ -952,5 +956,76 @@ class mCustomSearchWithRightSideIconButton extends StatelessWidget {
               )
       ],
     );
+  }
+}
+
+class CustomTwoPanelGroupBox extends StatelessWidget {
+  final Widget leftChild;
+  final Widget rightChild;
+  final double minWidth;
+  final double leftPanelWidth;
+  final String leftTitle;
+  final String rightTitle; // Renamed for consistency
+  final double spaceBetween;
+
+  const CustomTwoPanelGroupBox({
+    super.key,
+    required this.leftChild,
+    required this.rightChild,
+    this.minWidth = 1050,
+    this.leftPanelWidth = 450,
+    this.leftTitle = '',
+    this.rightTitle = '', // Renamed for consistency
+    this.spaceBetween = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return context.width >= minWidth
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: leftPanelWidth,
+                child: CustomGroupBox(
+                  padingvertical: 0,
+                  groupHeaderText: leftTitle,
+                  child: leftChild,
+                ),
+              ),
+              SizedBox(width: spaceBetween),
+              Expanded(
+                child: CustomGroupBox(
+                  padingvertical: 0,
+                  groupHeaderText: rightTitle,
+                  child: rightChild,
+                ),
+              ),
+            ],
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: SizedBox(
+                  width: double.infinity,
+                  height: leftPanelWidth,
+                  child: CustomGroupBox(
+                    padingvertical: 0,
+                    groupHeaderText: leftTitle,
+                    child: leftChild,
+                  ),
+                ),
+              ),
+              SizedBox(height: spaceBetween),
+              Expanded(
+                child: CustomGroupBox(
+                  padingvertical: 0,
+                  groupHeaderText: rightTitle,
+                  child: rightChild,
+                ),
+              ),
+            ],
+          );
   }
 }

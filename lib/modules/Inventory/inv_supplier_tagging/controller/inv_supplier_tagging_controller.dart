@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:pdf/widgets.dart';
 import 'package:web_2/core/config/const.dart';
 
@@ -67,6 +69,55 @@ class InvSupplierTaggingController extends GetxController with MixInController {
       ..addAll(list_company_master.where((e) => e.stypeId == id));
   }
 
+  void save() async {
+    loader = CustomBusyLoader(context: context);
+
+    dialog = CustomAwesomeDialog(context: context);
+    if (isCheckCondition(selectedCompany.value.stypeId == null, dialog,
+        'Selease select company')) return;
+    if (isCheckCondition(
+        list_supp_tag.isEmpty, dialog, 'No supplier selected for taging!'))
+      return;
+
+    try {
+      List<Map<String, dynamic>> list = [];
+      list_supp_tag.forEach((f) {
+        list.add({"id": f.id!});
+      });
+      var s = jsonEncode(list);
+      print(s);
+
+      ModelStatus st = await commonSaveUpdate(api, loader, dialog, [
+        {
+          "tag": "73",
+          "cid": user.value.cid,
+          "com_id": selectedCompany.value.id,
+          "str": s
+        }
+      ]);
+      if (st.status == '1') {
+        dialog
+          ..dialogType = DialogType.success
+          ..message = st.msg!
+          ..show()
+          ..onTap = () {
+            list_supp_tag.clear();
+            selectedCompany.value = ModelInvBrandCompany();
+            txt_search_supplier.text = '';
+            isAdd.value = false;
+          };
+      }
+
+      loader.close();
+    } catch (e) {
+      loader.close();
+      dialog
+        ..dialogType = DialogType.error
+        ..message = e.toString()
+        ..show();
+    }
+  }
+
   @override
   void onInit() async {
     api = data_api2();
@@ -105,11 +156,28 @@ class InvSupplierTaggingController extends GetxController with MixInController {
     super.onInit();
   }
 
-  void setCompanyForSettiongs(ModelInvBrandCompany f) {
-    isAdd.value=false;
-    
+  void setCompanyForSettiongs(ModelInvBrandCompany f) async {
+    dialog = CustomAwesomeDialog(context: context);
+    loader = CustomBusyLoader(context: context);
+    isAdd.value = false;
     selectedCompany.value = f;
     list_supp_tag.clear();
+    try {
+      loader.show();
+      var x = await api.createLead([
+        {"tag": "74", "cid": user.value.cid, "com_id": f.id}
+      ]);
+      loader.close();
+      if (checkJson(x)) {
+        list_supp_tag.addAll(x.map((e) => ModelSupplierMaster.fromJson(e)));
+      }
+    } catch (e) {
+      loader.close();
+      dialog
+        ..dialogType = DialogType.error
+        ..message = e.toString()
+        ..show();
+    }
   }
 
   void searchCompany() {

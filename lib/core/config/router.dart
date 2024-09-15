@@ -16,6 +16,7 @@ import 'package:web_2/modules/ot/ot_page/operation_type.dart';
 import 'package:web_2/modules/patient_registration/new_registration/patient_registration.dart';
 
 import '../../modules/Inventory/inv_item_master/pages/inv_item_master_page.dart';
+import '../../modules/Inventory/inv_po_create/pages/inv_po_create.dart';
 import '../../modules/Inventory/inv_pr_approval/pages/inv_pr_approval.dart';
 import '../../modules/Inventory/inv_purchase_requisition/pages/inv_purchase_requisition.dart';
 import '../../modules/Inventory/inv_supplier_master/pages/inv_supplier_master.dart';
@@ -87,6 +88,8 @@ Widget getPage(String id) {
       return const InvItemMaster();
     case '146':
       return const InvPurchaseRequisition();
+    case '136':
+      return const InvPOCreate();
     // ##################  end of inventory ------------------
     case "115":
       return const HmsChargeHeadMaster();

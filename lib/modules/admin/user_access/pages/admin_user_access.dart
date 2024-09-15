@@ -2,11 +2,11 @@
 
 import '../../../../core/config/const.dart';
 import '../controller/adin_user_access_controller.dart';
-import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
-import 'dart:html' as html;
+//import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
+//import 'dart:html' as html;
 
-import 'package:webview_flutter_web/webview_flutter_web.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+//import 'package:webview_flutter_web/webview_flutter_web.dart';
+ 
  
 
 class AdminUserAccess extends StatelessWidget {
@@ -124,6 +124,5 @@ Widget _treeList(AdminUserAccessController controller) => Expanded(
     child: CustomGroupBox(
         bgColor: Colors.white,
         groupHeaderText: '',
-        child:  
-          controller.htmlView.value
+        child:Obx(()=> controller.htmlView.value)
          ));

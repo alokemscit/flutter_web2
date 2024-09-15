@@ -58,7 +58,7 @@ dependencies:
   #quill_html_converter: ^9.3.21
   webview_flutter_web: ^0.2.3+2
   webview_flutter: ^4.8.0
-  webview_flutter_platform_interface: ^2.10.0
+  # webview_flutter_platform_interface: ^2.10.0
   velocity_x:
     path: packages/velocity_x
   quill_delta: ^3.0.0-nullsafety.2
@@ -66,7 +66,9 @@ dependencies:
   #archive: ^3.4.8
   js: ^0.7.1
    
-     
+# dart2js_options:
+#   no-minify: true
+   
 
 dev_dependencies:
   flutter_test:
@@ -89,9 +91,7 @@ flutter:
    - assets/fonts/roboto/
    - assets/fonts/openSans/
    - assets/fonts/lato/
-   - assets/WebLocal/js/
-   - assets/WebLocal/html/
-   - assets/WebLocal/js/metroStyle.css
+    
     
 fonts:
   - family: Muli

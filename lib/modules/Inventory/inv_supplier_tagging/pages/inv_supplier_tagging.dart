@@ -264,7 +264,9 @@ Widget _supplierList(InvSupplierTaggingController controller) => controller
                         
                          controller.list_supp_tag.isEmpty?const SizedBox():         Positioned(
                         bottom: 8,right: 8,
-                        child: CustomButton(Icons.save, 'Save',(){}))
+                        child: CustomButton(Icons.save, 'Save',(){
+                          controller.save();
+                        }))
                         ],
                       )),
                   8.heightBox,
