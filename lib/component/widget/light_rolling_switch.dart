@@ -35,7 +35,7 @@ class LiteRollingSwitch extends StatefulWidget {
   final Function onDoubleTap;
   final Function onSwipe;
 
-  LiteRollingSwitch({
+  const LiteRollingSwitch({super.key, 
     this.value = false,
     this.width = 100,
     this.textOff = "Off",

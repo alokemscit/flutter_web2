@@ -8,11 +8,11 @@ class TabButtons extends StatelessWidget {
   final int index;
 
   const TabButtons({
-    Key? key,
+    super.key,
     required this.caption,
     required this.onTab,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +22,12 @@ class TabButtons extends StatelessWidget {
         builder: (context, state) {
           return Container(
              // padding: const EdgeInsets.all(4),
-               padding: EdgeInsets.only(left: 4,right: 4,top: 6,bottom: 0),
+               padding: const EdgeInsets.only(left: 4,right: 4,top: 6,bottom: 0),
               margin: const EdgeInsets.all(0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1),
                 color:
-                    index != state.index ? Colors.grey[200] : Color.fromARGB(255, 247, 245, 245),
+                    index != state.index ? Colors.grey[200] : const Color.fromARGB(255, 247, 245, 245),
                 border: Border.all(color: Colors.black, width: 0.1),
               ),
               child: Text(
