@@ -9,7 +9,7 @@ import 'package:pdf/widgets.dart';
 import 'package:web_2/core/config/const.dart';
 
 import '../../../../core/config/function_js_tree.dart';
-import '../../../hrm/employee_master_page/model/model_employee_master_main.dart';
+import '../../../hrm/employee_master/model/model_employee_master_main.dart';
 import '../model/admin_model_tree_menu_all.dart';
  
 class AdminUserAccessController extends GetxController with MixInController {

@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
- 
 
 import '../../../../core/config/const.dart';
 import '../controller/inv_po_create_controller.dart';
@@ -116,7 +115,18 @@ Widget _rightPanel(InvPoCreateController controller) => Stack(
                                         height: 42,
                                         maxlength: 250,
                                         caption: 'Remarks',
-                                        controller: controller.txt_remarks)
+                                        controller: controller.txt_remarks),
+                                    controller.list_pr_item_tems.isEmpty
+                                        ? const SizedBox()
+                                        : Row(
+                                            children: [
+                                              12.widthBox,
+                                              CustomButton(Icons.save, 'Save',
+                                                  () {
+                                                controller.save();
+                                              })
+                                            ],
+                                          )
                                   ],
                                 ),
                               ],
@@ -125,6 +135,7 @@ Widget _rightPanel(InvPoCreateController controller) => Stack(
                         )))
               ],
             ),
+            _freeItemPanel(controller),
             Expanded(
                 child: CustomGroupBox(
                     bgColor: Colors.white,
@@ -135,43 +146,133 @@ Widget _rightPanel(InvPoCreateController controller) => Stack(
                           child: CustomTableGenerator(colWidtList: const [
                             25,
                             60,
-                             60 ,
                             50,
                             40,
                             40,
+                            40,
                             30,
                             30,
                             30,
-                            20,
                             30,
+                            35,
                             25,
-                            30
+                            45,
+                            10
                           ], childrenHeader: [
                             CustomTableColumnHeaderBlack('Code'),
                             CustomTableColumnHeaderBlack('Item Name'),
                             CustomTableColumnHeaderBlack('Generic'),
-                             
-                                CustomTableColumnHeaderBlack('Company'),
+                            CustomTableColumnHeaderBlack('Company'),
                             CustomTableColumnHeaderBlack('Group'),
-                            CustomTableColumnHeaderBlack('Sub. Group'),
                             CustomTableColumnHeaderBlack(
-                                'Req.Qty', Alignment.centerRight),
+                                'Sub. Group', Alignment.center),
                             CustomTableColumnHeaderBlack(
-                                'App.Qty', Alignment.centerRight),
+                                'Req.Qty', Alignment.center),
                             CustomTableColumnHeaderBlack(
-                                'Rem.Qty', Alignment.centerRight),
+                                'App.Qty', Alignment.center),
                             CustomTableColumnHeaderBlack(
-                                'Qty', Alignment.centerRight),
+                                'Rem.Qty', Alignment.center),
                             CustomTableColumnHeaderBlack(
-                                'Rate', Alignment.centerRight),
+                                'Qty', Alignment.center),
                             CustomTableColumnHeaderBlack(
-                                'Dis(%)', Alignment.centerRight),
+                                'Rate', Alignment.center),
+                            CustomTableColumnHeaderBlack(
+                                'Dis(%)', Alignment.center),
                             CustomTableColumnHeaderBlack(
                                 'Amount', Alignment.centerRight),
-                          ], childrenTableRowList: []),
-                        )
+                            CustomTableColumnHeaderBlack('*', Alignment.center),
+                          ], childrenTableRowList: [
+                            ...controller.list_pr_item_tems.map((f) => TableRow(
+                                    decoration: BoxDecoration(
+                                        color: f.isFree!
+                                            ? appColorPista.withOpacity(0.5)
+                                            : kBgColorG),
+                                    children: [
+                                      CustomTableCellx(text: f.code!),
+                                      CustomTableCellx(
+                                        text: f.itemName!,
+                                        isTextTuncate: true,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      CustomTableCellx(
+                                          text: f.genericName!,
+                                          isTextTuncate: true),
+                                      CustomTableCellx(
+                                        text: f.comName!,
+                                        isTextTuncate: true,
+                                      ),
+                                      CustomTableCellx(
+                                          text: f.groupName!,
+                                          isTextTuncate: true),
+                                      CustomTableCellx(
+                                        text: f.subgroupName!,
+                                        isTextTuncate: true,
+                                        alignment: Alignment.center,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.reqQty.toString(),
+                                        alignment: Alignment.center,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.appQty.toString(),
+                                        alignment: Alignment.center,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.remQty.toString(),
+                                        alignment: Alignment.center,
+                                      ),
+                                      _editText(
+                                        f.qty!,
+                                        f.qty_f!,
+                                        10,
+                                        () {
+                                          controller.key_change(f, true);
+                                        },
+                                        () {
+                                          FocusScope.of(controller.context)
+                                              .requestFocus(f.rate_f);
+                                        },
+                                      ),
+                                      _editText(f.rate!, f.rate_f!, 15, () {
+                                        controller.key_change(f);
+                                      }, () {
+                                        FocusScope.of(controller.context)
+                                            .requestFocus(f.disc_f);
+                                      }, f.isFree! ? true : false),
+                                      _editText(f.disc!, f.disc_f!, 5, () {
+                                        controller.key_change(f);
+                                      }, () {
+                                        controller.next_line_qty(f);
+                                      }, f.isFree! ? true : false),
+                                      CustomTableCellx(
+                                        text: f.amt!.toStringAsFixed(3),
+                                        alignment: Alignment.centerRight,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      CustomTableEditCell(
+                                          () {}, Icons.delete, 16, Colors.red)
+                                    ]))
+                          ]),
+                        ),
+                        double.parse(controller.grand_total.value == ''
+                                    ? '0'
+                                    : controller.grand_total.value) ==
+                                0
+                            ? const SizedBox()
+                            : Table(
+                                columnWidths:
+                                    customColumnWidthGenarator([410, 45, 10]),
+                                children: [
+                                  TableRow(children: [
+                                    _footerCell('Grand Total '),
+                                    _footerCell(
+                                        controller.grand_total.value, true),
+                                    _footerCell('')
+                                  ])
+                                ],
+                              )
                       ],
-                    )))
+                    ))),
           ],
         ),
         Positioned(
@@ -185,6 +286,214 @@ Widget _rightPanel(InvPoCreateController controller) => Stack(
             ))
       ],
     );
+
+Widget _freeItemPanel(InvPoCreateController controller) => Column(
+      children: [
+        controller.list_terms_master.isEmpty || controller.isShowfree.value
+            ? const SizedBox()
+            : Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      controller.addFreeItemShow();
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.add,
+                          color: appColorMint,
+                        ),
+                        Text(
+                          'Add Free Item',
+                          style: customTextStyle.copyWith(color: appColorMint),
+                        )
+                      ],
+                    ),
+                  ),
+                  const Spacer()
+                ],
+              ),
+        !controller.isShowfree.value
+            ? const SizedBox()
+            : Stack(
+                children: [
+                  SizedBox(
+                    height: 250,
+                    child: CustomGroupBox(
+                        child: Column(
+                      children: [
+                        4.heightBox,
+                        Row(
+                          children: [
+                            Flexible(
+                                child: CustomTextBox(
+                              borderRadious: 4,
+                              enabledBorderwidth: 1,
+                              focusedBorderWidth: 1,
+                              caption: 'Search Item',
+                              width: 450,
+                              controller: controller.txt_search,
+                              onChange: (v) {
+                                controller.search();
+                              },
+                            )),
+                          ],
+                        ),
+                        4.heightBox,
+                        Expanded(
+                          child: CustomTableGenerator(colWidtList: const [
+                            25,
+                            60,
+                            20,
+                            40,
+                            40,
+                            40,
+                            50,
+                            20
+                          ], childrenHeader: [
+                            CustomTableColumnHeaderBlack('Code'),
+                            CustomTableColumnHeaderBlack('Name'),
+                            CustomTableColumnHeaderBlack(
+                                'Unit', Alignment.center),
+                            CustomTableColumnHeaderBlack('Generic'),
+                            CustomTableColumnHeaderBlack('Group'),
+                            CustomTableColumnHeaderBlack('Sub.Group'),
+                            CustomTableColumnHeaderBlack('Company'),
+                            CustomTableColumnHeaderBlack('*', Alignment.center),
+                          ], childrenTableRowList: [
+                            ...controller.list_item_temp.map((f) => TableRow(
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white),
+                                    children: [
+                                      CustomTableCellx(
+                                        onTap: () {
+                                          controller.addFreeItem(f);
+                                        },
+                                        text: f.code!,
+                                        isTextTuncate: true,
+                                      ),
+                                      CustomTableCellx(
+                                        onTap: () {
+                                          controller.addFreeItem(f);
+                                        },
+                                        text: f.name!,
+                                        isTextTuncate: true,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.unitName!,
+                                        isTextTuncate: true,
+                                        alignment: Alignment.center,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.genName!,
+                                        isTextTuncate: true,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.grpName!,
+                                        isTextTuncate: true,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.sgrpName!,
+                                        isTextTuncate: true,
+                                      ),
+                                      CustomTableCellx(
+                                        text: f.conName!,
+                                        isTextTuncate: true,
+                                      ),
+                                      CustomTableEditCell(() {
+                                        controller.addFreeItem(f);
+                                      }, Icons.add, 16, appColorMint)
+                                    ])),
+                          ]),
+                        )
+                      ],
+                    )),
+                  ),
+                  Positioned(
+                      top: 8,
+                      right: 6,
+                      child: CustomUndoButtonRounded(onTap: () {
+                        controller.isShowfree.value = false;
+                      }))
+                ],
+              ),
+      ],
+    );
+
+Widget _footerCell(String text, [bool isBorder = false]) => TableCell(
+      verticalAlignment: TableCellVerticalAlignment.middle,
+      child: Container(
+        decoration: isBorder
+            ? const BoxDecoration(
+                border: Border(
+                    top: BorderSide(color: appColorGrayDark, width: 0.8)))
+            : null,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Flexible(
+                child: Text(
+              text,
+              style: customTextStyle.copyWith(
+                  color: appColorMint,
+                  fontFamily: appFontOpenSans,
+                  fontSize: 12),
+            ))
+          ],
+        ),
+      ),
+    );
+
+Widget _editText(TextEditingController cnt, FocusNode focusnode,
+    [int maxlength = 15,
+    Function()? fun,
+    Function()? submit,
+    bool isReadOnly = false]) {
+  focusnode.addListener(() {
+    if (focusnode.hasFocus) {
+      cnt.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: cnt.text.length,
+      );
+    }
+  });
+  return TableCell(
+      verticalAlignment: TableCellVerticalAlignment.fill,
+      child: Row(
+        children: [
+          Expanded(
+            child: CustomTextBox(
+                onChange: (v) {
+                  if (fun != null) {
+                    fun();
+                  }
+                },
+                onSubmitted: (p0) {
+                  if (submit != null) {
+                    submit();
+                  }
+                },
+                // onEditingComplete: () {
+                //   if (fun != null) {
+                //     fun();
+                //   }
+                // },
+                isDisable: isReadOnly,
+                isReadonly: isReadOnly,
+                fontColor: appColorMint,
+                fontWeight: FontWeight.bold,
+                fillColor: Colors.white,
+                isFilled: true,
+                focusNode: focusnode,
+                textAlign: TextAlign.center,
+                maxlength: maxlength,
+                textInputType: TextInputType.number,
+                caption: '',
+                controller: cnt),
+          ),
+        ],
+      ));
+}
 
 Widget _leftPanel(InvPoCreateController controller) => Column(
       children: [

@@ -3,7 +3,7 @@ import 'package:web_2/core/config/config.dart';
 import 'package:web_2/data/data_api.dart';
 import 'package:web_2/model/model_user.dart';
  
-import 'package:web_2/modules/hrm/employee_master_page/model/model_emp_load_master_table.dart';
+import 'package:web_2/modules/hrm/employee_master/model/model_emp_load_master_table.dart';
 import 'package:web_2/modules/opd/doctor_setup/model/model_doctor_setup.dart';
 
 class DoctorOPDsetupController extends GetxController {

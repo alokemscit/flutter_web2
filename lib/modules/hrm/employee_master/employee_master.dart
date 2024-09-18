@@ -17,7 +17,7 @@ import 'package:web_2/component/widget/custom_icon_button.dart';
 
  
 
-import 'package:web_2/modules/hrm/employee_master_page/widget/controller/employee_controller.dart';
+import 'package:web_2/modules/hrm/employee_master/widget/controller/employee_controller.dart';
 
 import '../../../component/widget/menubutton.dart';
 

@@ -40,6 +40,8 @@ class InvItemMasterController extends GetxController with MixInController {
   var list_item_master = <ModelItemMaster>[].obs;
   var list_item_temp = <ModelItemMaster>[].obs;
 
+  
+
   void search() {
     list_item_temp.clear();
     list_item_temp.addAll(list_item_master.where((f) =>

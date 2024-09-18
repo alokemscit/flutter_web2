@@ -72,7 +72,9 @@ _tablet(DepartmentSetupController econtroller) {
   return SingleChildScrollView(
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Column(children: [
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             _categoryPart(econtroller),
             const SizedBox(
               height: 8,
@@ -92,6 +94,7 @@ _desktop(DepartmentSetupController econtroller) {
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 flex: 4,
@@ -110,6 +113,7 @@ _desktop(DepartmentSetupController econtroller) {
             height: 8,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 flex: 6,
@@ -485,6 +489,7 @@ _sectionEntryPart(DepartmentSetupController econtroller) => Container(
               ),
             ],
           ),
+          12.heightBox,
           Row(
             children: [
               Expanded(

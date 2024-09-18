@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:web_2/modules/hrm/department_setup/model/model_department.dart';
 import 'package:web_2/modules/hrm/department_setup/model/model_section_unit.dart';
-import 'package:web_2/modules/hrm/employee_master_page/model/model_emp_load_master_table.dart';
+import 'package:web_2/modules/hrm/employee_master/model/model_emp_load_master_table.dart';
  
 import '../../../../../core/config/const.dart';
 

@@ -303,7 +303,7 @@ class CustomTableHeaderWeb extends StatelessWidget {
 class CustomGroupBox extends StatelessWidget {
   const CustomGroupBox(
       {super.key,
-       this.groupHeaderText='',
+      this.groupHeaderText = '',
       required this.child,
       this.textColor = Colors.black,
       this.borderWidth = 1,
@@ -311,9 +311,8 @@ class CustomGroupBox extends StatelessWidget {
       this.borderRadius = 6,
       this.ShadowColor = appColorGray200,
       this.padingvertical = 8,
-      this.height=0,
-      this.pading=const EdgeInsets.only(bottom: 6)
-      });
+      this.height = 0,
+      this.pading = const EdgeInsets.only(bottom: 6)});
   final String groupHeaderText;
   final Color textColor;
   final Color ShadowColor;
@@ -322,7 +321,7 @@ class CustomGroupBox extends StatelessWidget {
   final Color bgColor;
   final double borderRadius;
   final double padingvertical;
-   final double height;
+  final double height;
   final EdgeInsets pading;
   @override
   Widget build(BuildContext context) {
@@ -334,7 +333,7 @@ class CustomGroupBox extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Container(
-                  height: height==0?null:height,
+                  height: height == 0 ? null : height,
                   padding: const EdgeInsets.only(left: 8, right: 8, top: 6),
                   decoration: customBoxDecoration.copyWith(
                     color: bgColor,
@@ -391,7 +390,7 @@ class CustomGroupBox extends StatelessWidget {
                   style: customTextStyle.copyWith(
                       fontSize: 10.5,
                       fontWeight: FontWeight.w500,
-                        fontFamily: appFontLato,
+                      fontFamily: appFontLato,
                       color: textColor,
                       fontStyle: FontStyle.italic),
                 ))),
@@ -718,6 +717,7 @@ class CustomTableGenerator extends StatelessWidget {
   final List<int> colWidtList;
   final List<Widget> childrenHeader;
   final List<TableRow> childrenTableRowList;
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -822,6 +822,7 @@ class CustomTableCellx extends StatelessWidget {
   final Color bgColor;
   final bool isSelectable;
   final Color fontColor;
+  final bool isTextTuncate;
   void Function()? onTap;
   Function()? onHover;
   Function()? onExit;
@@ -838,7 +839,7 @@ class CustomTableCellx extends StatelessWidget {
       this.fontColor = Colors.black,
       this.onTap,
       this.onHover,
-      this.onExit});
+      this.onExit,this.isTextTuncate=false});
   @override
   Widget build(BuildContext context) {
     return TableCell(
@@ -885,14 +886,19 @@ class CustomTableCellx extends StatelessWidget {
                           style: customTextStyle.copyWith(
                               fontSize: fontSize,
                               fontWeight: fontWeight,
+                              overflow: isTextTuncate? TextOverflow.ellipsis:null,
                               color: fontColor))
-                      : Text(
-                          text,
-                          style: customTextStyle.copyWith(
-                              fontSize: fontSize,
-                              fontWeight: fontWeight,
-                              color: fontColor),
-                        ))),
+                      : Tooltip(
+                        message:isTextTuncate? text:'',
+                        child: Text(
+                            text,
+                            style: customTextStyle.copyWith(
+                                fontSize: fontSize,
+                                fontWeight: fontWeight,
+                                color: fontColor,
+                                overflow: isTextTuncate? TextOverflow.ellipsis:null),
+                          ),
+                      ))),
         ),
       ]);
 }

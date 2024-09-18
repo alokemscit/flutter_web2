@@ -237,20 +237,33 @@ CustomTableEditCell(Function() onTap,
         Color iconColor = kWebHeaderColor]) =>
     TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        child: Center(
-            child: InkWell(
-          onTap: () {
-            // print('object');
-            onTap();
-          },
-          child: Icon(
-            icon,
-            color: iconColor,
-            size: iconSize,
+      child: Row(
+         mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(
+            child: Center(
+                child: InkWell(
+              onTap: () {
+                // print('object');
+                onTap();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Icon(
+                      icon,
+                      color: iconColor,
+                      size: iconSize,
+                    ),
+                  ),
+                ],
+              ),
+            )),
           ),
-        )),
+        ],
       ),
     );
 
@@ -765,3 +778,10 @@ CustomTextInfo(String caption, String text, [double headerWidth = 0]) => Row(
         ),
       ],
     );
+
+
+void mdisposeController<T>() {
+  if (Get.isRegistered<T>()) {
+    Get.delete<T>();
+  }
+}

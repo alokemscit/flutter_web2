@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
  
-import 'package:web_2/modules/hrm/employee_master_page/model/model_emp_load_master_table.dart';
+import 'package:web_2/modules/hrm/employee_master/model/model_emp_load_master_table.dart';
  
 
 import '../../../../core/config/const.dart';

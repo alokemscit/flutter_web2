@@ -12,7 +12,7 @@ import 'package:web_2/model/model_status.dart';
 import '../../../../core/config/config.dart';
 import '../../../../data/data_api.dart';
 import '../../../../model/model_user.dart';
-import '../../../hrm/employee_master_page/model/model_emp_load_master_table.dart';
+import '../../../hrm/employee_master/model/model_emp_load_master_table.dart';
 
 class PatRegController extends GetxController {
   late BuildContext context;

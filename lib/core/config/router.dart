@@ -5,7 +5,7 @@ import 'package:web_2/modules/finance/cost_center_page/cost_center_page.dart';
 import 'package:web_2/modules/hms_setup/pages/hms_charges_config.dart';
 import 'package:web_2/modules/hms_setup/pages/hms_report_section_setup.dart';
 import 'package:web_2/modules/hrm/department_setup/department_setup_page.dart';
-import 'package:web_2/modules/hrm/employee_master_page/employee_master.dart';
+import 'package:web_2/modules/hrm/employee_master/employee_master.dart';
 import 'package:web_2/modules/hrm/setup_attributes/attributes_setup_hr_page.dart';
 import 'package:web_2/modules/hms_setup/pages/hms_department_Setup_setup.dart';
 import 'package:web_2/modules/hms_setup/pages/hms_setup_charges_head_master.dart';
@@ -31,6 +31,7 @@ import '../../modules/appointment/time_slot_page/time_slot_page.dart';
 import '../../modules/finance/ledger_master_page/ledger_master_page.dart';
 import '../../modules/finance/sub_ledger_linkage_page/sub_ledger_linkage_page.dart';
 import '../../modules/finance/sub_ledger_master/sub_ledger_master_page.dart';
+import '../../modules/hrm/employee_master/pages/hr_employee_profile.dart';
 
 Widget getPage(String id) {
   switch (id) {
@@ -68,7 +69,7 @@ Widget getPage(String id) {
         return const PatientRegistration();
       }
     case "81":
-      return const EmployeeMaster();
+      return const EmployeeProfile();
     case "88":
       return const OperationType();
     case "87":
