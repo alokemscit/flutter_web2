@@ -329,9 +329,9 @@ class CustomDatePickerDropDown extends StatefulWidget {
     this.hintTextColor = Colors.black,
     this.borderRadious = 0,
     this.focusedBorderColor = Colors.black,
-    this.focusedBorderWidth = 0.3,
+    this.focusedBorderWidth = 0.4,
     this.enabledBorderColor = Colors.grey,
-    this.enabledBorderwidth = 0.5,
+    this.enabledBorderwidth = 0.6,
     this.isInputMode = false,
     this.focusNode,
     this.isShowCurrentDate = true,
@@ -377,7 +377,7 @@ class _CustomDatePickerDropDownState extends State<CustomDatePickerDropDown> {
           shadowColor: appGray100,
        popUpAnimationStyle: AnimationStyle(curve:Curves.bounceOut,duration: const Duration(milliseconds: 300) ),
 
-          tooltip: 'Select date',
+          tooltip: widget.label,
           itemBuilder: (context) => [
             PopupMenuItem<int>(
                

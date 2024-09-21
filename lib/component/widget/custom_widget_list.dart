@@ -528,7 +528,10 @@ class CustomTextHeader extends StatelessWidget {
     return Text(
       text,
       style: customTextStyle.copyWith(
-          fontWeight: fontweight, fontSize: textSize, color: textColor),
+          fontFamily: appFontOpenSans,
+          fontWeight: fontweight,
+          fontSize: textSize,
+          color: textColor),
     );
   }
 }
@@ -1045,44 +1048,139 @@ class CustomTwoPanelGroupBox extends StatelessWidget {
   }
 }
 
-Widget CustomTabWithCheckBox(String text, bool isChcek, void Function() fun) =>
-    InkWell(
+// Widget CustomTabWithCheckBox(String text, bool isChcek, void Function() fun,[bool isCheckBox=false]) =>
+//     InkWell(
+//       onTap: () {
+//         fun();
+//       },
+//       child: Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+//           decoration: BoxDecoration(
+//               borderRadius: const BorderRadius.only(topRight: Radius.circular(8),
+//               bottomLeft: Radius.circular(8) ),
+//               color: isChcek ? appColorGrayDark : Colors.white,
+
+//               boxShadow: [
+//                 BoxShadow(
+//                     color: appColorGrayDark.withOpacity(0.5),
+//                     spreadRadius: 0.5,
+//                     blurRadius: 1)
+//               ]),
+//           child: Row(
+//             children: [
+//              isCheckBox? Row(children: [
+//                 isChcek
+//                   ? const Icon(
+//                       Icons.check_box_outlined,
+//                       color: Colors.white,
+//                       size: 22,
+//                     )
+//                   : const Icon(
+//                       Icons.check_box_outline_blank,
+//                       color: appColorGrayDark,
+//                       size: 22,
+//                     ),
+//               4.widthBox,
+//               ],):const SizedBox(),
+//               CustomTextHeader(
+//                 text: text,
+//                 textSize: isChcek ? 11.5 : 11,
+//                 textColor: isChcek ? Colors.white : appColorMint,
+//               ),
+//             ],
+//           )),
+//     );
+
+class CustomTabWithCheckBox extends StatefulWidget {
+  final String text;
+  final bool isCheck;
+  final bool isCheckBox;
+  final void Function() fun;
+
+  CustomTabWithCheckBox({
+    required this.text,
+    required this.isCheck,
+    required this.fun,
+    this.isCheckBox = false,
+  });
+
+  @override
+  _CustomTabWithCheckBoxState createState() => _CustomTabWithCheckBoxState();
+}
+
+class _CustomTabWithCheckBoxState extends State<CustomTabWithCheckBox> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
       onTap: () {
-        fun();
+        widget.fun();
       },
-      child: Container(
+      child: MouseRegion(
+        onEnter: (_) {
+          setState(() {
+            _isHovered = true;
+          });
+        },
+        onExit: (_) {
+          setState(() {
+            _isHovered = false;
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-              color: isChcek ? appColorGrayDark : Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: appColorGrayDark.withOpacity(0.5),
-                    spreadRadius: 0.1,
-                    blurRadius: .1)
-              ]),
-          child: Row(
-            children: [
-              isChcek
-                  ? const Icon(
-                      Icons.check_box_outlined,
-                      color: Colors.white,
-                      size: 22,
-                    )
-                  : const Icon(
-                      Icons.check_box_outline_blank,
-                      color: appColorGrayDark,
-                      size: 22,
-                    ),
-              4.widthBox,
-              CustomTextHeader(
-                text: text,
-                textSize: isChcek ? 11.5 : 11,
-                textColor: isChcek ? Colors.white : appColorMint,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(8),
+              bottomLeft: Radius.circular(8),
+            ),
+            color: widget.isCheck
+                ? appColorMint
+                : (_isHovered ?appGrayWindowHover  : Colors.white),
+            boxShadow: [
+              BoxShadow(
+                color: appColorGrayDark.withOpacity(0.5),
+                spreadRadius: 0.5,
+                blurRadius: 1,
               ),
             ],
-          )),
+          ),
+          child: Row(
+            children: [
+              if (widget.isCheckBox)
+                Row(
+                  children: [
+                    widget.isCheck
+                        ? const Icon(
+                            Icons.check_box_outlined,
+                            color: Colors.white,
+                            size: 22,
+                          )
+                        : const Icon(
+                            Icons.check_box_outline_blank,
+                            color: appColorGrayDark,
+                            size: 22,
+                          ),
+                    const SizedBox(width: 4),
+                  ],
+                ),
+              CustomTextHeader(
+                text: widget.text,
+                textSize: widget.isCheck ? 11.5 : 11,
+                textColor: widget.isCheck
+                    ? Colors.white
+                    : (_isHovered ? Colors.black : appColorMint),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+}
+
 
 // custom Tool Bar ##########################
 
