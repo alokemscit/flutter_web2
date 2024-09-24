@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
-import '../settings/config.dart';
+ 
+import '../../core/config/const.dart';
 
 
 class PreviousHistoryTab extends StatefulWidget {
@@ -60,14 +59,14 @@ class _PreviousHistoryTabState extends State<PreviousHistoryTab> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
                           color:
-                              index != 0 ? Colors.grey[200] : Color.fromARGB(255, 247, 245, 245),
+                              index != 0 ? Colors.grey[200] : const Color.fromARGB(255, 247, 245, 245),
                           border:
                               Border.all(color: Colors.black, width: 0.1),
                         ),
                         child:  Text(
                           "OPD Consultancy History",
                           style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold ,color: index==0?Color.fromARGB(174, 25, 0, 250):Colors.black),
+                          fontSize: 14, fontWeight: FontWeight.bold ,color: index==0?const Color.fromARGB(174, 25, 0, 250):Colors.black),
                         )),
                   ),
 
@@ -88,7 +87,7 @@ class _PreviousHistoryTabState extends State<PreviousHistoryTab> {
                       ),
                       child:  Text(
                         "Discharge Summary",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: index==1?Color.fromARGB(174, 25, 0, 250):Colors.black),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: index==1?const Color.fromARGB(174, 25, 0, 250):Colors.black),
                       ),
                     ),
                   )

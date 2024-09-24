@@ -8,12 +8,12 @@ class CapWithTextFields extends StatelessWidget {
   final int maxlength ;
   final TextEditingController controller;
   const CapWithTextFields({
-    Key? key,
+    super.key,
     required this.caption,
     this.width = 65,
      this.maxlength= 6,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

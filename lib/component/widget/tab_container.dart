@@ -10,9 +10,9 @@ import 'middle_tabbuttons.dart';
 class TabContainer extends StatelessWidget {
   
   const TabContainer({
-    Key? key,
+    super.key,
      
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
