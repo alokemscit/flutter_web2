@@ -113,7 +113,7 @@ Widget _empSearch(HrEmployeeProfileController controller) => CustomGroupBox(
       ),
       child: Row(
         children: [
-          MyWidget.TextBox
+          MyWidget().TextBox
             ..width = 100
             ..controller = TextEditingController()
             ..caption = 'Emp. No'
@@ -134,7 +134,7 @@ Widget _empSearch(HrEmployeeProfileController controller) => CustomGroupBox(
           //     caption: 'Emp ID',
           //     controller: TextEditingController()),
           4.widthBox,
-          MyWidget.ButtonRound
+          MyWidget().ButtonRound
             ..iconColor = appColorBlue
             ..icon = Icons.search
             ..bgColor = Colors.transparent
@@ -168,7 +168,7 @@ Widget _officialPanel(HrEmployeeProfileController controller) => SizedBox(
                     Row(
                       children: [
                         Expanded(
-                            child: MyWidget.DropDown
+                            child: MyWidget().DropDown
                               ..labeltext = 'Department Type'
                               ..id = controller.cmb_department_category.value
                               ..list = controller.getList('departmentcategory')

@@ -27,6 +27,7 @@ class CustomPDFGenerator {
 
   pw.Widget _header() => pw.Column(children: [
         pw.Column(
+          mainAxisAlignment: pw.MainAxisAlignment.start,
             // mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: header //[
 
@@ -35,7 +36,9 @@ class CustomPDFGenerator {
         pw.Divider(height: 2),
         pw.SizedBox(height: 15),
       ]);
-     pw.Widget _footer() => pw.Column(children: [
+     pw.Widget _footer() => pw.Column(
+      mainAxisAlignment: pw.MainAxisAlignment.start,
+      children: [
         pw.Divider(height: 2),
         pw.SizedBox(height: 4),
         pw.Column(children: footer),

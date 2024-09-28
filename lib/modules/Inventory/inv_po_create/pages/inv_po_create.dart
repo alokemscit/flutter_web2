@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:universal_html/js.dart';
+
 import '../../../../core/config/const.dart';
 import '../controller/inv_po_create_controller.dart';
 
@@ -29,10 +31,160 @@ class InvPOCreate extends StatelessWidget {
           controller.list_tools, (e) {
         if (e == ToolMenuSet.undo) controller.setUndo();
         if (e == ToolMenuSet.save) controller.save();
+        if (e == ToolMenuSet.show) _showDialog(controller);
       }),
     );
   }
 }
+
+void _showDialog(InvPoCreateController controller) => CustomDialog(
+    controller.context,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Text(
+        'PO. Reort',
+        style: customTextStyle.copyWith(color: appColorMint),
+      ),
+    ),
+    Row(
+      children: [
+        Flexible(
+          child: SizedBox(
+            width: 800,
+            height: 600,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomGroupBox(
+                        child: _dialodContentTop(
+                            controller,
+                            MyWidget().DropDown
+                              ..width = 250
+                              ..id = controller.cmb_store_type_search.value
+                              ..list = controller.list_storeTypeList
+                              ..onTap = (v) {
+                                controller.cmb_store_type_search.value = v!;
+                              },
+                            MyWidget().DatePicker
+                              ..width = 120
+                              ..date_controller = controller.txt_search_fdate
+                              ..label = 'From Date'
+                              ..isBackDate = true
+                              ..isShowCurrentDate = true,
+                            MyWidget().DatePicker
+                              ..width = 120
+                              ..date_controller = controller.txt_search_tdate
+                              ..label = 'To Date'
+                              ..isBackDate = true
+                              ..isShowCurrentDate = true,
+                            MyWidget().IconButton
+                              ..icon = Icons.search
+                              ..text = 'Show'
+                              ..onTap = () {
+                                controller.showPoStatus();
+                              }),
+                      ),
+                    ),
+                  ],
+                ),
+                8.heightBox,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MyWidget().SearchBox
+                      ..width = 250
+                      ..controller = TextEditingController()
+                      ..onChange = (v) {},
+                  ],
+                ),
+                8.heightBox,
+                Expanded(
+                    child: Obx(() => CustomTableGenerator(colWidtList: const [
+                          30,
+                          30,
+                          60,
+                          30,
+                          30,
+                          20
+                        ], childrenHeader: [
+                          MyWidget().TableColumnHeader..text = 'PO. No',
+                          MyWidget().TableColumnHeader..text = 'PO. Date',
+                          MyWidget().TableColumnHeader..text = 'Suppliers',
+                          MyWidget().TableColumnHeader..text = 'Delivery Date',
+                          MyWidget().TableColumnHeader..text = 'Status',
+                          MyWidget().TableColumnHeader
+                            ..text = '*'
+                            ..alignment = Alignment.center,
+                        ], childrenTableRowList: [
+                          ...controller.list_po_stattus_temp.map(
+                            (f) => TableRow(
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
+                                children: [
+                                  MyWidget().TableCell..text = f.prNo ?? '',
+                                  MyWidget().TableCell..text = f.poDate ?? '',
+                                  MyWidget().TableCell..text = f.subName ?? '',
+                                  MyWidget().TableCell
+                                    ..text = f.deliveryDate ?? '',
+                                  MyWidget().TableCell
+                                    ..text = (f.canceledBy ?? '0') != "0"
+                                        ? 'Canceled'
+                                        : (f.isApp ?? '0') == "0"
+                                            ? "App. Pending"
+                                            : "Approve",
+                                  CustomTableEditCell(() {
+                                    controller.show_po_report(f.poId!.toString());
+                                  }, Icons.print_rounded, 16)
+                                ]),
+                          )
+                        ])))
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+    () {},
+    true,
+    false);
+Widget _dialodContentTop(InvPoCreateController controller, Widget dropdowb,
+        Widget dateF, Widget dateT, Widget button) =>
+    controller.context.width < 650
+        ? Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: dropdowb),
+                ],
+              ),
+              8.heightBox,
+              Row(
+                children: [
+                  Expanded(child: dateF),
+                  8.widthBox,
+                  Expanded(child: dateT),
+                ],
+              ),
+              8.widthBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [button],
+              )
+            ],
+          )
+        : Row(
+            children: [
+              dropdowb,
+              8.widthBox,
+              dateF,
+              8.widthBox,
+              dateT,
+              12.widthBox,
+              button
+            ],
+          );
 
 Widget _rightPanel(InvPoCreateController controller) => Column(
       children: [
@@ -117,7 +269,6 @@ Widget _rightPanel(InvPoCreateController controller) => Column(
                                     maxlength: 250,
                                     caption: 'Remarks',
                                     controller: controller.txt_remarks),
-                                
                               ],
                             ),
                           ],
@@ -174,8 +325,10 @@ Widget _rightPanel(InvPoCreateController controller) => Column(
                         ...controller.list_pr_item_tems.map((f) => TableRow(
                                 decoration: BoxDecoration(
                                     color: f.isFree!
-                                        ? appColorPista.withOpacity(0.5):f.remQty!<1?Colors.red.withOpacity(0.05)
-                                        : kBgColorG),
+                                        ? appColorPista.withOpacity(0.5)
+                                        : f.remQty! < 1
+                                            ? Colors.red.withOpacity(0.05)
+                                            : kBgColorG),
                                 children: [
                                   CustomTableCellx(
                                     text: f.code!,
@@ -223,19 +376,24 @@ Widget _rightPanel(InvPoCreateController controller) => Column(
                                       FocusScope.of(controller.context)
                                           .requestFocus(f.rate_f);
                                     },
-                                     
                                   ),
                                   _editText(f.rate!, f.rate_f!, 15, () {
                                     controller.key_change(f);
                                   }, () {
                                     FocusScope.of(controller.context)
                                         .requestFocus(f.disc_f);
-                                  }, (f.isFree! || f.remQty!<1) ? true : false),
+                                  },
+                                      (f.isFree! || f.remQty! < 1)
+                                          ? true
+                                          : false),
                                   _editText(f.disc!, f.disc_f!, 5, () {
                                     controller.key_change(f);
                                   }, () {
                                     controller.next_line_qty(f);
-                                  }, (f.isFree! || f.remQty!<1 ) ? true : false),
+                                  },
+                                      (f.isFree! || f.remQty! < 1)
+                                          ? true
+                                          : false),
                                   CustomTableCellx(
                                     text: f.amt!.toStringAsFixed(3),
                                     alignment: Alignment.centerRight,
@@ -461,9 +619,9 @@ Widget _editText(TextEditingController cnt, FocusNode focusnode,
                 // },
                 isDisable: isReadOnly,
                 isReadonly: isReadOnly,
-                fontColor: isReadOnly?Colors.red:  appColorMint,
+                fontColor: isReadOnly ? Colors.red : appColorMint,
                 fontWeight: FontWeight.bold,
-                fillColor:    Colors.white,
+                fillColor: Colors.white,
                 isFilled: true,
                 focusNode: focusnode,
                 textAlign: TextAlign.center,

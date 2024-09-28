@@ -1,14 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, camel_case_types, curly_braces_in_flow_control_structures
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 
 import 'package:intl/intl.dart';
+import 'package:pdf/widgets.dart';
 
 import 'package:web_2/core/config/const.dart';
 import 'package:web_2/modules/Inventory/inv_supplier_master/model/inv_model_supplier_master.dart';
 
+import '../../../../component/custom_pdf_report_generator.dart';
 import '../../inv_item_master/model/inv_model_item_master.dart';
+import '../model/inv_model_po_details.dart';
+import '../model/inv_model_po_status.dart';
 import '../model/inv_model_pr_for_app_model.dart';
 import '../model/inv_model_pr_item_details.dart';
 import '../model/inv_model_terms_master.dart';
@@ -39,6 +44,175 @@ class InvPoCreateController extends GetxController with MixInController {
   var selectedMrr = ModelInvPrForApp().obs;
   var grand_total = ''.obs;
   var isShowfree = false.obs;
+  var list_po_details = <ModelPoDetails>[].obs;
+  var list_po_terms = <ModelCommonMaster>[].obs;
+  late Font font;
+
+  final TextEditingController txt_search_fdate = TextEditingController();
+  final TextEditingController txt_search_tdate = TextEditingController();
+  final TextEditingController txt_search_status = TextEditingController();
+  var cmb_store_type_search = ''.obs;
+  var list_po_stattus_master = <ModelPoStatus>[].obs;
+  var list_po_stattus_temp = <ModelPoStatus>[].obs;
+
+  void showPoStatus() async {
+    list_po_stattus_master.clear();
+    list_po_stattus_temp.clear();
+
+    if (isCheckCondition(
+        cmb_store_type_search.value == '', dialog, 'Plsease selct Store Type'))
+      return;
+
+    if (isCheckCondition(
+        !isValidDateRange(txt_search_fdate.text, txt_search_tdate.text),
+        dialog,
+        'Invalid Date range!')) return;
+
+    dialog = CustomAwesomeDialog(context: context);
+    loader = CustomBusyLoader(context: context);
+    loader.show();
+    try {
+      await mLoadModel(
+          api,
+          [
+            {
+              "tag": "83",
+              "store_type_id": cmb_store_type_search.value,
+              "fdate": txt_search_fdate.text,
+              "tdate": txt_search_tdate.text
+            }
+          ],
+          list_po_stattus_master,
+          (x) => ModelPoStatus.fromJson(x));
+      if (list_po_stattus_master.isNotEmpty) {
+        list_po_stattus_temp.addAll(list_po_stattus_master);
+      }
+      loader.close();
+    } catch (e) {
+      loader.close();
+      dialog
+        ..dialogType = DialogType.error
+        ..message = e.toString()
+        ..show();
+    }
+  }
+
+  void show_po_report(String po_id) async {
+    list_po_details.clear();
+    list_po_terms.clear();
+    dialog = CustomAwesomeDialog(context: context);
+    print(po_id);
+    try {
+      await mLoadModel(
+          api,
+          [
+            {"tag": "81", "po_id": po_id}
+          ],
+          list_po_details,
+          (x) => ModelPoDetails.fromJson(x));
+      await mLoadModel(
+          api,
+          [
+            {"tag": "82", "po_id": po_id}
+          ],
+          list_po_terms,
+          (x) => ModelCommonMaster.fromJson(x));
+      //print(list_po_details.length);
+
+      double sum = list_po_details.fold(0.0, (previousValue, element) {
+        return previousValue + element.tot!;
+      });
+      ModelPoDetails d = list_po_details.first;
+      CustomPDFGenerator(font: font, header: [
+        pwText2Col(
+            font, 'Supplier:  ', d.subName ?? '', 'PO. No.: ', d.prNo ?? ''),
+        pwHeight(4),
+        pwText2Col(font, 'Address:   ', d.supAddress ?? '', 'PO. Date: ',
+            d.poDate ?? ''),
+        pwHeight(4),
+        pwText2Col(font, 'Mobile No: ', d.supMob ?? '', 'PO. Status: ',
+            (d.isApp ?? 0) == 0 ? 'Not Approved' : 'Approved'),
+      ], footer: [
+        pwText2Col(font, 'Created By:  ', d.createdBy ?? '', 'Approved By: ',
+            d.appBy ?? ''),
+        pwHeight(4),
+        pwText2Col(font, 'Created By:  ', d.createdDate ?? '',
+            'Approved Date: ', d.appDate ?? ''),
+        pwHeight(2)
+      ], body: [
+        pwGenerateTable([
+          30,
+          50,
+          30,
+          30,
+          20,
+          20,
+          20,
+          30
+        ], [
+          pwTableColumnHeader('Code', font),
+          pwTableColumnHeader('Item Name', font),
+          pwTableColumnHeader('Type', font),
+          pwTableColumnHeader('Unit', font),
+          pwTableColumnHeader('Qty', font, pwAligmentCenter),
+          pwTableColumnHeader('Rate', font, pwAligmentRight),
+          pwTableColumnHeader('Dist', font, pwAligmentRight),
+          pwTableColumnHeader('Total', font, pwAligmentRight),
+        ], [
+          ...list_po_details.map((f) => pwTableRow([
+                pwTableCell(f.code ?? '', font),
+                pwTableCell(f.itemName ?? '', font),
+                pwTableCell(f.subGroupName ?? '', font),
+                pwTableCell(f.unitName ?? '', font),
+                pwTableCell((f.qty ?? 0).toString(), font, pwAligmentCenter),
+                pwTableCell(
+                    (f.rate ?? 0).toStringAsFixed(2), font, pwAligmentRight),
+                pwTableCell(
+                    (f.discAmt ?? 0).toStringAsFixed(2), font, pwAligmentRight),
+                pwTableCell(
+                    (f.tot ?? 0).toStringAsFixed(2), font, pwAligmentRight),
+              ]))
+        ]),
+        pwGenerateTable([
+          200,
+          30
+        ], [
+          pwTableCell('Grand Total', font, pwAligmentRight),
+          pwTableCell(sum.toStringAsFixed(2), font, pwAligmentRight),
+        ], []),
+        pwHeight(4),
+        pwTextOne(font, 'Remarks:       ', d.remarks ?? '', 9,
+            pwMainAxisAlignmentStart),
+        pwHeight(4),
+        pwTextOne(font, 'Delivery Date: ', d.deliveryDate ?? '', 9,
+            pwMainAxisAlignmentStart),
+        pwHeight(4),
+        pwTextOne(font, 'Delivery Note: ', d.deliveryNote ?? '', 9,
+            pwMainAxisAlignmentStart),
+        pwHeight(4),
+        pwTextOne(font, 'Terms & Condition ', '', 10, pwMainAxisAlignmentStart),
+        pwSizedBoxWithWidth(
+            pwGenerateTable([
+              10,
+              100
+            ], [], [
+              ...list_po_terms.map((f) => pwTableRow(
+                    [
+                      pwTableCell(
+                          (list_po_terms.indexOf(f) + 1).toString(), font,pwAligmentCenter,8.6),
+                      pwTableCell(f.name ?? '', font,pwAligmentLeft,8.6)
+                    ],
+                  ))
+            ]),
+            280),
+      ]).ShowReport();
+    } catch (e) {
+      dialog
+        ..dialogType = DialogType.error
+        ..message = e.toString()
+        ..show();
+    }
+  }
 
   void removeTempItem(_temp f) {
     list_pr_item_tems.removeWhere(
@@ -110,6 +284,7 @@ class InvPoCreateController extends GetxController with MixInController {
         {
           "tag": "80",
           "cid": user.value.cid,
+          "store_type_id": cmb_store_typeID.value,
           "pr_id": selectedMrr.value.id,
           "sup_id": cmb_supplierID.value,
           "po_date": txt_po_date.text,
@@ -128,9 +303,13 @@ class InvPoCreateController extends GetxController with MixInController {
           ..dialogType = DialogType.success
           ..message = st.msg!
           ..show()
-          ..onTap = () {
+          ..onTap = () async {
             setUndo();
-            setStore();
+            //setStore();
+            show_pr();
+            show_po_report(st.id!);
+
+            /// list_pr_master.removeWhere((e) => e.id == selectedMrr.value.id);
           };
       }
     } catch (e) {
@@ -229,6 +408,12 @@ class InvPoCreateController extends GetxController with MixInController {
     grand_total.value = '';
     mToolEnableDisable(
         list_tools, [ToolMenuSet.none], [ToolMenuSet.save, ToolMenuSet.undo]);
+    txt_delivery_date.text = '';
+    txt_delivery_note.text = '';
+    txt_po_date.text = '';
+    txt_search.text = '';
+    txt_remarks.text = '';
+    cmb_supplierID.value = '';
   }
 
   void setMRR(ModelInvPrForApp f) {
@@ -356,6 +541,7 @@ class InvPoCreateController extends GetxController with MixInController {
     isLoading.value = true;
     user.value = await getUserInfo();
     if (!await isValidLoginUser(this)) return;
+    font = await CustomLoadFont(appFontPathLato);
     try {
       await mLoadModel(
         api,
@@ -388,7 +574,9 @@ class InvPoCreateController extends GetxController with MixInController {
           ],
           list_item_master,
           (x) => ModelItemMaster.fromJson(x));
-      list_tools.addAll(Custom_Tool_List());
+      List<CustomTool> listT = Custom_Tool_List();
+      listT.where((e) => e.menu == ToolMenuSet.show).first.isDisable = false;
+      list_tools.addAll(listT);
       mToolEnableDisable(list_tools, [], [ToolMenuSet.file]);
       isLoading.value = false;
     } catch (e) {

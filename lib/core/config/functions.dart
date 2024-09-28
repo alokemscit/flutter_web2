@@ -142,7 +142,6 @@ class CustomScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.mouse,
       };
 }
- 
 
 Map<int, TableColumnWidth> CustomColumnWidthGenarator(List<int> columnWidth) {
   final Map<int, TableColumnWidth> columnWidthMap = {};
@@ -268,7 +267,7 @@ Widget CustomTableColumnHeaderBlack(String text,
       message: text,
       child: Container(
         //  decoration: BoxDecoration(color: appColorGrayDark.withOpacity(0.09),
-      
+
         //  //border: Border.all(color: kBgColorG,width: 0.5)
         //  ),
         alignment: alignment,
@@ -280,21 +279,19 @@ Widget CustomTableColumnHeaderBlack(String text,
               fontFamily: appFontLato,
               fontSize: fontSize,
               color: Colors.black,
-              overflow:   TextOverflow.ellipsis
-              ),
+              overflow: TextOverflow.ellipsis),
         ),
       ),
     ),
   );
 }
 
-
 class CustomTableColumnHeaderBlackNew extends StatelessWidget {
-   String text;
-   AlignmentGeometry alignment;
-   double fontSize;
-   FontWeight fontWeight;
-   EdgeInsets padding;
+  String text;
+  AlignmentGeometry alignment;
+  double fontSize;
+  FontWeight fontWeight;
+  EdgeInsets padding;
 
   CustomTableColumnHeaderBlackNew({
     required this.text,
@@ -328,9 +325,6 @@ class CustomTableColumnHeaderBlackNew extends StatelessWidget {
     );
   }
 }
-
-
-
 
 Widget CustomTableCellTableBody(String text,
     [double fontSize = 12,
@@ -512,7 +506,6 @@ List<DropdownMenuItem<String>> CustomGenerateDropdownList(List<dynamic> list) =>
               style: CustomDropdownTextStyle,
             )))
         .toList();
- 
 
 Future<pw.Font> CustomLoadFont(String path) async {
   final data = await rootBundle.load(path);
@@ -572,15 +565,28 @@ Map<int, pw.TableColumnWidth> pwTableColumnWidthGenerator(
 pw.Widget pwGenerateTable(List<int> columnWidth, List<pw.Widget> headerRow,
         List<pw.TableRow> bodyChildren) =>
     pw.Table(
-      border: pw.TableBorder.all(color: PdfColors.black),
+      border: pw.TableBorder.all(color: PdfColors.black,),
       columnWidths: pwTableColumnWidthGenerator(columnWidth),
       children: [
-        pw.TableRow(
+       headerRow.isEmpty?pw.TableRow(children: []): pw.TableRow(
             decoration: const pw.BoxDecoration(color: PdfColors.grey100),
-            children: headerRow),
+            children: headerRow
+            ),
         ...bodyChildren
       ],
     );
+
+pw.Widget pwColumn(
+  List<pw.Widget> list,
+) =>
+    pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: list);
+pw.Widget pwRow(
+  List<pw.Widget> list,
+) =>
+    pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: list);
+
+pw.Widget pwSizedBoxWithWidth( pw.Widget child, [ double width = 300]) =>
+    pw.SizedBox(width: width,child: child);
 
 pw.Widget pwText2Col(pw.Font? font, String caption1, String text1,
         String caption2, String text2,
@@ -599,16 +605,21 @@ pw.Widget pwText2Col(pw.Font? font, String caption1, String text1,
       ])
     ]);
 pw.Widget pwHeight([double height = 8]) => pw.SizedBox(height: height);
-pw.Widget pwTextOne(pw.Font? font, String caption, String text,
-        [double fontSize = 9,
-        pw.MainAxisAlignment aligment = pw.MainAxisAlignment.center]) =>
+pw.Widget pwTextOne(
+  pw.Font? font,
+  String caption,
+  String text, [
+  double fontSize = 9,
+  pw.MainAxisAlignment aligment = pw.MainAxisAlignment.center,
+]) =>
     pw.Row(mainAxisAlignment: aligment, children: [
       pw.Text(caption,
           style: pw.TextStyle(
-              fontSize: fontSize,
-              font: font,
-              //color: color,
-              fontWeight: pw.FontWeight.bold)),
+            fontSize: fontSize,
+            font: font,
+            //color: color,
+            fontWeight: pw.FontWeight.bold,
+          )),
       pw.Text(text,
           style: pw.TextStyle(
               fontSize: fontSize,
@@ -770,10 +781,7 @@ mNextIndex(List<ItemModel> list, int index) {
 }
 
 void mCloseTab(BuildContext context) {
-  context
-      .read<MenubuttonCloseBlocBloc>()
-      .add(TabCloseFromOuterEvent(context));
- 
+  context.read<MenubuttonCloseBlocBloc>().add(TabCloseFromOuterEvent(context));
 }
 
 void deleteController(String id) {
@@ -794,7 +802,6 @@ List<Function> _getMethods(x) {
   return [x.disposeController];
 }
 
-
 List<CustomTool> Custom_Tool_List() {
   List<CustomTool> list = [
     CustomTool(isDisable: false, onTap: null, menu: ToolMenuSet.file),
@@ -805,7 +812,10 @@ List<CustomTool> Custom_Tool_List() {
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.delete),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.print),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.show),
-     CustomTool(isDisable: false, onTap: null, menu: ToolMenuSet.divider),
+    CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.approve),
+    CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.post),
+    CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.cancel),
+    CustomTool(isDisable: false, onTap: null, menu: ToolMenuSet.divider),
     CustomTool(isDisable: false, onTap: null, menu: ToolMenuSet.close),
   ];
   return list;

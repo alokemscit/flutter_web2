@@ -1445,7 +1445,10 @@ enum ToolMenuSet {
   search,
   undo,
   divider,
-  none
+  none,
+  approve,
+  cancel,
+  post
 }
 
 IconData _getIcon(ToolMenuSet toolMenuSet) {
@@ -1470,6 +1473,12 @@ IconData _getIcon(ToolMenuSet toolMenuSet) {
       return Icons.file_copy_sharp;
     case ToolMenuSet.undo:
       return Icons.undo;
+    case ToolMenuSet.approve:
+      return Icons.approval;
+   case ToolMenuSet.post:
+      return Icons.post_add;
+      case   ToolMenuSet.cancel:
+      return Icons.cancel_rounded;
 
     default:
       return Icons.help_outline; // Default icon
@@ -1499,32 +1508,18 @@ String _getText(ToolMenuSet toolMenuSet) {
       return 'New';
     case ToolMenuSet.undo:
       return 'Undo';
+      case ToolMenuSet.approve:
+      return 'Approve';
+      case ToolMenuSet.post:
+      return 'Post';
+      case ToolMenuSet.cancel:
+      return 'Cancel';
 
     default:
       return 'Unknown'; // Default text
   }
 }
 
-// ############  End custom toolbar #########################################
-
-// Widget CommonBodyWithToolBar(dynamic controller, List<Widget> children,
-//         [List<Widget> childrenTool = const [SizedBox()],
-//         Function(dynamic obj, ToolMenuSet? type)? toolClick,
-//         Color bgColor = kWebBackgroundColor,
-//         EdgeInsets padding =
-//             const EdgeInsets.only(left: 2, right: 2, top: 0, bottom: 1)]) =>
-//     Scaffold(
-//       backgroundColor: bgColor,
-//       body: CommonBody2(
-//           controller,
-//           Column(
-//             children: [
-//               CustomToolBarClass(children: null, fun: toolClick),
-//               ...children
-//             ],
-//           ),
-//           padding),
-//     );
 
 class CustomButtonIconText extends StatefulWidget {
   String text;
@@ -1690,32 +1685,35 @@ class CustomTextHeaderWithCaptinAndWidget extends StatelessWidget {
 }
 
 class MyWidget {
-  static CustomTextBox TextBox =
+   CustomTextBox TextBox =
       CustomTextBox(caption: '', controller: TextEditingController());
-  static CustomDropDown2 DropDown =
+   CustomDropDown2 DropDown =
       CustomDropDown2(id: null, list: [], onTap: (v) {});
   CustomTableGenerator Table = CustomTableGenerator(
       colWidtList: [], childrenHeader: [], childrenTableRowList: []);
-  static CustomSearchBox SearchBox = CustomSearchBox(
+   CustomSearchBox SearchBox = CustomSearchBox(
       caption: '', controller: TextEditingController(), onChange: (v) {});
-  static CustomGroupBox GroupBox = CustomGroupBox(child: SizedBox());
-  static CustomTableColumnHeaderBlackNew TableColumnHeader =
+   CustomGroupBox GroupBox = CustomGroupBox(child: SizedBox());
+   CustomTableColumnHeaderBlackNew TableColumnHeader =
       CustomTableColumnHeaderBlackNew(text: '');
-  static CustomTableCellx TableCell = CustomTableCellx(text: '');
+ CustomTableColumnHeaderBlackNew TableColumnHeaderx =
+      CustomTableColumnHeaderBlackNew(text: '');
 
-  static CustomAccordionContainer AccordionContainer =
+   CustomTableCellx TableCell = CustomTableCellx(text: '');
+
+   CustomAccordionContainer AccordionContainer =
       CustomAccordionContainer(headerName: '', children: []);
 
-  static CustomButtonIconText IconButton = CustomButtonIconText(text: '');
+   CustomButtonIconText IconButton = CustomButtonIconText(text: '');
 
-  static CustomCloseButtonRounded ButtonRound =
+   CustomCloseButtonRounded ButtonRound =
       CustomCloseButtonRounded(onTap: () {});
 
-  static CustomDatePickerDropDown DatePicker =
+   CustomDatePickerDropDown DatePicker =
       CustomDatePickerDropDown(date_controller: TextEditingController());
-  static CustomTextHeaderWithCaptinAndWidget CaptionWidget =
+   CustomTextHeaderWithCaptinAndWidget CaptionWidget =
       CustomTextHeaderWithCaptinAndWidget(caption: '');
-  static CustomTabWithCheckBox TabBar =
+   CustomTabWithCheckBox TabBar =
       CustomTabWithCheckBox(text: '', isCheck: false, fun: () {});
 }
 
