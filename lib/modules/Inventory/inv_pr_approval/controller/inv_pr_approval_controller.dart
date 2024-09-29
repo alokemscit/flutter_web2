@@ -165,7 +165,15 @@ class InvPRApprovalController extends GetxController with MixInController {
       });
     });
     var t = jsonEncode(list);
-    // print(t);
+    // print({
+    //   "tag": "68",
+    //   "eid": user.value.uid,
+    //   "pr_id": selectedData.value.id!.toString(),
+    //   "str": t,
+    //   "rem": txt_note.text,
+    //   "isCancel": isCancel ? "1" : "0"
+    // });
+    //return;
     try {
       ModelStatus st = await commonSaveUpdate(api, loader, dialog, [
         {
@@ -316,30 +324,35 @@ class InvPRApprovalController extends GetxController with MixInController {
           pwText2Col(font, 'P.R. No: ', list_item_details_main.first.prNo ?? '',
               'P.R Date: ', list_item_details_main.first.prDate ?? ''),
           pwHeight(4),
-     (list_item_details_main.first.appDate!='' || list_item_details_main.first.cancelDate!='')  ?   pwText2Col(
-
-              font,
-              list_item_details_main.first.appBy != '0'
-                  ? 'Approved By : '
-                  : 'Canceled By : ',
-              list_item_details_main.first.appBy != '0'
-                  ? list_item_details_main.first.appByName ?? ''
-                  : list_item_details_main.first.cancelByName ?? '',
-              list_item_details_main.first.appBy != '0'
-                  ? 'Approved Date : '
-                  : 'Canceled Date : ',
-              list_item_details_main.first.appBy != '0'
-                  ? list_item_details_main.first.appDate ?? ''
-                  : list_item_details_main.first.cancelDate ?? ''):pwHeight(0),
-         (list_item_details_main.first.appDate!='' || list_item_details_main.first.cancelDate!='')  ?   pwHeight(4):pwHeight(0),
-
-
+          (list_item_details_main.first.appDate != '' ||
+                  list_item_details_main.first.cancelDate != '')
+              ? pwText2Col(
+                  font,
+                  list_item_details_main.first.appBy != '0'
+                      ? 'Approved By : '
+                      : 'Canceled By : ',
+                  list_item_details_main.first.appBy != '0'
+                      ? list_item_details_main.first.appByName ?? ''
+                      : list_item_details_main.first.cancelByName ?? '',
+                  list_item_details_main.first.appBy != '0'
+                      ? 'Approved Date : '
+                      : 'Canceled Date : ',
+                  list_item_details_main.first.appBy != '0'
+                      ? list_item_details_main.first.appDate ?? ''
+                      : list_item_details_main.first.cancelDate ?? '')
+              : pwHeight(0),
+          (list_item_details_main.first.appDate != '' ||
+                  list_item_details_main.first.cancelDate != '')
+              ? pwHeight(4)
+              : pwHeight(0),
           pwTextOne(
               font,
               'Status : ',
               list_item_details_main.first.appBy != '0'
                   ? 'Approved'
-                  : list_item_details_main.first.cancelDate != ''?'Canceled':'Not Approved',
+                  : list_item_details_main.first.cancelDate != ''
+                      ? 'Canceled'
+                      : 'Not Approved',
               9),
         ],
         footer: [

@@ -16,6 +16,7 @@ import 'package:web_2/modules/ot/ot_page/operation_type.dart';
 import 'package:web_2/modules/patient_registration/new_registration/patient_registration.dart';
 
 import '../../modules/Inventory/inv_item_master/pages/inv_item_master_page.dart';
+import '../../modules/Inventory/inv_po_approve/view/inv_po_approval.dart';
 import '../../modules/Inventory/inv_po_create/pages/inv_po_create.dart';
 import '../../modules/Inventory/inv_pr_approval/pages/inv_pr_approval.dart';
 import '../../modules/Inventory/inv_purchase_requisition/pages/inv_purchase_requisition.dart';
@@ -113,6 +114,8 @@ Widget getPage(String id) {
       return const SupplierMaster();
     case '150':
       return const InvSupplierTagging();
+    case '137':
+      return const InvPoApproval();
 
 // Accounts ###############################
     case "126":

@@ -1,6 +1,7 @@
 class ModelPoStatus {
   int? poId;
   String? prNo;
+  String? poNo;
   String? poDate;
   String? deliveryDate;
   String? remarks;
@@ -17,6 +18,7 @@ class ModelPoStatus {
   String? canceledBy;
   String? canceledDate;
   int? isApp;
+  int? currentStatus;
 
   ModelPoStatus(
       {this.poId,
@@ -36,7 +38,9 @@ class ModelPoStatus {
       this.appDate,
       this.canceledBy,
       this.canceledDate,
-      this.isApp});
+      this.isApp,
+      this.poNo,
+      this.currentStatus});
 
   ModelPoStatus.fromJson(Map<String, dynamic> json) {
     poId = json['po_id'];
@@ -57,6 +61,8 @@ class ModelPoStatus {
     canceledBy = json['canceled_by'];
     canceledDate = json['canceled_date'];
     isApp = json['is_app'];
+    poNo = json['po_no'];
+    currentStatus = json['current_status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +85,7 @@ class ModelPoStatus {
     data['canceled_by'] = this.canceledBy;
     data['canceled_date'] = this.canceledDate;
     data['is_app'] = this.isApp;
+    data['po_no'] = this.poNo;
     return data;
   }
 }

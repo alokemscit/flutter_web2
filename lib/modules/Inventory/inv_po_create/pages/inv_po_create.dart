@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:universal_html/js.dart';
-
 import '../../../../core/config/const.dart';
+import '../../shared_widget/inv_shared_widget.dart';
 import '../controller/inv_po_create_controller.dart';
 
 class InvPOCreate extends StatelessWidget {
@@ -24,7 +23,7 @@ class InvPOCreate extends StatelessWidget {
             Expanded(
                 child: CustomTwoPanelGroupBox(
                     leftPanelWidth: 320,
-                    leftChild: _leftPanel(controller),
+                    leftChild: _left_panel(controller),
                     rightChild: _rightPanel(controller),
                     minWidth: 1050))
           ],
@@ -121,21 +120,22 @@ void _showDialog(InvPoCreateController controller) => CustomDialog(
                           ...controller.list_po_stattus_temp.map(
                             (f) => TableRow(
                                 decoration:
-                                    const BoxDecoration(color: Colors.white),
+                                     BoxDecoration(color:f.currentStatus ==2?appColorPista:f.currentStatus==0?Colors.red.withOpacity(0.05): Colors.white),
                                 children: [
-                                  MyWidget().TableCell..text = f.prNo ?? '',
+                                  MyWidget().TableCell..text = f.poNo ?? '',
                                   MyWidget().TableCell..text = f.poDate ?? '',
                                   MyWidget().TableCell..text = f.subName ?? '',
                                   MyWidget().TableCell
                                     ..text = f.deliveryDate ?? '',
                                   MyWidget().TableCell
-                                    ..text = (f.canceledBy ?? '0') != "0"
+                                    ..text = f.currentStatus == 0
                                         ? 'Canceled'
-                                        : (f.isApp ?? '0') == "0"
-                                            ? "App. Pending"
-                                            : "Approve",
+                                        : f.currentStatus ==2
+                                            ? "Approved"
+                                            : "App. Pending",
                                   CustomTableEditCell(() {
-                                    controller.show_po_report(f.poId!.toString());
+                                    controller
+                                        .show_po_report(f.poId!.toString());
                                   }, Icons.print_rounded, 16)
                                 ]),
                           )
@@ -612,11 +612,7 @@ Widget _editText(TextEditingController cnt, FocusNode focusnode,
                     submit();
                   }
                 },
-                // onEditingComplete: () {
-                //   if (fun != null) {
-                //     fun();
-                //   }
-                // },
+               
                 isDisable: isReadOnly,
                 isReadonly: isReadOnly,
                 fontColor: isReadOnly ? Colors.red : appColorMint,
@@ -634,153 +630,63 @@ Widget _editText(TextEditingController cnt, FocusNode focusnode,
       ));
 }
 
-Widget _leftPanel(InvPoCreateController controller) => Column(
-      children: [
-        12.heightBox,
-        Row(
-          children: [
-            Expanded(
-              child: CustomGroupBox(
-                  padingvertical: 0,
-                  groupHeaderText: '',
-                  child: Row(
+Widget _left_panel(InvPoCreateController controller) => InvleftPanelWithTree(
+    CustomDropDown2(
+        labeltext: 'Store Type',
+        id: controller.cmb_store_typeID.value,
+        list: controller.list_storeTypeList,
+        onTap: (v) {
+          controller.cmb_store_typeID.value = v!;
+          controller.show_pr();
+          // controller.setStore();
+        }),
+    CustomDropDown2(
+        labeltext: 'Year',
+        id: controller.cmb_yearID.value,
+        width: 120,
+        list: controller.list_year,
+        onTap: (v) {
+          controller.cmb_yearID.value = v!;
+          controller.show_pr();
+        }),
+    controller.list_month
+        .map((f) => tree_node(
+            8,
+            f.name!,
+            [
+              ...controller.list_pr_master
+                  .where((e) => e.month_name == f.name)
+                  .map(
+                    (a) => InvTree_child(
+                        a.pr_no!, controller.selectedMrr.value.id == a.id, () {
+                      controller.setMRR(a);
+                    }),
+                  )
+            ],
+            14))
+        .toList(),
+    CustomTableGenerator(
+        colWidtList: const [
+          20,
+          80
+        ],
+        childrenHeader: [
+          CustomTableColumnHeaderBlack('Check', Alignment.center),
+          CustomTableColumnHeaderBlack('Terms & Condiition List')
+        ],
+        childrenTableRowList: controller.list_terms_master
+            .map((f) => TableRow(
+                    decoration: const BoxDecoration(color: Colors.white),
                     children: [
-                      Expanded(
-                          child: CustomDropDown2(
-                              labeltext: 'Store Type',
-                              id: controller.cmb_store_typeID.value,
-                              list: controller.list_storeTypeList,
-                              onTap: (v) {
-                                controller.cmb_store_typeID.value = v!;
-                                controller.show_pr();
-                                // controller.setStore();
+                      TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+                          child: Checkbox(
+                              value: f.isDefault == 1 ? true : false,
+                              onChanged: (v) {
+                                controller.setCheckCondition(
+                                    v!, f.id.toString());
                               })),
-                      12.widthBox,
-                      CustomDropDown2(
-                          labeltext: 'Year',
-                          id: controller.cmb_yearID.value,
-                          width: 120,
-                          list: controller.list_year,
-                          onTap: (v) {
-                            controller.cmb_yearID.value = v!;
-                            controller.show_pr();
-                          })
-                    ],
-                  )),
-            )
-          ],
-        ),
-        8.heightBox,
-        Expanded(
-          child: Container(
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(4)),
-                boxShadow: [
-                  BoxShadow(
-                      color: appColorGrayDark,
-                      spreadRadius: 0.1,
-                      blurRadius: 0.5)
-                ]),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                      child: Column(
-                    children: [
-                      6.heightBox,
-                      ...controller.list_month.map((f) => tree_node(
-                          8,
-                          f.name!,
-                          [
-                            ...controller.list_pr_master
-                                .where((e) => e.month_name == f.name)
-                                .map(
-                                  (a) => _tree_child(a.pr_no!,
-                                      controller.selectedMrr.value.id == a.id,
-                                      () {
-                                    controller.setMRR(a);
-                                  }),
-                                )
-                          ],
-                          14))
-                    ],
-                  )),
-                ),
-              ],
-            ),
-          ),
-        ),
-        controller.context.width < 1050
-            ? const SizedBox()
-            : CustomGroupBox(
-                bgColor: Colors.white,
-                height: 280,
-                child: CustomTableGenerator(
-                    colWidtList: [
-                      20,
-                      80
-                    ],
-                    childrenHeader: [
-                      CustomTableColumnHeaderBlack('Check', Alignment.center),
-                      CustomTableColumnHeaderBlack('Terms & Condiition List')
-                    ],
-                    childrenTableRowList: controller.list_terms_master
-                        .map((f) => TableRow(
-                                decoration:
-                                    const BoxDecoration(color: Colors.white),
-                                children: [
-                                  TableCell(
-                                      verticalAlignment:
-                                          TableCellVerticalAlignment.middle,
-                                      child: Checkbox(
-                                          value:
-                                              f.isDefault == 1 ? true : false,
-                                          onChanged: (v) {
-                                            controller.setCheckCondition(
-                                                v!, f.id.toString());
-                                          })),
-                                  CustomTableCellx(text: f.name ?? '')
-                                ]))
-                        .toList()))
-      ],
-    );
-
-_tree_child(String text, bool isID, Function() fun) => Padding(
-      padding: const EdgeInsets.only(top: 2, bottom: 2, left: 18),
-      child: InkWell(
-        onTap: () {
-          fun();
-        },
-        child: Row(
-          children: [
-            Icon(
-              Icons.arrow_forward_ios,
-              color: appColorGrayDark,
-              size: isID ? 16 : 14,
-            ),
-            4.widthBox,
-            Expanded(
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: isID ? appGray100 : Colors.white,
-                      borderRadius: BorderRadius.circular(4),
-                      boxShadow: const [
-                        BoxShadow(
-                            color: appColorGray200,
-                            blurRadius: .05,
-                            spreadRadius: .01)
-                      ]),
-                  child: Text(
-                    text,
-                    style: customTextStyle.copyWith(
-                        fontSize: 11,
-                        color: !isID ? appColorMint : Colors.black,
-                        fontFamily: appFontLato),
-                  )),
-            ),
-          ],
-        ),
-      ),
-    );
+                      CustomTableCellx(text: f.name ?? '')
+                    ]))
+            .toList()),controller.context.width);
+ 

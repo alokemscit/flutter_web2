@@ -131,13 +131,13 @@ class InvPoCreateController extends GetxController with MixInController {
             d.poDate ?? ''),
         pwHeight(4),
         pwText2Col(font, 'Mobile No: ', d.supMob ?? '', 'PO. Status: ',
-            (d.isApp ?? 0) == 0 ? 'Not Approved' : 'Approved'),
+            (d.isApp ?? 0) == 1 ? 'Approved' : (d.canceledDate??'')!=''?'Canceled' :'Approved'),
       ], footer: [
-        pwText2Col(font, 'Created By:  ', d.createdBy ?? '', 'Approved By: ',
-            d.appBy ?? ''),
+        pwText2Col(font, 'Created By:  ', d.createdBy ?? '', (d.canceledDate??'')!=''?'Canceled By:':'Approved By: ',
+          (d.canceledDate??'')!=''?d.canceledBy??'':  d.appBy ?? ''),
         pwHeight(4),
         pwText2Col(font, 'Created By:  ', d.createdDate ?? '',
-            'Approved Date: ', d.appDate ?? ''),
+          (d.canceledDate??'')!=''?'Canceled Date: ':  'Approved Date: ',(d.canceledDate??'')!=''?d.canceledDate??'': d.appDate ?? ''),
         pwHeight(2)
       ], body: [
         pwGenerateTable([

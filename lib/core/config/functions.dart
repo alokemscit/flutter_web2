@@ -806,13 +806,15 @@ List<CustomTool> Custom_Tool_List() {
   List<CustomTool> list = [
     CustomTool(isDisable: false, onTap: null, menu: ToolMenuSet.file),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.save),
+    
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.update),
+    CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.approve),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.edit),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.undo),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.delete),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.print),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.show),
-    CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.approve),
+    
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.post),
     CustomTool(isDisable: true, onTap: null, menu: ToolMenuSet.cancel),
     CustomTool(isDisable: false, onTap: null, menu: ToolMenuSet.divider),
