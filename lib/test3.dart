@@ -1,119 +1,89 @@
-
+import 'dart:html' as html;
+import 'dart:ui_web' as ui_web;
 import 'package:flutter/material.dart';
+import 'package:web/web.dart' as web;
+import 'package:js/js.dart';
+import 'package:js/js_util.dart' as js_util;
 
-class MyExpansionTileList extends StatefulWidget {
-  final List<dynamic> elementList;
+@JS('jQuery')
+external dynamic get jQuery;
+@JS('jQuery.fn.zTree.init')
+external dynamic zTreeInit(dynamic element, dynamic settings, dynamic nodes);
 
-  MyExpansionTileList({Key? key, required this.elementList}) : super(key: key);
+class Test3 extends StatelessWidget {
+  const Test3({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _DrawerState();
-}
-
-class _DrawerState extends State<MyExpansionTileList> {
-  // You can ask Get to find a Controller that is being used by another page and redirect you to it.
-  //final Controller c = Get.find();
-
-  List<Widget> _getChildren(final List<dynamic> elementList) {
-    List<Widget> children = [];
-    elementList.toList().asMap().forEach((index, element) {
-      int selected = 0;
-      final subMenuChildren = <Widget>[];
-      // try {
-      //   for (var i = 0; i < element['children'].length; i++) {
-      //     subMenuChildren.add(new ListTile(
-      //       leading: Visibility(
-      //         child: Icon(
-      //           Icons.account_box_rounded,
-      //           size: 15,
-      //         ),
-      //         visible: false,
-      //       ),
-      //       onTap: () => {
-      //         setState(() {
-      //         //  log("The item clicked is " + element['children'][i]['state']);
-
-      //           //from the json we got which contains the menu and submenu we will need the "state"
-      //           // json item to get the unique identifier so we know what to open
-
-      //           switch (element['children'][i]['state']) {
-      //             case '/fund-type':
-      //               //setting current index and opening a new screen using page controller with animations
-      //               _selectedPageIndex = 1;
-      //               WidgetsBinding.instance.addPostFrameCallback((_) {
-      //                 if (_pageController.hasClients) {
-      //                   _pageController.animateToPage(1, duration: Duration(milliseconds: 1), curve: Curves.easeInOut);
-      //                 }
-      //               });
-      //               c.title.value = "Fund Type";
-      //               Navigator.pop(context);
-
-
-      //               break;
-      //             case '/fund-sources':
-      //               _selectedPageIndex = 2;
-      //               // _pageController.jumpToPage(2);
-      //               WidgetsBinding.instance.addPostFrameCallback((_) {
-      //                 if (_pageController.hasClients) {
-      //                   _pageController.animateToPage(2,
-      //                       duration: Duration(milliseconds: 1),
-      //                       curve: Curves.easeInOut);
-      //                 }
-      //               });
-      //               c.title.value = "Fund Source";
-
-      //               Navigator.pop(context);
-
-      //               break;
-      //           }
-      //         })
-      //       },
-      //       title: Text(
-      //         element['children'][i]['title'],
-      //         style: TextStyle(fontWeight: FontWeight.w700),
-      //       ),
-      //     ));
-      //   }
-        children.add(
-          new ExpansionTile(
-            key: Key(index.toString()),
-            initiallyExpanded: index == selected,
-            leading: Icon(
-              Icons.audiotrack,
-              color: Colors.green,
-              size: 30.0,
-            ),
-            title: Text(
-              element['title'],
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
-            ),
-            children: subMenuChildren,
-            onExpansionChanged: ((newState) {
-              if (newState) {
-                Duration(seconds: 20000);
-                selected = index;
-               // log(' selected ' + index.toString());
-              } else {
-                selected = -1;
-                //log(' selected ' + selected.toString());
-              }
-            }),
-          ),
-        );
-      }
+  void registerRedDivFactory() {
+    ui_web.platformViewRegistry.registerViewFactory(
+      'my-view-type',
+      (int viewId, {Object? params}) {
+        final web.HTMLDivElement myDiv = web.HTMLDivElement()
+          ..id = 'some_id_'
+          // ..style.backgroundColor = 'red'
+          ..style.width = '100%'
+          ..style.height = '100%';
+        return myDiv;
+      },
     );
-    return children;
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
-      children: _getChildren(widget.elementList),
-    );
-  }
+    registerRedDivFactory();
 
-  @override
-  void initState() {
-    super.initState();
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(
+            width: 400,
+            height: 500,
+            child: HtmlElementView(
+              viewType: 'my-view-type',
+              onPlatformViewCreated: (viewId) async {
+                final div = ui_web.platformViewRegistry.getViewById(viewId)
+                    as html.DivElement;
+                div.innerHtml = '</br>';
+                
+               
+
+                final web.HTMLUListElement ul = web.HTMLUListElement()
+                  ..id = '_tree_form_'
+                  ..className = 'ztree';
+                div.append(ul as html.Node);
+ 
+              final settings = js_util.jsify({
+    "view": {"selectedMulti": false},
+    "check": {"enable": true},
+    "data": {
+      "simpleData": {
+        "enable": true,
+        "idKey": "id",
+        "pIdKey": "pId",
+        "rootPId": 0
+      }
+    },
+  });
+
+                // Define zTree nodes
+                 final nodes = [
+    {"id": 1, "pId": 0, "name": "Parent Node 1", "open": false},
+    {"id": 11, "pId": 1, "name": "Child Node 1-1", "open": false},
+    {"id": 12, "pId": 1, "name": "Child Node 1-2", "open": false},
+    {"id": 2, "pId": 0, "name": "Parent Node 1", "open": false},
+    {"id": 21, "pId": 2, "name": "Child Node 1-1", "open": false},
+    {"id": 22, "pId": 2, "name": "Child Node 1-2", "open": false}
+  ];
+  final jsNodes = nodes.map((node) => js_util.jsify(node)).toList();
+
+                 
+                zTreeInit(jQuery(div).find(ul), settings, jsNodes);
+
+              
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

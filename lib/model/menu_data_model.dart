@@ -1,59 +1,64 @@
-import '../data/module_menu_list.dart';
+import 'dart:convert';
 
-class MenuData {
-  int? mid;
-  List<Menu>? menu;
 
-  MenuData({this.mid, this.menu});
+import '../data/data_api.dart';
 
-  MenuData.fromJson(Map<String, dynamic> json) {
-    mid = json['mid'];
-    if (json['menu'] != null) {
-      menu = <Menu>[];
-      json['menu'].forEach((v) {
-        menu!.add(Menu.fromJson(v));
-      });
-    }
-  }
+// class MenuData {
+//   int? mid;
+//   List<Menu>? menu;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['mid'] = mid;
-    if (menu != null) {
-      data['menu'] = menu!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
+//   MenuData({this.mid, this.menu});
+
+//   MenuData.fromJson(Map<String, dynamic> json) {
+//     mid = json['mid'];
+//     if (json['menu'] != null) {
+//       menu = <Menu>[];
+//       json['menu'].forEach((v) {
+//         menu!.add(Menu.fromJson(v));
+//       });
+//     }
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['mid'] = mid;
+//     if (menu != null) {
+//       data['menu'] = menu!.map((v) => v.toJson()).toList();
+//     }
+//     return data;
+//   }
+// }
 
 class Menu {
   int? id;
   String? name;
   List<Smenu>? smenu;
-  String? icon;
 
-  Menu({this.id, this.name, this.smenu, this.icon});
+  Menu({this.id, this.name, this.smenu});
 
   Menu.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+   //print(":::::"+json['smenu']);
     if (json['smenu'] != null) {
+       
       smenu = <Smenu>[];
-      json['smenu'].forEach((v) {
+      jsonDecode(json['smenu']).forEach((v) {
         smenu!.add(Smenu.fromJson(v));
       });
     }
-    icon = json['icon'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    
     if (smenu != null) {
-      data['smenu'] = this.smenu!.map((v) => v.toJson()).toList();
+      
+      data['smenu'] = smenu!.map((v) => v.toJson()).toList();
     }
-    data['icon'] = this.icon;
+    //print(data);
     return data;
   }
 }
@@ -80,6 +85,20 @@ class Smenu {
 //mList.map((post) => User_Model.fromJson(post)).toList();
 // ignore: non_constant_identifier_names
 Future<List<Menu>> get_menu_data_list(String id) async {
-  List<MenuData> x = menu_data.map((e) => MenuData.fromJson(e)).toList();
-  return (x.where((o) => o.mid!.toString() == id).first).menu!.toList();
+  List<Menu> list = [];
+  data_api2 repo = data_api2();
+  try {
+    var x = await repo.createLead([
+      //@name, @pid int,@img
+      {"tag": "4", "pid": id}
+    ]);
+    // print(x);
+    list = x.map((e) => Menu.fromJson(e)).toList().where((element) => element.smenu!=null).toList();
+  } on Exception {
+    return [];
+  }
+
+  return list;
+  //List<Menu> x = menu_data.map((e) => MenuData.fromJson(e)).toList();
+  // return (list.where((o) => o.mid!.toString() == id).first).menu!.toList();
 }
