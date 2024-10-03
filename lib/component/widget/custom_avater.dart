@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class CustomAvater extends StatelessWidget {
   final double size;
   const CustomAvater({
-    Key? key,
+    super.key,
     required this.size,
     required this.backgroundImage,
-  }) : super(key: key);
+  });
 
   final ImageProvider<Object>? backgroundImage;
 

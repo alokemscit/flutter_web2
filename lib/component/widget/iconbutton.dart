@@ -10,12 +10,12 @@ class MyIconButton extends StatelessWidget {
   final double width;
 
   const MyIconButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.buttonClick,
     required this.icon,
     this.color = const Color.fromARGB(255, 248, 248, 248),  this.width=0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
