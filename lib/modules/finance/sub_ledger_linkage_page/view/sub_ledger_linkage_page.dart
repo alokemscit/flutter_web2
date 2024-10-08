@@ -1,9 +1,9 @@
  
-import '../../../component/widget/custom_panel.dart';
-import '../../../core/config/const.dart';
+import '../../../../component/widget/custom_panel.dart';
+import '../../../../core/config/const.dart';
  
-import '../ledger_master_page/model/model_ledger_master.dart';
-import 'controller/sub_ledger_linkage_controller.dart';
+import '../../ledger_master_page/model/model_ledger_master.dart';
+import '../controller/sub_ledger_linkage_controller.dart';
 
 class SubLeaderLinkageMaster extends StatelessWidget {
   const SubLeaderLinkageMaster({super.key});
@@ -513,31 +513,7 @@ _responsiveNonDesktop(SubLedgerLinkageController controller) =>
           ],
         )
        
-          // Expanded(
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start, children: [
-          //                 SizedBox(
-          //                   height: 400,
-          //                   child: Expanded(
-          //                     child: ListView(
-          //                               children: controller.ledger_list
-          //                                   .where((p0) => p0.pARENTID == '0')
-          //                                   .map((e) => _chartAccount(controller, e))
-          //                                   .toList(),
-          //                     ),
-          //                   ),
-          //                 ),
-          //                 controller.selectedLedger.value.iD == null
-          //     ? const Spacer()
-          //     : Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: SizedBox(
-          //           height: 300,
-          //          // child: _slList(controller),
-          //         ),
-          //       )
-          //               ]),
-          // ),
+          
         
       ),
     );

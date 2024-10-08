@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, camel_case_types, curly_braces_in_flow_control_structures
 import 'dart:convert';
- 
 
 import 'package:equatable/equatable.dart';
 
 import 'package:intl/intl.dart';
- 
 
 import 'package:web_2/core/config/const.dart';
 import 'package:web_2/modules/Inventory/inv_supplier_master/model/inv_model_supplier_master.dart';
@@ -46,7 +44,6 @@ class InvPoCreateController extends GetxController with MixInController {
   var isShowfree = false.obs;
   var list_po_details = <ModelPoDetails>[].obs;
   var list_po_terms = <ModelCommonMaster>[].obs;
- 
 
   final TextEditingController txt_search_fdate = TextEditingController();
   final TextEditingController txt_search_tdate = TextEditingController();
@@ -120,7 +117,7 @@ class InvPoCreateController extends GetxController with MixInController {
       //print(list_po_details.length);
 
       double sum = list_po_details.fold(0.0, (previousValue, element) {
-        return previousValue + element.tot!;
+        return previousValue + element.po_tot!;
       });
       ModelPoDetails d = list_po_details.first;
       CustomPDFGenerator(font: font, header: [
@@ -130,14 +127,34 @@ class InvPoCreateController extends GetxController with MixInController {
         pwText2Col(font, 'Address:   ', d.supAddress ?? '', 'PO. Date: ',
             d.poDate ?? ''),
         pwHeight(4),
-        pwText2Col(font, 'Mobile No: ', d.supMob ?? '', 'PO. Status: ',
-            (d.isApp ?? 0) == 1 ? 'Approved' : (d.canceledDate??'')!=''?'Canceled' :'Approved'),
+        pwText2Col(
+            font,
+            'Mobile No: ',
+            d.supMob ?? '',
+            'PO. Status: ',
+            (d.isApp ?? 0) == 1
+                ? 'Approved'
+                : (d.canceledDate ?? '') != ''
+                    ? 'Canceled'
+                    : 'Approved'),
       ], footer: [
-        pwText2Col(font, 'Created By:  ', d.createdBy ?? '', (d.canceledDate??'')!=''?'Canceled By:':'Approved By: ',
-          (d.canceledDate??'')!=''?d.canceledBy??'':  d.appBy ?? ''),
+        pwText2Col(
+            font,
+            'Created By:  ',
+            d.createdBy ?? '',
+            (d.canceledDate ?? '') != '' ? 'Canceled By:' : 'Approved By: ',
+            (d.canceledDate ?? '') != '' ? d.canceledBy ?? '' : d.appBy ?? ''),
         pwHeight(4),
-        pwText2Col(font, 'Created By:  ', d.createdDate ?? '',
-          (d.canceledDate??'')!=''?'Canceled Date: ':  'Approved Date: ',(d.canceledDate??'')!=''?d.canceledDate??'': d.appDate ?? ''),
+        pwText2Col(
+            font,
+            'Created By:  ',
+            d.createdDate ?? '',
+            (d.canceledDate ?? '') != ''
+                ? 'Canceled Date: '
+                : 'Approved Date: ',
+            (d.canceledDate ?? '') != ''
+                ? d.canceledDate ?? ''
+                : d.appDate ?? ''),
         pwHeight(2)
       ], body: [
         pwGenerateTable([
@@ -170,7 +187,7 @@ class InvPoCreateController extends GetxController with MixInController {
                 pwTableCell(
                     (f.discAmt ?? 0).toStringAsFixed(2), font, pwAligmentRight),
                 pwTableCell(
-                    (f.tot ?? 0).toStringAsFixed(2), font, pwAligmentRight),
+                    (f.po_tot ?? 0).toStringAsFixed(2), font, pwAligmentRight),
               ]))
         ]),
         pwGenerateTable([
@@ -198,9 +215,9 @@ class InvPoCreateController extends GetxController with MixInController {
             ], [], [
               ...list_po_terms.map((f) => pwTableRow(
                     [
-                      pwTableCell(
-                          (list_po_terms.indexOf(f) + 1).toString(), font,pwAligmentCenter,8.6),
-                      pwTableCell(f.name ?? '', font,pwAligmentLeft,8.6)
+                      pwTableCell((list_po_terms.indexOf(f) + 1).toString(),
+                          font, pwAligmentCenter, 8.6),
+                      pwTableCell(f.name ?? '', font, pwAligmentLeft, 8.6)
                     ],
                   ))
             ]),
@@ -242,13 +259,14 @@ class InvPoCreateController extends GetxController with MixInController {
         list_pr_item_tems.isEmpty, dialog, 'No Item list found for PO')) return;
 
     List<Map<String, dynamic>> list = [];
-
+    bool b = true;
     for (var f in list_pr_item_tems) {
       if ((double.tryParse(f.qty?.text ?? '0') ?? 0) == 0) {
         dialog
           ..dialogType = DialogType.warning
           ..message = 'Item quantity should be greater tahn zero'
           ..show();
+        b = false;
         break;
       }
 
@@ -257,6 +275,7 @@ class InvPoCreateController extends GetxController with MixInController {
           ..dialogType = DialogType.warning
           ..message = 'Item Rate should be required for non free item'
           ..show();
+        b = false;
         break;
       }
       list.add({
@@ -268,6 +287,12 @@ class InvPoCreateController extends GetxController with MixInController {
         "amt": f.amt
       });
     }
+    if (!b) {
+      return;
+    }
+
+
+
     List<Map<String, dynamic>> __list_terms = [];
     list_terms_master.forEach((f) {
       if (f.isDefault == 1) {

@@ -12,7 +12,7 @@ import '../../inv_po_create/model/inv_model_po_details.dart';
 import '../../inv_po_create/model/inv_model_terms_master.dart';
 import '../../inv_supplier_master/model/inv_model_supplier_master.dart';
 import '../model/inv_grn_master_view.dart';
-import 'inv_grn_details_view.dart';
+import '../model/inv_grn_details_view.dart';
 
 class InvGrnCreateController extends GetxController with MixInController {
   final TextEditingController txt_grn_date = TextEditingController();
@@ -63,117 +63,20 @@ class InvGrnCreateController extends GetxController with MixInController {
           (x) => ModelGrnDetailsView.fromJson(x));
       if (list_grn_details_view.isEmpty) {
         loader.close();
+        dialog
+          ..dialogType = DialogType.error
+          ..message = 'No Report Data Found!'
+          ..show();
         return;
       }
-      var x = list_grn_details_view.first;
-      var total = list_grn_details_view.fold(0.0, (previousValue, element) {
-        return previousValue + (element.tot ?? 0.0);
-      });
+      // var x = list_grn_details_view.first;
+      // var total = list_grn_details_view.fold(0.0, (previousValue, element) {
+      //   return previousValue + (element.tot ?? 0.0);
+      // });
 
-      CustomPDFGenerator(
-          font: font,
-          header: [
-            pwTextOne(font, '', user.value.cname ?? ''),
-            pwHeight(),
-            pwTextOne(font, 'Store Type : ', x.storeName ?? '', 9,
-                pwMainAxisAlignmentStart),
-            pwHeight(4),
-            pwText2Col(font, "GRN. No : ", x.grnNo ?? '', 'GRN. Date : ',
-                x.grnDate ?? ''),
-           
-            pwHeight(4),
-            pwText2Col(font, "Chalan. No : ", x.chalanNo ?? '',
-                'Chalan. Date : ', x.chalanDate ?? ''),
-                 pwHeight(4),
-            pwText2Col(
-                font,
-                "PO. No : ",
-                x.poNo ?? '',
-                'GRN. Status : ',
-                (x.currentStatus ?? 0) == 0
-                    ? 'Canceled'
-                    : (x.currentStatus ?? 0) == 2
-                        ? "Approved"
-                        : "Approval Pending"),
-            pwHeight(4),
-            pwTextOne(font, 'Remarks : ', x.remarks ?? '', 9,
-                pwMainAxisAlignmentStart)
-          ],
-          footer: [
-            pwText2Col(font, "GRN. Created By : ", x.createdBy ?? '',
-                'Created. Date : ', x.createdDate ?? ''),
-            pwHeight(4),
-            (x.currentStatus ?? 0) == 2
-                ? pwText2Col(font, "Approved By : ", x.appBy ?? '',
-                    'Created. Date : ', x.appDate ?? '')
-                : (x.currentStatus ?? 0) == 0
-                    ? pwText2Col(font, "Canceled By : ", x.cancelBy ?? '',
-                        'Created. Date : ', x.cancelDate ?? '')
-                    : pwSizedBox(),
-            pwText2Col(
-                font,
-                "Printed By : ",
-                user.value.name ?? '',
-                'Printed Date : ',
-                DateFormat('dd/MM/yyyy hh:mm PM').format(DateTime.now())),
-          ],
-          body: [
-            pwGenerateTable([
-              15,
-              50,
-              20,
-              20,
-              20,
-              20,
-              20,
-              20,
-              20,
-              30
-            ], [
-              pwTableColumnHeader('Code', font),
-              pwTableColumnHeader('Name', font),
-              pwTableColumnHeader('Type', font, pwAligmentCenter),
-              pwTableColumnHeader('Unit', font, pwAligmentCenter),
-               pwTableColumnHeader('Batch', font, pwAligmentCenter),
-              pwTableColumnHeader('MRP', font, pwAligmentCenter),
-              
-              pwTableColumnHeader('Price', font, pwAligmentCenter),
-              pwTableColumnHeader('Disc(%)', font, pwAligmentCenter),
-              pwTableColumnHeader('Qty', font, pwAligmentCenter),
-              pwTableColumnHeader('Total', font, pwAligmentRight),
-            ], [
-              ...list_grn_details_view.map((f) => pwTableRow([
-                    pwTableCell(f.code ?? '', font,pwAligmentLeft,8),
-                    pwTableCell(f.itemName ?? '', font,pwAligmentLeft,8),
-                    pwTableCell(f.subgroupName ?? '', font,pwAligmentCenter,8),
-                    pwTableCell(f.unitName ?? '', font, pwAligmentCenter,8),
-                     pwTableCell(f.batch_no ?? '', font, pwAligmentCenter,8),
-                    pwTableCell((f.mrp ?? 0).toStringAsFixed(2), font,
-                        pwAligmentCenter,8),
-                    pwTableCell((f.price ?? 0).toStringAsFixed(2), font,
-                        pwAligmentCenter,8),
-                    pwTableCell((f.disc ?? 0).toStringAsFixed(2), font,
-                        pwAligmentCenter,8),
-                    pwTableCell((f.qty ?? 0).toStringAsFixed(2), font,
-                        pwAligmentCenter,8),
-                    pwTableCell(
-                        (f.tot ?? 0).toStringAsFixed(2), font, pwAligmentRight,8),
-                  ])),
-            ]),
-            pwGenerateTable([
-              15 + 50 + 20 + 20 + 20 + 20+20,
-              20 + 20,
-              30,
-            ], [
-              pwTableColumnHeader('', font),
-              pwTableColumnHeader('Grand Total', font, pwAligmentRight, 9.5),
-              pwTableColumnHeader(
-                  total.toStringAsFixed(2), font, pwAligmentRight, 9.5)
-            ], [])
-          ],
-          fun: () {
-            loader.close();
-          }).ShowReport();
+      report_grn(font, list_grn_details_view, user, () {
+        loader.close();
+      });
     } catch (e) {
       loader.close();
       dialog
@@ -212,10 +115,16 @@ class InvGrnCreateController extends GetxController with MixInController {
 
     List<Map<String, dynamic>> list = [];
     list_po_item_tems.forEach((f) {
-      list.add({"id":f.id,"qty": (double.tryParse(f.qty?.text ?? '0') ?? 0),"rate":f.rate,"disc":f.disc,"is_free":f.isFree,"batch":f.batch!.text,"exp_date":f.expdate!.text ,  });
+      list.add({
+        "id": f.id,
+        "qty": (double.tryParse(f.qty?.text ?? '0') ?? 0),
+        "rate": f.rate,
+        "disc": f.disc,
+        "is_free": f.isFree,
+        "batch": f.batch!.text,
+        "exp_date": f.expdate!.text,
+      });
     });
-
-     
 
     try {
       //@cid int,@eid int,@po_id int, @store_type_id int, @store_id int, @sup_id int,   @str varchar(max),@rem nvarchar(250), @grn_date varchar(10)

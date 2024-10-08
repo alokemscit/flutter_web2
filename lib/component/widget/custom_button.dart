@@ -86,7 +86,6 @@ Widget CustomButton(@required IconData icon, @required String caption,
   );
 }
 
-
 class CustomButtonAnimated extends StatefulWidget {
   final IconData icon;
   final String caption;
@@ -96,14 +95,14 @@ class CustomButtonAnimated extends StatefulWidget {
   final Color buttonColor;
 
   const CustomButtonAnimated({
-    super.key,
+    Key? key,
     required this.icon,
     required this.caption,
     required this.onClick,
     this.textColor = appColorGrayLight,
     this.iconColor = appColorGrayLight,
-    this.buttonColor = appColorPrimary,
-  });
+    this.buttonColor = appColorGrayDark,
+  }) : super(key: key);
 
   @override
   _CustomButtonAnimatedState createState() => _CustomButtonAnimatedState();
@@ -120,9 +119,11 @@ class _CustomButtonAnimatedState extends State<CustomButtonAnimated> {
     widget.onClick();
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      setState(() {
-        isClick = false;
-      });
+      if (mounted) {  // Check if the widget is still mounted
+        setState(() {
+          isClick = false;
+        });
+      }
     });
   }
 
@@ -132,7 +133,7 @@ class _CustomButtonAnimatedState extends State<CustomButtonAnimated> {
       cursor: SystemMouseCursors.click,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        splashColor: widget.buttonColor.withBlue(100),
+        splashColor: widget.buttonColor.withOpacity(0.7),
         onTap: handleClick,
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 600),
@@ -147,7 +148,7 @@ class _CustomButtonAnimatedState extends State<CustomButtonAnimated> {
                   spreadRadius: 0,
                   blurRadius: 3,
                   color: Colors.black.withOpacity(0.25),
-                )
+                ),
               ],
             ),
             child: Row(
@@ -176,8 +177,6 @@ class _CustomButtonAnimatedState extends State<CustomButtonAnimated> {
     );
   }
 }
-
-
 
 
 

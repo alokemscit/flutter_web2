@@ -44,6 +44,9 @@ class ModelGrnDetailsView {
   double? disc;
   double? mrp;
   double? tot;
+  double? po_app_qty;
+  double? rem_qty;
+  String? app_cancel_remarks;
 
   ModelGrnDetailsView(
       {this.poId,
@@ -88,7 +91,10 @@ class ModelGrnDetailsView {
       this.mrp,
       this.price,
       this.qty,
-      this.tot});
+      this.tot,
+      this.po_app_qty,
+      this.rem_qty,
+      this.app_cancel_remarks});
 
   ModelGrnDetailsView.fromJson(Map<String, dynamic> json) {
     poId = json['po_id'];
@@ -135,6 +141,9 @@ class ModelGrnDetailsView {
     disc = json['disc'];
     mrp = json['mrp'];
     tot = json['tot'];
+    rem_qty = json['rem_qty'];
+    po_app_qty = json['po_app_qty'];
+    app_cancel_remarks = json['app_cancel_remarks'];
   }
 
   // Map<String, dynamic> toJson() {

@@ -15,7 +15,7 @@ class LoginPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? cid;
+    String? cid='12';
 
     return MultiBlocProvider(
       //create: (context) => SubjectBloc(),

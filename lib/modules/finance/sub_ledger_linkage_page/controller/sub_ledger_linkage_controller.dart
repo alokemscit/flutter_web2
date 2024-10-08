@@ -1,4 +1,3 @@
-
 import '../../../../component/widget/custom_snakbar.dart';
 import '../../../../core/config/const.dart';
 
@@ -8,6 +7,7 @@ import '../model/model_gl_sl_linkage_master.dart';
 
 class SubLedgerLinkageController extends GetxController with MixInController {
   var ledger_list = <ModelLedgerMaster>[].obs;
+  var list_tool = <CustomTool>[].obs;
 
   final TextEditingController txt_search = TextEditingController();
 
@@ -170,43 +170,38 @@ class SubLedgerLinkageController extends GetxController with MixInController {
     isLoading.value = true;
     isError.value = false;
     api = data_api2();
+    user.value = await getUserInfo();
+    if (!await isValidLoginUser(this)) return;
     try {
-      user.value = await getUserInfo();
-      if (user.value.uid == null) {
-        isError.value = true;
-        isLoading.value = false;
-        errorMessage.value = "User re-login required!";
-        return;
-      }
       //print(user.value.comID);
 
-      var x = await api.createLead([
-        {"tag": "53", "p_cid": user.value.cid}
-      ]);
-      // print(x);
-      ledger_list.addAll(x.map((e) => ModelLedgerMaster.fromJson(e)));
+      await mLoadModel(
+          api,
+          [
+            {"tag": "53", "p_cid": user.value.cid}
+          ],
+          ledger_list,
+          (e) => ModelLedgerMaster.fromJson(e));
 
-      var y = await api.createLead([
-        {"tag": "72", "p_cid": user.value.cid}
-      ]);
-      if (y == [] || y.map((e) => ModelStatus.fromJson(e)).first.status=='3') {
-        isLoading.value = false;
-        return;
-      }
-     
-      sl_list_main.addAll(y.map((e) => ModelSubledgerMaster.fromJson(e)));
-      // print(y);
-      var z = await api.createLead([
-        {"tag": "76", "p_cid": user.value.cid}
-      ]);
-     if (z == [] || z.map((e) => ModelStatus.fromJson(e)).first.status=='3') {
-        isLoading.value = false;
-        return;
-      }
-      link_list_main.addAll(z.map((e) => ModelGlSlLinkageMaster.fromJson(e)));
+      await mLoadModel(
+          api,
+          [
+            {"tag": "72", "p_cid": user.value.cid}
+          ],
+          sl_list_main,
+          (e) => ModelSubledgerMaster.fromJson(e));
+
+      await mLoadModel(
+          api,
+          [
+            {"tag": "76", "p_cid": user.value.cid}
+          ],
+          link_list_main,
+          (e) => ModelGlSlLinkageMaster.fromJson(e));
+
       link_list_temp.addAll(link_list_main);
-      // print(z);
-      //  sl_list_temp.addAll(sl_list_main);
+      list_tool.addAll(Custom_Tool_List());
+      mToolEnableDisable(list_tool, [ToolMenuSet.file], []);
 
       isLoading.value = false;
     } catch (e) {

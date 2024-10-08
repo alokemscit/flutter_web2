@@ -1,5 +1,3 @@
-
-
 import '../../../../core/config/const.dart';
 import '../../shared/inv_shared_widget.dart';
 import '../controller/inv_po_approval_controller.dart';
@@ -15,7 +13,7 @@ class InvPoApproval extends StatelessWidget implements MyInterface {
   Widget build(BuildContext context) {
     final InvPoApprovalController c = Get.put(InvPoApprovalController());
     c.context = context;
-    
+    bool b = true;
     return Obx(() => CommonBodyWithToolBar(
             c,
             [
@@ -28,14 +26,20 @@ class InvPoApproval extends StatelessWidget implements MyInterface {
               ))
             ],
             c.list_menu, (v) {
-          
-            c.toolBarEvent(v!);
-            
-          
+          if (b) {
+            if (v == ToolMenuSet.show) {
+              _showDialog(c);
+            } else {
+              c.toolBarEvent(v!);
+            }
+            b = false;
+            Future.delayed(const Duration(seconds: 1), () {
+              b = true;
+            });
+          }
         }));
   }
 }
-
 
 Widget _rightPanel(InvPoApprovalController controller) => Column(
       children: [
@@ -362,3 +366,157 @@ Widget _left_panel(InvPoApprovalController controller) => InvleftPanelWithTree(
                       ]))
               .toList()),
     );
+
+void _showDialog(InvPoApprovalController controller) => CustomDialog(
+    controller.context,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Text(
+        'PO. Reort',
+        style: customTextStyle.copyWith(color: appColorMint),
+      ),
+    ),
+    Row(
+      children: [
+        Flexible(
+          child: SizedBox(
+            width: 800,
+            height: 600,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomGroupBox(
+                        child: _dialodContentTop(
+                            controller,
+                            MyWidget().DropDown
+                              ..width = 250
+                              ..id = controller.cmb_store_type_search.value
+                              ..list = controller.list_storeTypeList
+                              ..onTap = (v) {
+                                controller.cmb_store_type_search.value = v!;
+                              },
+                            MyWidget().DatePicker
+                              ..width = 120
+                              ..date_controller = controller.txt_search_fdate
+                              ..label = 'From Date'
+                              ..isBackDate = true
+                              ..isShowCurrentDate = true,
+                            MyWidget().DatePicker
+                              ..width = 120
+                              ..date_controller = controller.txt_search_tdate
+                              ..label = 'To Date'
+                              ..isBackDate = true
+                              ..isShowCurrentDate = true,
+                            MyWidget().IconButton
+                              ..icon = Icons.search
+                              ..text = 'Show'
+                              ..onTap = () {
+                                controller.showPoStatus();
+                              }),
+                      ),
+                    ),
+                  ],
+                ),
+                8.heightBox,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MyWidget().SearchBox
+                      ..width = 250
+                      ..controller = TextEditingController()
+                      ..onChange = (v) {},
+                  ],
+                ),
+                8.heightBox,
+                Expanded(
+                    child: Obx(() => CustomTableGenerator(colWidtList: const [
+                          30,
+                          30,
+                          60,
+                          30,
+                          30,
+                          20
+                        ], childrenHeader: [
+                          MyWidget().TableColumnHeader..text = 'PO. No',
+                          MyWidget().TableColumnHeader..text = 'PO. Date',
+                          MyWidget().TableColumnHeader..text = 'Suppliers',
+                          MyWidget().TableColumnHeader..text = 'Delivery Date',
+                          MyWidget().TableColumnHeader..text = 'Status',
+                          MyWidget().TableColumnHeader
+                            ..text = '*'
+                            ..alignment = Alignment.center,
+                        ], childrenTableRowList: [
+                          ...controller.list_po_stattus_temp.map(
+                            (f) => TableRow(
+                                decoration: BoxDecoration(
+                                    color: f.currentStatus == 2
+                                        ? appColorPista
+                                        : f.currentStatus == 0
+                                            ? Colors.red.withOpacity(0.05)
+                                            : Colors.white),
+                                children: [
+                                  MyWidget().TableCell..text = f.poNo ?? '',
+                                  MyWidget().TableCell..text = f.poDate ?? '',
+                                  MyWidget().TableCell..text = f.subName ?? '',
+                                  MyWidget().TableCell
+                                    ..text = f.deliveryDate ?? '',
+                                  MyWidget().TableCell
+                                    ..text = f.currentStatus == 0
+                                        ? 'Canceled'
+                                        : f.currentStatus == 2
+                                            ? "Approved"
+                                            : "App. Pending",
+                                  CustomTableEditCell(() {
+                                    controller
+                                        .show_po_report(f.poId!.toString());
+                                  }, Icons.print_rounded, 16)
+                                ]),
+                          )
+                        ])))
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+    () {},
+    true,
+    false);
+Widget _dialodContentTop(InvPoApprovalController controller, Widget dropdowb,
+        Widget dateF, Widget dateT, Widget button) =>
+    controller.context.width < 650
+        ? Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: dropdowb),
+                ],
+              ),
+              8.heightBox,
+              Row(
+                children: [
+                  Expanded(child: dateF),
+                  8.widthBox,
+                  Expanded(child: dateT),
+                ],
+              ),
+              8.widthBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [button],
+              )
+            ],
+          )
+        : Row(
+            children: [
+              dropdowb,
+              8.widthBox,
+              dateF,
+              8.widthBox,
+              dateT,
+              12.widthBox,
+              button
+            ],
+          );

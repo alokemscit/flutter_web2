@@ -1,11 +1,7 @@
- 
-
 import '../../core/config/const.dart';
 
- 
-
 class CustomPanel extends StatefulWidget {
-   CustomPanel({
+  CustomPanel({
     super.key,
     required this.children,
     required this.title,
@@ -14,10 +10,15 @@ class CustomPanel extends StatefulWidget {
     this.splashColor = appColorPista,
     this.openIcon = Icons.folder_open_sharp,
     this.closeIcon = Icons.folder,
-    this.isLeadingIcon = false,  this.iconColor=Colors.black87,  this.iconSize=18,  
-    this.isSurfixIcon=true,  this.isSelectedColor=true,
-     void Function(bool b)? onTap,  this.selectedTitleColor=Colors.white,
-  }): onTap = onTap ?? ((bool b) {});
+    this.isLeadingIcon = false,
+    this.iconColor = Colors.black87,
+    this.iconSize = 18,
+    this.isSurfixIcon = true,
+    this.isSelectedColor = true,
+    void Function(bool b)? onTap,
+    this.selectedTitleColor = Colors.white,
+    this.isExpandRow=true,
+  }) : onTap = onTap ?? ((bool b) {});
 
   final List<Widget> children;
   final Widget title;
@@ -33,6 +34,7 @@ class CustomPanel extends StatefulWidget {
   final Color selectedTitleColor;
   final double iconSize;
   final void Function(bool b) onTap;
+  final bool isExpandRow;
   @override
   State<CustomPanel> createState() => _CustomPanelState();
 }
@@ -82,51 +84,82 @@ class _CustomPanelState extends State<CustomPanel>
       children: [
         InkWell(
           borderRadius: BorderRadius.circular(widget.borderRadius),
-          splashColor: widget.isSelectedColor? widget.splashColor:Colors.transparent,
-          hoverColor: widget.isSelectedColor? widget.splashColor:Colors.transparent,
-          onTap:(){
+          splashColor:
+              widget.isSelectedColor ? widget.splashColor : Colors.transparent,
+          hoverColor:
+              widget.isSelectedColor ? widget.splashColor : Colors.transparent,
+          onTap: () {
             _toggleExpand();
             widget.onTap(_isExpanded);
-          }, 
+          },
           child: Container(
             decoration: _isExpanded
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(widget.borderRadius),
-                    color: widget.isSelectedColor? widget.splashColor:Colors.transparent,
-                   
- 
-                    
-                    boxShadow:  [
+                    color: widget.isSelectedColor
+                        ? widget.splashColor
+                        : Colors.transparent,
+                    boxShadow: [
                         BoxShadow(
-                            blurRadius: 3, spreadRadius: 1, color: widget.selectedTitleColor)
+                            blurRadius: 3,
+                            spreadRadius: 1,
+                            color: widget.selectedTitleColor)
                       ])
                 : null,
             // padding: const EdgeInsets.all(4),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
+              widget.isExpandRow?  Expanded(
                   child: Row(
                     children: [
-                      widget.isLeadingIcon?Row(
-                        children: [
-                          Icon( _isExpanded? widget.openIcon:widget.closeIcon,size: widget.iconSize,color: widget.iconColor,),
-                          6.widthBox,
-                        ],
-                      ):const SizedBox(),
+                      widget.isLeadingIcon
+                          ? Row(
+                              children: [
+                                Icon(
+                                  _isExpanded
+                                      ? widget.openIcon
+                                      : widget.closeIcon,
+                                  size: widget.iconSize,
+                                  color: widget.iconColor,
+                                ),
+                                6.widthBox,
+                              ],
+                            )
+                          : const SizedBox(),
                       widget.title,
                     ],
                   ),
-                ),
+                ):Row(
+                    children: [
+                      widget.isLeadingIcon
+                          ? Row(
+                              children: [
+                                Icon(
+                                  _isExpanded
+                                      ? widget.openIcon
+                                      : widget.closeIcon,
+                                  size: widget.iconSize,
+                                  color: widget.iconColor,
+                                ),
+                                6.widthBox,
+                              ],
+                            )
+                          : const SizedBox(),
+                      widget.title,
+                    ],
+                  ),
                 const SizedBox(
                   width: 4,
                 ),
-              widget.isSurfixIcon?   RotationTransition(
-                  turns: _animation,
-                  child:  Icon(!_isExpanded
-                      ? Icons.arrow_drop_down
-                      : Icons.arrow_drop_up),
-                ):const SizedBox(),
+                widget.isSurfixIcon
+                    ? RotationTransition(
+                        turns: _animation,
+                        child: Icon(!_isExpanded
+                            ? Icons.arrow_drop_down
+                            : Icons.arrow_drop_up),
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),
@@ -135,7 +168,9 @@ class _CustomPanelState extends State<CustomPanel>
           duration: const Duration(milliseconds: 200),
           curve: Curves.fastOutSlowIn,
           child: _isExpanded
-              ? Column(children: widget.children)
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.children)
               : const SizedBox(height: 0),
         ),
       ],

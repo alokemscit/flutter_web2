@@ -33,6 +33,7 @@ class ModelPoDetails {
   int? isApp;
   double? app_qty;
   double? rem_qty;
+  double? po_tot;
 
   ModelPoDetails(
       {this.poId,
@@ -68,7 +69,8 @@ class ModelPoDetails {
       this.isApp,
       this.app_qty,
       this.poNo,
-      this.rem_qty});
+      this.rem_qty,
+      this.po_tot});
 
   ModelPoDetails.fromJson(Map<String, dynamic> json) {
     poId = json['po_id'];
@@ -105,6 +107,7 @@ class ModelPoDetails {
     isApp = json['is_app'];
     app_qty = json['app_qty'];
     rem_qty = json['rem_qty'];
+    po_tot = json['po_tot'];
   }
 
   Map<String, dynamic> toJson() {

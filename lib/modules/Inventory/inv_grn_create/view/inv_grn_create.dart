@@ -350,34 +350,7 @@ Widget _rightPanel(InvGrnCreateController controller) => Column(
       ],
     );
 Widget _leftpanel(InvGrnCreateController c) => InvleftPanelWithTree(
-    // Column(
-    //   children: [
-    //     CustomDropDownSearchbox<ModelCommonMaster>(
-    //       //width: double.infinity,
-    //       onSelected: (p0) {
-    //         /// print(p0.name!);
-    //         ///
-    //         c.txt_store_name.text = p0.name!;
-
-    //       },
-    //       controller: c.txt_store_name,
-    //       //list: c.list_storeTypeList,
-    //       focusNode: FocusNode(),
-    //       id: c.cmb_store_typeID.value,
-    //       itemBuilder: (BuildContext, c) {
-    //         return Row(
-    //           children: [Text(c.name!)],
-    //         );
-    //       },
-
-    //       suggestionsCallback: (s) {
-    //         return c.list_storeTypeList
-    //             .where((f) => f.name!.toUpperCase().contains(s.toUpperCase()))
-    //             .toList();
-    //       },
-    //     ),
-    //   ],
-    // ),
+    
     CustomDropDown2(
         id: c.cmb_store_typeID.value,
         list: c.list_storeTypeList,

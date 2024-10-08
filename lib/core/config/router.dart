@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_2/modules/Inventory/attribute_setup_page/pages/inventory_attribute_setup.dart';
 import 'package:web_2/modules/Inventory/warehouse_setup/warehouse_inv_setup.dart';
-import 'package:web_2/modules/finance/cost_center_page/cost_center_page.dart';
+import 'package:web_2/modules/finance/cost_center_master/view/cost_center_page.dart';
 import 'package:web_2/modules/hms_setup/pages/hms_charges_config.dart';
 import 'package:web_2/modules/hms_setup/pages/hms_report_section_setup.dart';
 import 'package:web_2/modules/hrm/department_setup/department_setup_page.dart';
@@ -23,7 +23,9 @@ import '../../modules/Inventory/inv_po_create/pages/inv_po_create.dart';
 import '../../modules/Inventory/inv_pr_approval/pages/inv_pr_approval.dart';
 import '../../modules/Inventory/inv_purchase_requisition/pages/inv_purchase_requisition.dart';
 import '../../modules/Inventory/inv_store_item_issue/view/inv_item_issue_to_store.dart';
+import '../../modules/Inventory/inv_store_requisition/view/inv_store_requisition.dart';
 import '../../modules/Inventory/inv_supplier_master/pages/inv_supplier_master.dart';
+import '../../modules/Inventory/inv_supplier_return/view/inv_supplier_return.dart';
 import '../../modules/Inventory/inv_supplier_tagging/pages/inv_supplier_tagging.dart';
 import '../../modules/admin/module_page/form_page.dart';
 import '../../modules/admin/module_page/module_page.dart';
@@ -32,9 +34,10 @@ import '../../modules/appointment/doctor_appointment.dart';
 
 import '../../modules/appointment/doctor_leave_page/doctor_leave_page.dart';
 import '../../modules/appointment/time_slot_page/time_slot_page.dart';
-import '../../modules/finance/ledger_master_page/ledger_master_page.dart';
-import '../../modules/finance/sub_ledger_linkage_page/sub_ledger_linkage_page.dart';
-import '../../modules/finance/sub_ledger_master/sub_ledger_master_page.dart';
+import '../../modules/finance/fin_voucher/view/fin_voucher_entry.dart';
+import '../../modules/finance/ledger_master_page/view/ledger_master_page.dart';
+import '../../modules/finance/sub_ledger_linkage_page/view/sub_ledger_linkage_page.dart';
+import '../../modules/finance/sub_ledger_master/view/sub_ledger_master_page.dart';
 import '../../modules/hrm/employee_master/pages/hr_employee_profile.dart';
 import '../../modules/hrm/hr_duty_roster/view/hr_duty_roster_page.dart';
 
@@ -125,6 +128,10 @@ Widget getPage(String id) {
       return const InvGrnApproval();
     case '142':
       return const InvStoreItemIssue();
+    case '141':
+      return const InvSupplierReturn();
+    case '143':
+      return const InvSoreRequisition();
 
 // Accounts ###############################
     case "126":
@@ -135,6 +142,8 @@ Widget getPage(String id) {
       return const ConstcenterPage();
     case "129":
       return const SubLeaderLinkageMaster();
+    case '125':
+      return const FinVoucherEntry();
 //###########################################
 
     case "":

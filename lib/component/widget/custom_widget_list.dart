@@ -1,12 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:js/js_util.dart';
 import 'package:web_2/core/config/const.dart';
 
 import '../../model/user_model.dart';
+import 'searchable_dropdown/flutter_typeahead.dart';
 
 class PoppupMenu extends StatelessWidget {
   const PoppupMenu({super.key, required this.child, required this.menuList});
@@ -1011,7 +1013,7 @@ class CustomTwoPanelGroupBox extends StatelessWidget {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Flexible(
+              Expanded(
                 child: SizedBox(
                   width: double.infinity,
                   height: leftPanelWidth,
@@ -1034,49 +1036,7 @@ class CustomTwoPanelGroupBox extends StatelessWidget {
           );
   }
 }
-
-// Widget CustomTabWithCheckBox(String text, bool isChcek, void Function() fun,[bool isCheckBox=false]) =>
-//     InkWell(
-//       onTap: () {
-//         fun();
-//       },
-//       child: Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-//           decoration: BoxDecoration(
-//               borderRadius: const BorderRadius.only(topRight: Radius.circular(8),
-//               bottomLeft: Radius.circular(8) ),
-//               color: isChcek ? appColorGrayDark : Colors.white,
-
-//               boxShadow: [
-//                 BoxShadow(
-//                     color: appColorGrayDark.withOpacity(0.5),
-//                     spreadRadius: 0.5,
-//                     blurRadius: 1)
-//               ]),
-//           child: Row(
-//             children: [
-//              isCheckBox? Row(children: [
-//                 isChcek
-//                   ? const Icon(
-//                       Icons.check_box_outlined,
-//                       color: Colors.white,
-//                       size: 22,
-//                     )
-//                   : const Icon(
-//                       Icons.check_box_outline_blank,
-//                       color: appColorGrayDark,
-//                       size: 22,
-//                     ),
-//               4.widthBox,
-//               ],):const SizedBox(),
-//               CustomTextHeader(
-//                 text: text,
-//                 textSize: isChcek ? 11.5 : 11,
-//                 textColor: isChcek ? Colors.white : appColorMint,
-//               ),
-//             ],
-//           )),
-//     );
+ 
 
 class CustomTabWithCheckBox extends StatefulWidget {
   String text;
@@ -1196,104 +1156,7 @@ Widget CommonBodyWithToolBar(dynamic controller, List<Widget> children,
     ),
   );
 }
-
-// custom Tool Bar ##########################
-
-// class CustomToolBarClass extends StatefulWidget {
-//   final List<CustomTool>? children;
-//   final Function(_CustomToolBarState obj, ToolMenuSet? type)? fun;
-//   // final GlobalKey<_CustomToolBarState> toolbarKey; // Pass the GlobalKey
-
-//   const CustomToolBarClass({
-//     Key? key,
-//     this.children,
-//     this.fun,
-//     // required this.toolbarKey, // Accept GlobalKey
-//   }) : super(key: key);
-
-//   @override
-//   _CustomToolBarState createState() => _CustomToolBarState();
-// }
-
-// class _CustomToolBarState extends State<CustomToolBarClass> {
-//   late List<CustomTool>? list;
-//   late GlobalKey<_CustomToolBarState> toolbarKey;
-//   @override
-//   void initState() {
-//     print('State teset');
-//     super.initState();
-//     //toolbarKey = GlobalKey<_CustomToolBarState>();
-//     if (widget.children!.isEmpty) {
-//       list = Custom_Tool_List();
-//     } else {
-//       list = widget.children;
-//     }
-//   }
-
-//   // Disable tool method
-//   List<CustomTool> disableTool(List<ToolMenuSet> toolList) {
-//     // print('Disable Tool Executed'); // This should be printed if it is executed
-//     toolList.forEach((f) {
-//       var item = list!.firstWhere((e) => e.menu == f);
-//       if (item.menu != null) {
-//         setState(() {
-//           list!.firstWhere((e) => e.menu == f).isDisable = true;
-//         });
-//       }
-//     });
-
-//     return list!;
-//   }
-
-//   // Enable tool method
-//   List<CustomTool> enableTool(List<ToolMenuSet> toolList) {
-//     toolList.forEach((f) {
-//       var item = list!.firstWhere((e) => e.menu == f);
-//       if (item.menu != null) {
-//         setState(() {
-//           list!.firstWhere((e) => e.menu == f).isDisable = false;
-//         });
-//       }
-//     });
-
-//     return list!;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         Expanded(
-//           child: Container(
-//             height: 30,
-//             decoration: const BoxDecoration(
-//               color: kWebBackgroundDeepColor,
-//               boxShadow: [
-//                 BoxShadow(
-//                   color: appColorGrayDark,
-//                   spreadRadius: 0.05,
-//                   blurRadius: 0.5,
-//                 ),
-//               ],
-//             ),
-//             child: ListView(
-//               scrollDirection: Axis.horizontal,
-//               children: [
-//                 ...list!.map((f) => f
-//                   ..onTap = () {
-//                     if (widget.fun != null) {
-//                       // toolbarKey.currentState!.disableTool([]);
-//                       widget.fun!(this, f.menu); // Use the passed key
-//                     }
-//                   }),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+ 
 
 Widget CustomTooBar(
         [List<CustomTool>? list, Function(ToolMenuSet? type)? fun]) =>
@@ -1416,7 +1279,7 @@ class _HoverToolState extends State<CustomTool> {
                           _getText(widget.menu!),
                           style: customTextStyle.copyWith(
                             fontFamily: appFontLato,
-                            fontSize: 11.5,
+                            fontSize: 11,
                             color: widget.isDisable
                                 ? appDisableTextColor
                                 : appBlackColor,
@@ -1746,4 +1609,140 @@ mToolEnableDisable(List<CustomTool> list, List<ToolMenuSet> etoolList,
   //       0, CustomTool(isDisable: true, menu: ToolMenuSet.none, onTap: null));
   // }
   // print('Tool Refresh');
+}
+
+
+// class CustomSearchableDropdown<T> extends StatelessWidget {
+//   final Widget? Function(T) callback;
+//   final FutureOr<List<T>?> Function(String) suggestionList;
+//   final Function(T)? onSelected;
+// final TextEditingController controller;
+// final FocusNode focusnode;
+//   const CustomSearchableDropdown({
+//     super.key,
+//     required this.callback,
+//     required this.suggestionList,
+//     required this.onSelected, required this.controller, required this.focusnode,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return CupertinoTypeAheadField<T>(  // CupertinoTypeAheadField extends TypeAheadField
+//       focusNode: focusnode,
+//       controller: controller,
+//       builder: (context, controller, focusNode) {
+//         return CustomTextBox(
+//           controller: controller,
+//           focusNode: focusNode,
+//           width: double.infinity,
+//         );
+//       },
+//       decorationBuilder: (context, child) => Material(
+//         type: MaterialType.card,
+//         elevation: 4,
+//         borderRadius: BorderRadius.circular(2),
+//         child: child,
+//       ),
+//       itemBuilder: (context, c) {
+//         return Row(
+//           children: [
+//             Flexible(
+//               child: Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+//                 child: callback(c),
+//               ),
+//             ),
+//           ],
+//         );
+//       },
+//       suggestionsCallback: (v) {
+//         return suggestionList(v);
+//       },
+//       onSelected: (v) {
+//         onSelected!(v);
+//       },
+//     );
+//   }
+// }
+
+class CustomSearchableDropdown<T> extends StatefulWidget {
+  final Widget? Function(T) callback;
+  final FutureOr<List<T>?> Function(String) suggestionList;
+  final Function(T)? onSelected;
+  final TextEditingController controller;
+  final FocusNode focusNode;
+
+  const CustomSearchableDropdown({
+    Key? key,
+    required this.callback,
+    required this.suggestionList,
+    required this.onSelected,
+    required this.controller,
+    required this.focusNode,
+  }) : super(key: key);
+
+  @override
+  _CustomSearchableDropdownState<T> createState() => _CustomSearchableDropdownState<T>();
+}
+
+class _CustomSearchableDropdownState<T> extends State<CustomSearchableDropdown<T>> {
+  bool _isDisposed = false; // Keep track if widget is disposed
+
+  @override
+  void initState() {
+    super.initState();
+    _isDisposed = false; // Not disposed when initialized
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true; // Set disposed flag
+    widget.controller.dispose();
+    widget.focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoTypeAheadField<T>(
+      focusNode: widget.focusNode,
+      controller: widget.controller,
+      builder: (context, controller, focusNode) {
+        return CustomTextBox(
+          controller: controller,
+          focusNode: focusNode,
+          width: double.infinity,
+        );
+      },
+      decorationBuilder: (context, child) => Material(
+        type: MaterialType.card,
+        elevation: 4,
+        borderRadius: BorderRadius.circular(2),
+        child: child,
+      ),
+      itemBuilder: (context, c) {
+        Widget? result = widget.callback(c);
+        return result != null
+            ? Row(
+                children: [
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                      child: result,
+                    ),
+                  ),
+                ],
+              )
+            : Container();
+      },
+      suggestionsCallback: (v) {
+        return widget.suggestionList(v);
+      },
+      onSelected: (v) {
+        if (!_isDisposed && mounted) { // Check if not disposed
+          widget.onSelected!(v);
+        }
+      },
+    );
+  }
 }

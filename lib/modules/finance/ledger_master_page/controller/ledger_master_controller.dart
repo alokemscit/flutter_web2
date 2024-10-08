@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:web_2/core/config/const.dart';
+import 'package:web_2/modules/hrm/employee_master/controller/hr_employee_profile_controller.dart';
 
 import '../../../../component/widget/custom_snakbar.dart';
 import '../model/model_chart_acc_master.dart';
@@ -31,6 +32,8 @@ class LedgerMasterController extends GetxController with MixInController {
 
   var list_chart_master = <ModelChartAccMaster>[].obs;
 
+  var list_tools = <CustomTool>[].obs;
+
   void exportExcelFile() async {
     api = data_api2();
     loader = CustomBusyLoader(context: context);
@@ -51,7 +54,6 @@ class LedgerMasterController extends GetxController with MixInController {
           "Group Name": row.gROUPNAME!.replaceAll(',', ' '),
           "Sub Group": row.sUBNAME!.replaceAll(',', ' '),
           "Ledger Category": row.cATNAME!.replaceAll(',', ' '),
-          // ignore: prefer_interpolation_to_compose_strings
           "GL Code": row.gLCODE!,
           "GL Name": row.gLNAME!.replaceAll(',', ' ')
         });
@@ -97,7 +99,6 @@ class LedgerMasterController extends GetxController with MixInController {
       return;
     }
     try {
-     
       var x = await api.createLead([
         {
           "tag": "54",
@@ -261,7 +262,6 @@ class LedgerMasterController extends GetxController with MixInController {
       return;
     }
     try {
- 
       var x = await api.createLead([
         {
           "tag": "54",
@@ -348,7 +348,6 @@ class LedgerMasterController extends GetxController with MixInController {
       return;
     }
 
-
     try {
       var x = await api.createLead([
         {
@@ -365,9 +364,9 @@ class LedgerMasterController extends GetxController with MixInController {
         }
       ]);
       loader.close();
-       //print(x);
+      //print(x);
       ModelStatus s = await getStatusWithDialog(x, dialog);
-     // print(s);
+      // print(s);
       if (s.status == "1") {
         if (isUpdate) {
           int index = ledger_list.indexWhere((model) => model.iD == e.iD);
@@ -426,20 +425,26 @@ class LedgerMasterController extends GetxController with MixInController {
         errorMessage.value = "User re-login required!";
         return;
       }
-     // print(user.value.cid);
+      // print(user.value.cid);
       isError.value = false;
-
-      var x = await api.createLead([
-        {"tag": "53", "p_cid": user.value.cid}
-      ]);
+      await mLoadModel(
+          api,
+          [
+            {"tag": "53", "p_cid": user.value.cid}
+          ],
+          ledger_list,
+          (x) => ModelLedgerMaster.fromJson(x));
+      // var x = await api.createLead([
+      //   {"tag": "53", "p_cid": user.value.cid}
+      // ]);
       //print(x);
-      ledger_list.addAll(x.map((e) => ModelLedgerMaster.fromJson(e)));
+      // ledger_list.addAll(x.map((e) => ModelLedgerMaster.fromJson(e)));
+      list_tools.addAll(Custom_Tool_List());
+      mToolEnableDisable(list_tools, [], [ToolMenuSet.file]);
       //print(ledger_list.length);
       isLoading.value = false;
     } catch (e) {
-      isError.value = true;
-      isLoading.value = false;
-      errorMessage.value = e.toString();
+      CustomInitError(this, e.toString());
     }
     super.onInit();
   }

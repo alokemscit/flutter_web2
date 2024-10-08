@@ -7,8 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:web_2/core/config/const.dart';
 import 'package:web_2/modules/Inventory/inv_item_master/model/inv_model_item_master.dart';
 
+import '../../../../component/custom_pdf_report_generator.dart';
 import '../../inv_po_create/model/inv_model_po_details.dart';
 
+import '../../inv_po_create/model/inv_model_po_status.dart';
 import '../../inv_po_create/model/inv_model_terms_master.dart';
 import '../../inv_supplier_master/model/inv_model_supplier_master.dart';
 import '../model/inv_model_PO_Approval.dart';
@@ -16,6 +18,8 @@ import '../model/inv_model_PO_Approval.dart';
 class InvPoApprovalController extends GetxController with MixInController {
   var cmb_yearID = ''.obs;
   var cmb_store_typeID = ''.obs;
+  var cmb_store_type_search = ''.obs;
+
   var cmb_supplierID = ''.obs;
   var grand_total = ''.obs;
   var list_menu = <CustomTool>[].obs;
@@ -25,10 +29,15 @@ class InvPoApprovalController extends GetxController with MixInController {
   final TextEditingController txt_delivery_note = TextEditingController();
   final TextEditingController txt_remarks = TextEditingController();
   final TextEditingController txt_search = TextEditingController();
+  final TextEditingController txt_search_fdate = TextEditingController();
+  final TextEditingController txt_search_tdate = TextEditingController();
+
   var list_storeTypeList = <ModelCommonMaster>[].obs;
   var list_year = <ModelCommonMaster>[].obs;
 
   var list_po_master = <ModelPoMasterForApp>[].obs;
+  var list_po_stattus_temp = <ModelPoStatus>[].obs;
+  var list_po_stattus_master = <ModelPoStatus>[].obs;
 
   var list_terms_master = <ModelInvTermsMaster>[].obs;
   var list_supplier = <ModelSupplierMaster>[].obs;
@@ -37,9 +46,193 @@ class InvPoApprovalController extends GetxController with MixInController {
   var list_po_item_tems = <_temp>[].obs;
 
   var list_po_details = <ModelPoDetails>[].obs;
+  var list_po_terms = <ModelCommonMaster>[].obs;
 
   var list_month = <_m>[].obs;
   bool b = true;
+
+  void show_po_report(String po_id) async {
+    list_po_details.clear();
+    list_po_terms.clear();
+    dialog = CustomAwesomeDialog(context: context);
+    print(po_id);
+    try {
+      await mLoadModel(
+          api,
+          [
+            {"tag": "81", "po_id": po_id}
+          ],
+          list_po_details,
+          (x) => ModelPoDetails.fromJson(x));
+      await mLoadModel(
+          api,
+          [
+            {"tag": "82", "po_id": po_id}
+          ],
+          list_po_terms,
+          (x) => ModelCommonMaster.fromJson(x));
+      //print(list_po_details.length);
+
+      double sum = list_po_details.fold(0.0, (previousValue, element) {
+        return previousValue + element.tot!;
+      });
+      ModelPoDetails d = list_po_details.first;
+      CustomPDFGenerator(font: font, header: [
+        pwText2Col(
+            font, 'Supplier:  ', d.subName ?? '', 'PO. No.: ', d.prNo ?? ''),
+        pwHeight(4),
+        pwText2Col(font, 'Address:   ', d.supAddress ?? '', 'PO. Date: ',
+            d.poDate ?? ''),
+        pwHeight(4),
+        pwText2Col(
+            font,
+            'Mobile No: ',
+            d.supMob ?? '',
+            'PO. Status: ',
+            (d.isApp ?? 0) == 1
+                ? 'Approved'
+                : (d.canceledDate ?? '') != ''
+                    ? 'Canceled'
+                    : 'Approved'),
+      ], footer: [
+        pwText2Col(
+            font,
+            'Created By:  ',
+            d.createdBy ?? '',
+            (d.canceledDate ?? '') != '' ? 'Canceled By:' : 'Approved By: ',
+            (d.canceledDate ?? '') != '' ? d.canceledBy ?? '' : d.appBy ?? ''),
+        pwHeight(4),
+        pwText2Col(
+            font,
+            'Created By:  ',
+            d.createdDate ?? '',
+            (d.canceledDate ?? '') != ''
+                ? 'Canceled Date: '
+                : 'Approved Date: ',
+            (d.canceledDate ?? '') != ''
+                ? d.canceledDate ?? ''
+                : d.appDate ?? ''),
+        pwHeight(2)
+      ], body: [
+        pwGenerateTable([
+          30,
+          50,
+          30,
+          30,
+          20,
+          30,
+          20,
+          20,
+          30
+        ], [
+          pwTableColumnHeader('Code', font),
+          pwTableColumnHeader('Item Name', font),
+          pwTableColumnHeader('Type', font),
+          pwTableColumnHeader('Unit', font),
+          pwTableColumnHeader('Qty', font, pwAligmentCenter),
+          pwTableColumnHeader('Ap.Qty', font, pwAligmentCenter),
+          pwTableColumnHeader('Rate', font, pwAligmentRight),
+          pwTableColumnHeader('Dist', font, pwAligmentRight),
+          pwTableColumnHeader('Total', font, pwAligmentRight),
+        ], [
+          ...list_po_details.map((f) => pwTableRow([
+                pwTableCell(f.code ?? '', font),
+                pwTableCell(f.itemName ?? '', font),
+                pwTableCell(f.subGroupName ?? '', font),
+                pwTableCell(f.unitName ?? '', font),
+                pwTableCell((f.qty ?? 0).toString(), font, pwAligmentCenter),
+                  pwTableCell((f.app_qty ?? 0).toString(), font, pwAligmentCenter),
+                pwTableCell(
+                    (f.rate ?? 0).toStringAsFixed(2), font, pwAligmentRight),
+                pwTableCell(
+                    (f.discAmt ?? 0).toStringAsFixed(2), font, pwAligmentRight),
+                pwTableCell(
+                    (f.tot ?? 0).toStringAsFixed(2), font, pwAligmentRight),
+              ]))
+        ]),
+        pwGenerateTable([
+          230,
+          30
+        ], [
+          pwTableCell('Grand Total', font, pwAligmentRight),
+          pwTableCell(sum.toStringAsFixed(2), font, pwAligmentRight),
+        ], []),
+        pwHeight(4),
+        pwTextOne(font, 'Remarks:       ', d.remarks ?? '', 9,
+            pwMainAxisAlignmentStart),
+        pwHeight(4),
+        pwTextOne(font, 'Delivery Date: ', d.deliveryDate ?? '', 9,
+            pwMainAxisAlignmentStart),
+        pwHeight(4),
+        pwTextOne(font, 'Delivery Note: ', d.deliveryNote ?? '', 9,
+            pwMainAxisAlignmentStart),
+        pwHeight(4),
+        pwTextOne(font, 'Terms & Condition ', '', 10, pwMainAxisAlignmentStart),
+        pwSizedBoxWithWidth(
+            pwGenerateTable([
+              10,
+              100
+            ], [], [
+              ...list_po_terms.map((f) => pwTableRow(
+                    [
+                      pwTableCell((list_po_terms.indexOf(f) + 1).toString(),
+                          font, pwAligmentCenter, 8.6),
+                      pwTableCell(f.name ?? '', font, pwAligmentLeft, 8.6)
+                    ],
+                  ))
+            ]),
+            280),
+      ]).ShowReport();
+    } catch (e) {
+      dialog
+        ..dialogType = DialogType.error
+        ..message = e.toString()
+        ..show();
+    }
+  }
+
+  void showPoStatus() async {
+    list_po_stattus_master.clear();
+    list_po_stattus_temp.clear();
+
+    if (isCheckCondition(
+        cmb_store_type_search.value == '', dialog, 'Plsease selct Store Type'))
+      return;
+
+    if (isCheckCondition(
+        !isValidDateRange(txt_search_fdate.text, txt_search_tdate.text),
+        dialog,
+        'Invalid Date range!')) return;
+
+    dialog = CustomAwesomeDialog(context: context);
+    loader = CustomBusyLoader(context: context);
+    loader.show();
+    try {
+      await mLoadModel(
+          api,
+          [
+            {
+              "tag": "83",
+              "store_type_id": cmb_store_type_search.value,
+              "fdate": txt_search_fdate.text,
+              "tdate": txt_search_tdate.text
+            }
+          ],
+          list_po_stattus_master,
+          (x) => ModelPoStatus.fromJson(x));
+      if (list_po_stattus_master.isNotEmpty) {
+        list_po_stattus_temp.addAll(list_po_stattus_master);
+      }
+      loader.close();
+    } catch (e) {
+      loader.close();
+      dialog
+        ..dialogType = DialogType.error
+        ..message = e.toString()
+        ..show();
+    }
+  }
+
   void toolBarEvent(ToolMenuSet v) async {
     if (!b) {
       Future.delayed(const Duration(seconds: 1), () {
@@ -370,6 +563,7 @@ class InvPoApprovalController extends GetxController with MixInController {
     cmb_yearID.value = DateFormat('yyyy').format(DateTime.now());
     user.value = await getUserInfo();
     if (!await isValidLoginUser(this)) return;
+    font = await CustomLoadFont(appFontPathOpenSans);
 
     try {
       await mLoadModel(

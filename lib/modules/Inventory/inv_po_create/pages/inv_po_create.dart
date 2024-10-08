@@ -16,6 +16,7 @@ class InvPOCreate extends StatelessWidget {
   Widget build(BuildContext context) {
     final InvPoCreateController controller = Get.put(InvPoCreateController());
     controller.context = context;
+    bool b = true;
     return Obx(
       () => CommonBodyWithToolBar(
           controller,
@@ -24,13 +25,19 @@ class InvPOCreate extends StatelessWidget {
                 child: CustomTwoPanelGroupBox(
                     leftPanelWidth: 320,
                     leftChild: _left_panel(controller),
-                    rightChild: _rightPanel(controller),
+                    rightChild:  _rightPanel(controller),
                     minWidth: 1050))
           ],
           controller.list_tools, (e) {
-        if (e == ToolMenuSet.undo) controller.setUndo();
-        if (e == ToolMenuSet.save) controller.save();
-        if (e == ToolMenuSet.show) _showDialog(controller);
+        if (b) {
+          if (e == ToolMenuSet.undo) controller.setUndo();
+          if (e == ToolMenuSet.save) controller.save();
+          if (e == ToolMenuSet.show) _showDialog(controller);
+          b = false;
+          Future.delayed(const Duration(seconds: 1), () {
+            b = true;
+          });
+        }
       }),
     );
   }
@@ -119,8 +126,12 @@ void _showDialog(InvPoCreateController controller) => CustomDialog(
                         ], childrenTableRowList: [
                           ...controller.list_po_stattus_temp.map(
                             (f) => TableRow(
-                                decoration:
-                                     BoxDecoration(color:f.currentStatus ==2?appColorPista:f.currentStatus==0?Colors.red.withOpacity(0.05): Colors.white),
+                                decoration: BoxDecoration(
+                                    color: f.currentStatus == 2
+                                        ? appColorPista
+                                        : f.currentStatus == 0
+                                            ? Colors.red.withOpacity(0.05)
+                                            : Colors.white),
                                 children: [
                                   MyWidget().TableCell..text = f.poNo ?? '',
                                   MyWidget().TableCell..text = f.poDate ?? '',
@@ -130,7 +141,7 @@ void _showDialog(InvPoCreateController controller) => CustomDialog(
                                   MyWidget().TableCell
                                     ..text = f.currentStatus == 0
                                         ? 'Canceled'
-                                        : f.currentStatus ==2
+                                        : f.currentStatus == 2
                                             ? "Approved"
                                             : "App. Pending",
                                   CustomTableEditCell(() {
@@ -271,7 +282,6 @@ Widget _rightPanel(InvPoCreateController controller) => Column(
                                     controller: controller.txt_remarks),
                               ],
                             ),
-                           
                           ],
                         ),
                       ),
@@ -613,7 +623,6 @@ Widget _editText(TextEditingController cnt, FocusNode focusnode,
                     submit();
                   }
                 },
-               
                 isDisable: isReadOnly,
                 isReadonly: isReadOnly,
                 fontColor: isReadOnly ? Colors.red : appColorMint,
@@ -689,5 +698,5 @@ Widget _left_panel(InvPoCreateController controller) => InvleftPanelWithTree(
                               })),
                       CustomTableCellx(text: f.name ?? '')
                     ]))
-            .toList()),controller.context.width);
- 
+            .toList()),
+    controller.context.width);

@@ -60,3 +60,5 @@ const appGrayWindow = Color(0xffEAEAEA);
 const appBlackColor = Colors.black;
 const appGrayWindowHover = Color.fromARGB(109, 207, 207, 207);
 const appDisableTextColor = Color(0xFFC1C1C1);
+
+Color appColorRowSelected = appColorPista.withOpacity(0.2);

@@ -102,4 +102,51 @@ class data_api2 {
     }
     //return apiData1;
   }
+
+
+
+Future<List<dynamic>> fetch(List<dynamic> parameter,
+      [String methods = "fin"]) async {
+     
+    String jsonString = jsonEncode(parameter);
+    // print(jsonString);
+    String d = base64Encode(utf8.encode(jsonString));
+    
+
+    var key = '*erphub.top*';
+    var key2 = 'RG-V2ZWxvcGVyIH/Byb2R1Y3Rpdml0eS-BpcyBtZWFzd:;XJlZCBpbiBj=!';
+   
+    String url = 'https://erphub.top/mob/getdata_all';
+    //print(url);
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+        
+        'url-proxy': key,
+        'Api-Key': key2,
+        'types':methods,
+      },
+      body: jsonEncode([
+        {"data": d}
+      ]),
+    );
+    if (response.statusCode == 200) {
+      
+      String decodedJsonString = utf8.decode(base64Decode(response.body));
+      var apiData1 = jsonDecode(decodedJsonString);
+
+      
+
+      return apiData1;
+    } else {
+      print(response.body);
+      return [];
+    }
+    //return apiData1;
+  }
+
+
+
 }

@@ -87,6 +87,7 @@ class CustomDropDownSearchbox<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<T>(
+      //autoFlipDirection :true,
       controller: controller,
       suggestionsCallback: (search) => suggestionsCallback(search),
       builder: (context, controller, focusNode) {

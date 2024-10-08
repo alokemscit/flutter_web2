@@ -64,8 +64,8 @@ Widget rightpart(
 ) {
   final FocusNode fId = FocusNode();
   final FocusNode fPws = FocusNode();
-  TextEditingController txt_uid = TextEditingController();
-  TextEditingController txt_pws = TextEditingController();
+  TextEditingController txt_uid = TextEditingController(text: '1234');
+  TextEditingController txt_pws = TextEditingController(text: '123456');
   CustomAwesomeDialog dialog = CustomAwesomeDialog(context: context);
   return SingleChildScrollView(
     child: Padding(
@@ -640,7 +640,7 @@ _dialogBox(
 }
 
 Widget _dropdown(FocusNode f1) {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController(text: 'TESTING11');
 
   return FutureBuilder(
     future: get_company(),
@@ -678,7 +678,7 @@ Widget _dropdown(FocusNode f1) {
                         onChange: (v) {
                           context
                               .read<LoginUserBloc>()
-                              .add(LoginUserSetComIDEvent(cid: ''));
+                              .add(LoginUserSetComIDEvent(cid: '12'));
                         },
                       ),
                     ),

@@ -388,13 +388,14 @@ bool checkJson(List<dynamic> x) {
   if (x == []) {
     return false;
   }
-  var y = x.map((e) => ModelStatus.fromJson(e));
-  if (y.isEmpty) {
-    return false;
-  }
-  if (y.first.status == '3') {
-    return false;
-  }
+     var y = x.map((e) => ModelStatus.fromJson(e));
+    if (y.isEmpty) {
+      return false;
+    }
+    if (y.first.status == '3') {
+      return false;
+    }
+  
   return true;
 }
 
@@ -454,6 +455,36 @@ List<ModelCommonMaster> getStatusMaster() {
   ml.add(ModelCommonMaster(id: "1", name: "Active"));
   ml.add(ModelCommonMaster(id: "0", name: "Inactive"));
   return ml;
+}
+
+Future<ModelStatus> commonSaveUpdate_all(data_api2 api, CustomBusyLoader loader,
+    CustomAwesomeDialog dialog, List<dynamic> parameter, String method) async {
+  loader.show();
+  try {
+    var x = await api.fetch(parameter, method);
+    //print(x);
+    loader.close();
+    if (checkJsonForSaveUpdate(x)) {
+      return await getStatusWithDialog(x, dialog);
+    } else {
+      dialog
+        ..dialogType = DialogType.error
+        ..message = 'Faillure to save/update operation!'
+        ..show();
+      return ModelStatus(
+          id: '',
+          status: '3',
+          msg: 'Faillure to save/update operation!',
+          extra: '');
+    }
+  } catch (e) {
+    loader.close();
+    dialog
+      ..dialogType = DialogType.error
+      ..message = e.toString()
+      ..show();
+    return ModelStatus(id: '', status: '3', msg: e.toString(), extra: '');
+  }
 }
 
 Future<ModelStatus> commonSaveUpdate(data_api2 api, CustomBusyLoader loader,
@@ -681,21 +712,63 @@ pw.MainAxisAlignment pwMainAxisAlignmentCenter = pw.MainAxisAlignment.center;
 pw.Widget pwLogo(pw.MemoryImage image) =>
     pw.Image(image, width: 150, height: 80);
 
-Future<void> mLoadModel<T>(
-  data_api2 api,
-  List<dynamic> parameter,
-  List<T> listObject,
-  T Function(Map<String, dynamic>) fromJson,
-) async {
+Future<void> mLoadModel<T>(data_api2 api, List<dynamic> parameter,
+    List<T> listObject, T Function(Map<String, dynamic>) fromJson,
+    [String method = '']) async {
   try {
     // Wait for the API response asynchronously
-    var response = await api.createLead(parameter);
+    var response = await (method == ''
+        ? api.createLead(parameter)
+        : api.createLead(parameter, 'getdata_$method'));
 
+    //print(response);
     // Convert the response to a list of objects using the fromJson function
-    listObject.addAll(response.map((e) => fromJson(e)).toList());
+    if (checkJson(response)) {
+      listObject.addAll(response.map((e) => fromJson(e)).toList());
+    } else {
+      if (response != []) {
+        throw Exception(
+            'Error occurred while loading model: invalid parameter');
+      }
+    }
   } catch (e) {
     // Log and throw the exception
     throw Exception('Error occurred while loading model: $e');
+  }
+}
+
+Future<void> mLoadModel_All<T>(data_api2 api, List<dynamic> parameter,
+    List<T> listObject, T Function(Map<String, dynamic>) fromJson,
+    [String method = 'fin']) async {
+  try {
+    // Wait for the API response asynchronously
+    var response = await api.fetch(parameter, method);
+
+    
+    // Convert the response to a list of objects using the fromJson function
+    if (checkJson(response)) {
+       
+      listObject.addAll(response.map((e) => fromJson(e)).toList());
+    } else {
+      if (response.isNotEmpty) {
+       // print('object');
+        try {
+          String s =
+              response.map((e) => ModelStatus.fromJson(e)).toList().last.msg ??
+                  '';
+          throw Exception('Error occurred while loading model :   $s ');
+        } catch (e) {
+          throw Exception(
+              'Error occurred while loading model :  parameter or header invalid $e');
+        }
+
+        // throw Exception(
+        //     'Error occurred while loading model:  parameter or header invalid ');
+      }
+    }
+  } catch (e) {
+    // Log and throw the exception
+    throw Exception('Error occurred while loading model 3: $e');
   }
 }
 
@@ -832,7 +905,6 @@ bool mIsValidateDate(String date) {
     int month = int.tryParse(parts[1]) ?? 0;
     int year = int.tryParse(parts[2]) ?? 0;
 
-    
     try {
       DateTime parsedDate = DateTime(year, month, day);
 
