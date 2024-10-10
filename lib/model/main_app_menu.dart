@@ -35,7 +35,7 @@ List<dynamic> list = [
     "id": 19,
     "name": "Admin",
     "description":
-        "Setting up an admin module for  creating a robust and secure interface that allows administrators to manage various aspects of the ERP system",
+        "Admin module setting up secure interface that allows administrators to manage various aspects of the ERP system",
     "icon": "settings.png"
   },
   {
@@ -50,7 +50,7 @@ List<dynamic> list = [
     "name": "Appointment Scheduling",
     "description":
         "This module enables the scheduling of patient appointments with doctors, helping to manage the hospital's daily schedule efficiently.",
-    "icon": "appintment3.png"
+    "icon": "appointment.png"
   },
    {
     "id": 3,
@@ -125,7 +125,7 @@ List<dynamic> list = [
   },
 
 
-{
+ {
     "id": 11,
     "name": "Pharmacy Management",
     "description":
