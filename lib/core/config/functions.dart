@@ -388,14 +388,29 @@ bool checkJson(List<dynamic> x) {
   if (x == []) {
     return false;
   }
-     var y = x.map((e) => ModelStatus.fromJson(e));
-    if (y.isEmpty) {
-      return false;
+  var y = x.map((e) => ModelStatus.fromJson(e));
+  if (y.isEmpty) {
+    return false;
+  }
+  if (y.first.status == '3') {
+    return false;
+  }
+
+  return true;
+}
+
+bool checkJsonSelect(List<dynamic> x) {
+  var y = x.map((e) => ModelStatus.fromJson(e));
+  if (y.isNotEmpty) {
+    if (y.first.status == null) {
+      return true;
     }
+
     if (y.first.status == '3') {
       return false;
     }
-  
+  }
+
   return true;
 }
 
@@ -723,7 +738,7 @@ Future<void> mLoadModel<T>(data_api2 api, List<dynamic> parameter,
 
     //print(response);
     // Convert the response to a list of objects using the fromJson function
-    if (checkJson(response)) {
+    if (checkJsonSelect(response)) {
       listObject.addAll(response.map((e) => fromJson(e)).toList());
     } else {
       if (response != []) {
@@ -744,14 +759,12 @@ Future<void> mLoadModel_All<T>(data_api2 api, List<dynamic> parameter,
     // Wait for the API response asynchronously
     var response = await api.fetch(parameter, method);
 
-    
     // Convert the response to a list of objects using the fromJson function
-    if (checkJson(response)) {
-       
+    if (checkJsonSelect(response)) {
       listObject.addAll(response.map((e) => fromJson(e)).toList());
     } else {
       if (response.isNotEmpty) {
-       // print('object');
+        // print('object');
         try {
           String s =
               response.map((e) => ModelStatus.fromJson(e)).toList().last.msg ??

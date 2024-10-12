@@ -199,4 +199,147 @@ class FinVoucherWidget {
           ),
         ],
       );
+
+
+      void voucher_showDialog(FinVoucherEntryController controller) => CustomDialog(
+    controller.context,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Text(
+        'Voucher List',
+        style: customTextStyle.copyWith(color: appColorMint),
+      ),
+    ),
+    Row(
+      children: [
+        Flexible(
+          child: SizedBox(
+            width: 800,
+            height: 600,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomGroupBox(
+                        child: _dialodContentTop(
+                            controller,
+                            MyWidget().DropDown
+                              ..width = 250
+                              ..id = controller.cmb_vs_v_typeID.value
+                              ..list = controller.list_voucher_type
+                              ..onTap = (v) {
+                                controller.cmb_vs_v_typeID.value = v!;
+                              },
+                            MyWidget().DatePicker
+                              ..width = 120
+                              ..date_controller = controller.txt_vs_fdate
+                              ..label = 'From Date'
+                              ..isBackDate = true
+                              ..isShowCurrentDate = true,
+                            MyWidget().DatePicker
+                              ..width = 120
+                              ..date_controller = controller.txt_vs_tdate
+                              ..label = 'To Date'
+                              ..isBackDate = true
+                              ..isShowCurrentDate = true,
+                            MyWidget().IconButton
+                              ..icon = Icons.search
+                              ..text = 'Show'
+                              ..onTap = () {
+                                controller.show_voucher_with_date_range();
+                              }),
+                      ),
+                    ),
+                  ],
+                ),
+                8.heightBox,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MyWidget().SearchBox
+                      ..width = 250
+                      ..controller = controller.txt_vs_search
+                      ..onChange = (v) {
+
+                      },
+                  ],
+                ),
+                8.heightBox,
+                Expanded(
+                    child: Obx(() =>
+                     CustomTableGenerator(colWidtList: const [
+                          30,
+                          30,
+                          30,
+                          30,
+                          50,
+                          20
+                        ], childrenHeader: [
+                          MyWidget().TableColumnHeader..text = 'Voucher No',
+                          MyWidget().TableColumnHeader..text = 'Voucher Date',
+                          MyWidget().TableColumnHeader..text = 'Voucher Type',
+                          MyWidget().TableColumnHeader..text = 'Voucher Amount'..alignment=Alignment.centerRight,
+                          MyWidget().TableColumnHeader..text = 'Status'..alignment=Alignment.center,
+                          MyWidget().TableColumnHeader
+                            ..text = '*'
+                            ..alignment = Alignment.center,
+                        ], childrenTableRowList: [
+                           ...controller.list_voucher_with_date_range.map((f)=>TableRow(children: [
+                            CustomTableCellx(text: f.vno??''),
+                            CustomTableCellx(text: f.vdate??''),
+                            CustomTableCellx(text: f.vtName??''),
+                            CustomTableCellx(text: (f.amt??0).toStringAsFixed(2),alignment: Alignment.centerRight,),
+                            CustomTableCellx(text: f.status==1?'Approval Pending':f.status==2?'Approved':'Canceled'),
+                            CustomTableEditCell((){},Icons.print,14,appColorBlue)
+
+                           ]))
+
+                        ]))
+                        )
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+    () {},
+    true,
+    false);
+Widget _dialodContentTop(FinVoucherEntryController controller, Widget dropdowb,
+        Widget dateF, Widget dateT, Widget button) =>
+    controller.context.width < 650
+        ? Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: dropdowb),
+                ],
+              ),
+              8.heightBox,
+              Row(
+                children: [
+                  Expanded(child: dateF),
+                  8.widthBox,
+                  Expanded(child: dateT),
+                ],
+              ),
+              8.widthBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [button],
+              )
+            ],
+          )
+        : Row(
+            children: [
+              dropdowb,
+              8.widthBox,
+              dateF,
+              8.widthBox,
+              dateT,
+              12.widthBox,
+              button
+            ],
+          );
 }

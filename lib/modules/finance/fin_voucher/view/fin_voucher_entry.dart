@@ -18,6 +18,7 @@ class FinVoucherEntry extends StatelessWidget implements MyInterface {
     return Obx(() => CommonBodyWithToolBar(
             c,
             [
+              1.heightBox,
               FinVoucherWidget().finVoucherWidget(
                   c, [Obx(() => _tablePart(c)), Obx(() => _total(c))])
             ],

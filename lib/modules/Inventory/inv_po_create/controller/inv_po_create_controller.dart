@@ -291,8 +291,6 @@ class InvPoCreateController extends GetxController with MixInController {
       return;
     }
 
-
-
     List<Map<String, dynamic>> __list_terms = [];
     list_terms_master.forEach((f) {
       if (f.isDefault == 1) {
@@ -474,6 +472,8 @@ class InvPoCreateController extends GetxController with MixInController {
           ],
           list_terms_master,
           (x) => ModelInvTermsMaster.fromJson(x));
+
+     // print(selectedMrr.value.id);
       await mLoadModel(
           api,
           [
